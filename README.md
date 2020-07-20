@@ -1,2 +1,2 @@
-# Cours_OC_GitHUB_2
-Utilisez Git et GitHub pour vos projets de développement
+# Formation Développeur PHP / Symfony
+Projet 5 : Créez votre premier blog en PHP
