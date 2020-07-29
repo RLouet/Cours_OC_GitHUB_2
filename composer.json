@@ -8,5 +8,11 @@
             "email": "romainlouet@romsworld.net"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Blog\\": "src/",
+            "App\\": "rlfram/"
+        }
+    },
     "require": {}
 }
