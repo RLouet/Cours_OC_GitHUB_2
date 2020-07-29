@@ -1,0 +1,12 @@
+{
+    "name": "rlouet/blogp5",
+    "description": "Blog personnel en PHP",
+    "type": "project",
+    "authors": [
+        {
+            "name": "LouetR",
+            "email": "romainlouet@romsworld.net"
+        }
+    ],
+    "require": {}
+}
