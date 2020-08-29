@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Core;
+namespace Core;
 
 
-class HTTPRequest extends ApplicationComponent
+class HTTPRequest
 {
     public function cookieData($key)
     {
@@ -44,5 +44,10 @@ class HTTPRequest extends ApplicationComponent
     public function requestURI()
     {
         return $_SERVER['REQUEST_URI'];
+    }
+
+    public function requestQueryString()
+    {
+        return $_SERVER['QUERY_STRING'];
     }
 }

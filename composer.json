@@ -11,8 +11,10 @@
     "autoload": {
         "psr-4": {
             "Blog\\": "src/",
-            "App\\": "rlfram/"
+            "Core\\": "Core/"
         }
     },
-    "require": {}
+    "require": {
+        "twig/twig": "^3.0"
+    }
 }
