@@ -3,17 +3,22 @@
 
 namespace Core;
 
+use Throwable;
 
 class Error
 {
+
     /**
      * Exception handler.
      *
-     * @param \Throwable $exception The exception
+     * @param Throwable $exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      *
      * @return void
      */
-    public static function exceptionHandler(\Throwable $exception)
+    public static function exceptionHandler(Throwable $exception)
     {
         // Code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
@@ -21,7 +26,7 @@ class Error
             $code = 500;
         }
         http_response_code($code);
-        $config = new Config();
+        $config = Config::getInstance();
         if ($config->get('show_errors') === "true") {
             echo "<h1>Fatal error</h1>";
             echo "<p>Uncaught exception : '" . get_class($exception) . "'</p>";
@@ -39,14 +44,6 @@ class Error
 
             error_log($message);
 
-            //echo "<h1>An error occured</h1>";
-            /*
-            if ($code == 404) {
-                echo "<h1>Page not found</h1>";
-            } else {
-                echo "<h1>An error occured</h1>";
-            }
-            */
             HTTPResponse::renderTemplate("Errors/$code.html.twig");
         }
     }

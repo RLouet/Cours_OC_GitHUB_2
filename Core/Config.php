@@ -4,25 +4,37 @@
 namespace Core;
 
 
+use \DOMDocument;
+
 class Config
 {
-    protected $vars = [];
+    private static $instance = null;
+    private $vars = [];
+
+    private function __construct()
+    {
+        $xml = new DOMDocument;
+        $xml->load(__DIR__.'/../config/config.xml');
+
+        $elements = $xml->getElementsByTagName('define');
+
+        foreach ($elements as $element)
+        {
+            $this->vars[$element->getAttribute('var')] = $element->getAttribute('value');
+        }
+    }
+
+    public static function getInstance()
+    {
+        if(is_null(self::$instance))
+        {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
 
     public function get($var)
     {
-        if (!$this->vars)
-        {
-            $xml = new \DOMDocument;
-            $xml->load(__DIR__.'/../config/config.xml');
-
-            $elements = $xml->getElementsByTagName('define');
-
-            foreach ($elements as $element)
-            {
-                $this->vars[$element->getAttribute('var')] = $element->getAttribute('value');
-            }
-        }
-
         if (isset($this->vars[$var]))
         {
             return $this->vars[$var];

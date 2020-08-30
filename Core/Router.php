@@ -25,6 +25,7 @@ class Router
      */
     public function __construct()
     {
+
         $xml = new \DOMDocument;
         $xml->load(dirname(__DIR__) . '/config/routes.xml');
 
@@ -133,7 +134,7 @@ class Router
             $controller = $this->getNamespace() . $controller;
 
             if (class_exists($controller)) {
-                $controllerObject = new $controller($this->params);
+                $controllerObject = new $controller($this->params, $request);
 
                 $action = $this->params['action'];
                 $action = $this->convertToCamelCase($action);

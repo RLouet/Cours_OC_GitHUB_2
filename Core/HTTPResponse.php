@@ -3,17 +3,18 @@
 
 namespace Core;
 
+use \Twig;
+
 
 class HTTPResponse
 {
-    protected $page;
 
-    public function addHeader($header)
+    public function addHeader(string $header)
     {
         header($header);
     }
 
-    public function redirect($location)
+    public function redirect(string $location)
     {
         header('location: http://' . $_SERVER['HTTP_HOST'] . $location, true, 303);
         exit;
@@ -27,20 +28,21 @@ class HTTPResponse
     /**
      * @param $template
      * @param array $args
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws Twig\Error\LoaderError
+     * @throws Twig\Error\RuntimeError
+     * @throws Twig\Error\SyntaxError
      */
-    public static function renderTemplate ($template, $args = [])
+    public static function renderTemplate (string $template, array $args = [])
     {
         static $twig = null;
 
         if ($twig === null) {
-            $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
-            $twig = new \Twig\Environment($loader, [
+            $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
+            $twig = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
         }
+        $args['path'] = 'http://' . $_SERVER['HTTP_HOST'];
         echo $twig->render($template, $args);
     }
 

@@ -21,17 +21,17 @@ abstract class Controller
     protected $managers = null;
 
     /**
-     * Class constructor
-     *
-     * @param array $route_params  Parameters from the route
-     *
-     * @return void
+     * http request
+     * @var HTTPRequest
      */
-    public function __construct($route_params)
-    {
-        $this->route_params = $route_params;
+    protected $httpRequest = null;
 
-        $this->managers = new Managers('PDO', PDOFactory::getPDOConnexion());
+
+    public function __construct(array $routeParams)
+    {
+        $this->route_params = $routeParams;
+
+        $this->managers = new Managers('PDO', PDOFactory::getInstance()::getPDOConnexion());
     }
 
     /**
