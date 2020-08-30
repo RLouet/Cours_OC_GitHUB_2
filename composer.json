@@ -8,5 +8,14 @@
             "email": "romainlouet@romsworld.net"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Blog\\": "src/",
+            "Core\\": "Core/"
+        }
+    },
+    "require": {
+        "twig/twig": "^3.0",
+        "swiftmailer/swiftmailer": "^6.0"
+    }
 }
