@@ -44,8 +44,6 @@ class HTTPResponse
         echo $twig->render($template, $args);
     }
 
-
-
         public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         $this->setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);

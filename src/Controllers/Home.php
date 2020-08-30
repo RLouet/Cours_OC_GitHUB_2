@@ -42,8 +42,8 @@ class Home extends Controller
      */
     public function indexAction()
     {
-        $config = new Config();
-        echo $config->get('show_errors');
+        /*$config = new Config();
+        echo $config->get('show_errors');*/
 
         HTTPResponse::renderTemplate('Frontend/index.html.twig', [
             'name' => 'Romain',
