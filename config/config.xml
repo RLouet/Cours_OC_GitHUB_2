@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
-    <define var="show_errors" value="false" />
-    <define var="db_host" value="admin" />
-    <define var="db_name" value="admin" />
-    <define var="db_user" value="admin" />
-    <define var="db_password" value="mdp" />
+    <define var="show_errors" value="true" />
+    <define var="db_host" value="localhost" />
+    <define var="db_name" value="oc_daphpsymfony_p5" />
+    <define var="db_user" value="root" />
+    <define var="db_password" value="" />
 </definitions>
