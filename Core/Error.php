@@ -47,7 +47,7 @@ class Error
                 echo "<h1>An error occured</h1>";
             }
             */
-            HTTPResponse::renderTemplate("$code.html.twig");
+            HTTPResponse::renderTemplate("Errors/$code.html.twig");
         }
     }
 }
