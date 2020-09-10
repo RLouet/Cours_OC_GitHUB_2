@@ -22,17 +22,12 @@ class PDOFactory
         self::$pdoConnexion = $db;
     }
 
-    public static function getInstance()
+    public static function getPDOConnexion()
     {
         if(is_null(self::$instance))
         {
             self::$instance = new PDOFactory();
         }
-        return self::$instance;
-    }
-
-    public static function getPDOConnexion()
-    {
-        return self::$pdoConnexion;
+        return self::$instance::$pdoConnexion;
     }
 }

@@ -23,6 +23,6 @@ Routes exemples :
     <route url = "{controller}/{id:\d+}/{action}">
     </route>
     <route url = "admin/{controller}/{action}">
-        <param name="namespace">NS</param>
+        <param name="namespace">Admin</param>
     </route>
 </routes>

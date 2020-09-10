@@ -2,6 +2,53 @@
 
 {% block title %}Home{% endblock %}
 
+
 {% block body %}
-    <h1>Index</h1>
+<!-- Hero Slider Block
+================================================== -->
+
+<div class="section full-height">
+    <div class="parallax" style="background-image: url('img/parallax-hero-7.jpg')"></div>
+    <div class="light-fade-over-2"></div>
+    <div class="hero-center-wrap z-bigger">
+        <div class="container hero-text parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="typed">I'm <span id="typed-1"></span></h2>
+                    <div class="subtext mt-3">good design must primarily serve people</div>
+                    <ul class="hero-social mb-0 mt-5">
+                        <li class="twitter">
+                            <a href="#">Tw</a>
+                        </li>
+                        <li class="facebook">
+                            <a href="#">Fb</a>
+                        </li>
+                        <li class="google">
+                            <a href="#">G+</a>
+                        </li>
+                        <li class="vimeo">
+                            <a href="#">Vm</a>
+                        </li>
+                    </ul>
+                    <div class="clear"></div>
+                    <a href="#scroll-top" class="btn btn-primary btn-simple btn-round btn-long mt-5 scroll" >read more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <h2>index</h2>
+        <h3>{{ data.firstname }} {{ data.lastname }}</h3>
+        <p>{{ data.teaserphrase }}</p>
+        <p>{{ data.logo }}</p>
+        <p>{{ data.contactmail }}</p>
+        <p>{{ data.cv }}</p>
+        {% for network in data.socialnetworks %}
+            <p>{{ network.name }}</p>
+            <p>{{ network.logo }}</p>
+            <p>{{ network.url }}</p>
+        {% endfor %}
+    </div>
 {% endblock %}

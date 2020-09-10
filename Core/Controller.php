@@ -31,7 +31,7 @@ abstract class Controller
     {
         $this->route_params = $routeParams;
 
-        $this->managers = new Managers('PDO', PDOFactory::getInstance()::getPDOConnexion());
+        $this->managers = new Managers('PDO', PDOFactory::getPDOConnexion());
     }
 
     /**
