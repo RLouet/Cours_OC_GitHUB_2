@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="{{ path }}/css/owl.carousel.css"/>
     <link rel="stylesheet" href="{{ path }}/css/owl.transitions.css"/>
     <link rel="stylesheet" href="{{ path }}/css/colors/color-green.css"/>
+    <link rel="stylesheet" href="{{ path }}/custom/css/style.css"/>
 
     <!-- Favicons
     ================================================== -->
@@ -50,17 +51,17 @@
 
 <!-- Nav and Logo
 ================================================== -->
-
+{% block nav %}
 <div id="menu-wrap" class="cbp-af-header white-menu-background-1st-trans menu-fixed-padding menu-shadow">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <nav class="navbar navbar-toggleable-md navbar-light bg-inverse bg-faded">
+                <nav class="navbar navbar-toggleable-md navbar-light not-transparent bg-faded">
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavMenuMain" aria-controls="navbarNavMenuMain" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">
-                        <img src="img/logo.png" alt="" class="">
+                    <a class="navbar-brand hidden-md-down" href="{{ path }}">
+                        <img src="{{ path }}/uploads/logo/logo.png" alt="Logo" class="">
                     </a>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNavMenuMain">
                         <ul class="navbar-nav">
@@ -75,12 +76,12 @@
                                 </a>
                             </li>
                             <li class="nav-item dropdown mega-menu">
-                                <a class="nav-link" href="{{ path }}#cv">
+                                <a class="nav-link" href="{{ path }}/uploads/cv/{{ data.cv }}">
                                     CV
                                 </a>
                             </li>
                             <li class="nav-item dropdown mega-menu">
-                                <a class="nav-link" href="{{ path }}#contact">
+                                <a class="nav-link" href="{{ path }}#contactSection">
                                     Contact
                                 </a>
                             </li>
@@ -91,7 +92,7 @@
         </div>
     </div>
 </div>
-
+{% endblock %}
 
 <!-- Primary Page Layout
 ================================================== -->
@@ -100,17 +101,7 @@
     <h1>Body</h1>
 {% endblock %}
 
-
-<div class="section background-dark-2 over-hide footer-1 dark">
-    <div class="container scd-foot pt-4 pb-4">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <p class="mb-0">© 2018 Funky. Powerd with <i class="fa fa-heart"></i> by <a href="https://themeforest.net/user/ig_design/portfolio?ref=IG_design" target="_blank">IG Design</a>!</p>
-            </div>
-        </div>
-    </div>
-</div>
-
+{% include('footer.html.twig') %}
 
 <div class="scroll-to-top"><i class="fa fa-angle-up"></i></div>
 
@@ -121,7 +112,9 @@
 <script type="text/javascript" src="{{ path }}/js/tether.min.js"></script>
 <script type="text/javascript" src="{{ path }}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ path }}/js/plugins.js"></script>
+{% block javascripts %}
 <script type="text/javascript" src="{{ path }}/js/custom/custom-personal.js"></script>
+{% endblock %}
 <!-- End Document
 ================================================== -->
 </body>

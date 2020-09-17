@@ -27,8 +27,10 @@ abstract class Controller
     protected $httpRequest = null;
 
 
-    public function __construct(array $routeParams)
+    public function __construct(array $routeParams, HTTPRequest $request)
     {
+       $this->httpRequest = $request;
+
         $this->route_params = $routeParams;
 
         $this->managers = new Managers('PDO', PDOFactory::getPDOConnexion());

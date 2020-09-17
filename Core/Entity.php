@@ -14,8 +14,7 @@ abstract class Entity implements \ArrayAccess
 
     public function __construct(array $data = [])
     {
-        if (!empty($data))
-        {
+        if (!empty($data)) {
             $this->hydrate($data);
         }
     }

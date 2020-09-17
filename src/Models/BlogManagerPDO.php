@@ -5,7 +5,7 @@ namespace Blog\Models;
 
 use Blog\Entities\Blog;
 use Blog\Entities\SocialNetwork;
-use \PDO;
+use PDO;
 
 
 class BlogManagerPDO extends BlogManager
@@ -40,5 +40,30 @@ class BlogManagerPDO extends BlogManager
         //var_dump($blog);
 
         return $blog;
+    }
+
+    protected function add(Blog $blog)
+    {
+        // TODO: Implement add() method.
+    }
+
+    protected function modify(Blog $blog)
+    {
+        $sql = 'UPDATE blog SET lastname=:lastname, firstname=:firstname, email=:email, phone=:phone, logo=:logo, teaser_phrase=:teaser_phrase, contact_mail=:contact_mail, cv=:cv WHERE id=:id';
+
+        $stmt = $this->dao->prepare($sql);
+
+        $stmt->bindValue(':lastname', $blog->lastname());
+        $stmt->bindValue(':firstname', $blog->firstname());
+        $stmt->bindValue(':email', $blog->email());
+        $stmt->bindValue(':phone', $blog->phone());
+        $stmt->bindValue(':logo', $blog->logo());
+        $stmt->bindValue(':teaser_phrase', $blog->teaserPhrase());
+        $stmt->bindValue(':contact_mail', $blog->contactMail());
+        $stmt->bindValue(':cv', $blog->cv());
+        $stmt->bindValue(':id', $blog->id());
+
+        $stmt->execute();
+
     }
 }

@@ -11,6 +11,8 @@ class Blog extends Entity
 {
     protected $lastname,
         $firstname,
+        $email,
+        $phone,
         $logo,
         $teaserPhrase,
         $contactMail,
@@ -19,10 +21,12 @@ class Blog extends Entity
 
     const INVALID_LASTNAME = 1;
     const INVALID_FIRSTNAME = 2;
-    const INVALID_LOGO = 3;
-    const INVALID_TEASER = 4;
-    const INVALID_MAIL = 5;
-    const INVALID_CV = 6;
+    const INVALID_EMAIL = 3;
+    const INVALID_PHONE = 4;
+    const INVALID_LOGO = 5;
+    const INVALID_TEASER = 6;
+    const INVALID_CONTACTMAIL = 7;
+    const INVALID_CV = 8;
 
     public function __construct(array $data = [])
     {
@@ -32,7 +36,7 @@ class Blog extends Entity
 
     public function  isValid()
     {
-        return !(empty($this->lastname) || empty($this->firstname) || empty($this->logo) || empty($this->teaserPhrase) || empty($this->contactMail) || empty($this->cv));
+        return !(empty($this->lastname) || empty($this->firstname) || empty($this->logo) || empty($this->teaserPhrase) || empty($this->contactMail) || empty($this->cv) ||empty($this->email) || empty($this->phone));
     }
 
 
@@ -56,6 +60,24 @@ class Blog extends Entity
         }
     }
 
+    public function setEmail(string $email)
+    {
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->errors[] = self::INVALID_EMAIL;
+        } else {
+            $this->email = $email;
+        }
+    }
+
+    public function setPhone(string $phone)
+    {
+        if (empty($phone) || !preg_match('/^[\d+(][\d. ()+-]{6,28}[\d)]$/', $phone)) {
+            $this->errors[] = self::INVALID_PHONE;
+        } else {
+            $this->phone = $phone;
+        }
+    }
+
     public function setLogo(string $logo)
     {
         if (empty($logo)) {
@@ -74,12 +96,12 @@ class Blog extends Entity
         }
     }
 
-    public function setContactMail(string $mail)
+    public function setContactMail(string $contactMail)
     {
-        if (empty($mail) || !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-            $this->errors[] = self::INVALID_MAIL;
+        if (empty($contactMail) || !filter_var($contactMail, FILTER_VALIDATE_EMAIL)) {
+            $this->errors[] = self::INVALID_CONTACTMAIL;
         } else {
-            $this->contactMail = $mail;
+            $this->contactMail = $contactMail;
         }
     }
 
@@ -116,6 +138,16 @@ class Blog extends Entity
     public function firstname()
     {
         return $this->firstname;
+    }
+
+    public function email()
+    {
+        return $this->email;
+    }
+
+    public function phone()
+    {
+        return $this->phone;
     }
 
     public function logo()

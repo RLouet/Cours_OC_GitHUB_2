@@ -1,0 +1,85 @@
+{%  extends "Backend/back-base.html.twig" %}
+
+{% block title %}Config{% endblock %}
+
+
+{% block body %}
+    <div class="section padding-top background-grey-2 over-hide">
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center">
+                        <h3>Administration</h3>
+                        <div class="main-subtitle-bottom mt-3">
+                            Gérez votre Blog.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <form class="configform">
+        <!-- Block ============================================== -->
+        <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2">
+            <h4 class="text-center dark-1-title">Commentaires à modérer</h4>
+            <div class="container form-on-dark pt-3">
+                <div class="row justify-content-around">
+                    <div class="col-md-4">
+                        Commentaire 1
+                    </div>
+                    <div class="col-md-4">
+                        Commentaire 2
+                    </div>
+                    <div class="col-md-4">
+                        Commentaire 3
+                    </div>
+                    <div class="col-md-4">
+                        Commentaire 4
+                    </div>
+                    <div class="col-md-4">
+                        Commentaire 5
+                    </div>
+                    <div class="col-md-4">
+                        Commentaire 6
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Block ============================================== -->
+        <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
+            <h4 class="text-center">Vos derniers posts</h4>
+            <div class="container pt-3">
+                <div class="row justify-content-around align-items-center">
+                    <div class="col-lg-6 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            Post 1
+                        </div>
+                    </div>
+                    <div class=" col-lg-6 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            Post 2
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            Post 3
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            Post 4
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+{% endblock %}

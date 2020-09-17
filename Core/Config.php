@@ -4,14 +4,14 @@
 namespace Core;
 
 
-use \DOMDocument;
+use DOMDocument;
 
 class Config
 {
     private static $instance = null;
     private $vars = [];
 
-    private function __construct()
+    public function __construct()
     {
         $xml = new DOMDocument;
         $xml->load(__DIR__.'/../config/config.xml');

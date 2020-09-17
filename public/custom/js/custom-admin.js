@@ -10,27 +10,6 @@
 		showPercentage : false
 	});
 
-
-	//Page Scroll to id
-
-	$(window).on("load",function(){
-
-		/* Page Scroll to id fn call */
-		$("a.nav-link,a[href='#top'],a[data-gal='m_PageScroll2id']").mPageScroll2id({
-			highlightSelector:"a.nav-link",
-			offset: 67,
-			scrollSpeed:800
-		});
-
-		/* demo functions */
-		$("a[rel='next']").click(function(e){
-			e.preventDefault();
-			var to=$(this).parent().parent("section").next().attr("id");
-			$.mPageScroll2id("scrollTo",to);
-		});
-
-	});
-
 	
 	/* Scroll Animation */
 	
@@ -44,7 +23,7 @@
 		var scrollPos = $(this).scrollTop();
 		$('.parallax-fade-top').css({
 		  'top' : (scrollPos/2)+'px',
-		  'opacity' : 1-(scrollPos/950)
+		  'opacity' : 1-(scrollPos/250)
 		});
 	  });    
 	}
@@ -88,44 +67,26 @@
 			return false;
 		})
 
-
+			
 		// Type text
-
-		var typed;
-
-		function getTypedElements() {
-			$.ajax({
-				url: "/ajax/typedElements",
-				method: "POST",
-				dataType: "json",
-				success: function (data) {
-						typed = new Typed('#typed-1', {
-						strings: data,
-						typeSpeed:45,
-						backSpeed:0,
-						startDelay:200,
-						backDelay:2200,
-						loop:true,
-						loopCount:false,
-						showCursor:true,
-						cursorChar:"_",
-						attr:null
-					});
-					//setTypedElements(data) ;
-				},
-				error: function () {
-					alert('error');
-				}
-			})
-		}
-
-		getTypedElements();
-
+		
+		var typed = new Typed('#typed-1', {
+			strings: ['a web developer.', 'a player', 'a lover', 'a racer', 'an elf', 'a web designer.'],
+			typeSpeed:45,
+			backSpeed:0,
+			startDelay:200,
+			backDelay:2200,
+			loop:true,
+			loopCount:false,
+			showCursor:true,
+			cursorChar:"_",
+			attr:null
+		});	
 		
 		
 		/* Progress Bar Animation */	
 		
-		/*$(function() {
+		$(function() {   
 			var $meters = $(".progress > .progress-bar");
 			var $section = $('#progress');
 			var $queue = $({});
@@ -149,7 +110,7 @@
 					$(document).unbind('.myScroll');
 				}
 			});    
-		});	*/
+		});		
 	
 	
 		// Progress Counter 

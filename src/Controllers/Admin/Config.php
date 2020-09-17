@@ -4,9 +4,11 @@
 namespace Blog\Controllers\Admin;
 
 
+use Blog\Entities\Blog;
+use Core\Controller;
 use Core\HTTPResponse;
 
-class Config
+class Config extends Controller
 {
 
     /**
@@ -39,14 +41,41 @@ class Config
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function show()
+    public function index()
     {
         /*$config = new Config();
         echo $config->get('show_errors');*/
 
+        /*$manager = $this->managers->getManagerOf('Blog');
+        $blog = new Blog();
+        $manager->save($blog);*/
+        if ($this->httpRequest->postExists('blog-update')) {
+            $this->processForm();
+        }
+
         HTTPResponse::renderTemplate('Backend/config.html.twig', [
-            'name' => 'Romain',
-            'colours' => ['green', 'yellow', 'red']
+            'section' => 'config',
         ]);
+    }
+
+    private function processForm() {
+        $blog = new Blog([
+            'lastname' => $this->httpRequest->postData('lastname'),
+            'firstname' => $this->httpRequest->postData('firstname'),
+            'email' => $this->httpRequest->postData('email'),
+            'phone' => $this->httpRequest->postData('phone'),
+            'teaserPhrase' => $this->httpRequest->postData('teaser_phrase'),
+            'logo' => $this->httpRequest->postData('logo'),
+            'cv' => $this->httpRequest->postData('cv'),
+            'contactMail' => $this->httpRequest->postData('contact_mail'),
+            'id' => "1",
+        ]);
+        //var_dump($blog);
+
+        if ($blog->isValid()) {
+            $this->managers->getManagerOf('blog')->save($blog);
+        } else {
+            throw new \Exception('formulaire invalid');
+        }
     }
 }

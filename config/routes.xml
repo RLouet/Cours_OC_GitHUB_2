@@ -18,6 +18,15 @@ Routes exemples :
         <param name="controller">Home</param>
         <param name="action">index</param>
     </route>
+    <route url = "admin">
+        <param name="namespace">Admin</param>
+        <param name="controller">Admin</param>
+        <param name="action">index</param>
+    </route>
+    <route url = "admin/{controller}">
+        <param name="namespace">Admin</param>
+        <param name="action">index</param>
+    </route>
     <route url = "{controller}/{action}">
     </route>
     <route url = "{controller}/{id:\d+}/{action}">

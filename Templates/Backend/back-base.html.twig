@@ -1,0 +1,53 @@
+{%  extends "base.html.twig" %}
+
+{% block nav %}
+    <div id="menu-wrap" class="cbp-af-header white-menu-background-1st-trans menu-fixed-padding menu-shadow">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav class="navbar navbar-toggleable-md navbar-light bg-inverse bg-faded">
+                        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavMenuMain" aria-controls="navbarNavMenuMain" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ path }}">
+                            <img src="{{ path }}/uploads/logo/logo.png" alt="Logo" class="">
+                        </a>
+                        <div class="collapse navbar-collapse justify-content-end" id="navbarNavMenuMain">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown mega-menu {% if section == "accueil" %}active{% endif %}">
+                                    <a class="nav-link" href="{{ path }}/admin">
+                                        Accueil
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown mega-menu {% if section == "posts" %}active{% endif %}">
+                                    <a class="nav-link" href="{{ path }}/admin/posts">
+                                        Posts
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown mega-menu {% if section == "commentaires" %}active{% endif %}">
+                                    <a class="nav-link" href="{{ path }}/admin/commentaires">
+                                        Commentaires
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown mega-menu {% if section == "utilisateurs" %}active{% endif %}">
+                                    <a class="nav-link" href="{{ path }}/admin/utilisateurs">
+                                        Utilisateurs
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown mega-menu {% if section == "config" %}active{% endif %}">
+                                    <a class="nav-link" href="{{ path }}/admin/config">
+                                        Configuration
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin.js"></script>
+{% endblock %}
