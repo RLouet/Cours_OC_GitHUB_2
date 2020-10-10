@@ -50,4 +50,19 @@ class HTTPRequest
     {
         return $_SERVER['QUERY_STRING'];
     }
+
+    public function filesData($key)
+    {
+        return isset($_FILES[$key]) ? $_FILES[$key] : null;
+    }
+
+    public function filesExists($key)
+    {
+        return isset($_FILES[$key]);
+    }
+
+    public function isAjax()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+    }
 }

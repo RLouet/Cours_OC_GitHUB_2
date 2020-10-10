@@ -42,11 +42,14 @@ class Posts extends Controller
      */
     public function index()
     {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
         /*$config = new Config();
         echo $config->get('show_errors');*/
 
         HTTPResponse::renderTemplate('Backend/posts-index.html.twig', [
             'section' => 'posts',
+            'blog' => $blog,
         ]);
     }
 

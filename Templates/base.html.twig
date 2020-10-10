@@ -61,7 +61,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <a class="navbar-brand hidden-md-down" href="{{ path }}">
-                        <img src="{{ path }}/uploads/logo/logo.png" alt="Logo" class="">
+                        <img src="{{ path }}/uploads/logo/{{ data.id }}/{{ data.logo }}" alt="Logo" class="">
                     </a>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNavMenuMain">
                         <ul class="navbar-nav">
@@ -76,7 +76,7 @@
                                 </a>
                             </li>
                             <li class="nav-item dropdown mega-menu">
-                                <a class="nav-link" href="{{ path }}/uploads/cv/{{ data.cv }}">
+                                <a class="nav-link" href="{{ path }}/uploads/cv/{{ data.id }}/{{ data.cv }}" target="_blank">
                                     CV
                                 </a>
                             </li>
@@ -112,6 +112,7 @@
 <script type="text/javascript" src="{{ path }}/js/tether.min.js"></script>
 <script type="text/javascript" src="{{ path }}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ path }}/js/plugins.js"></script>
+<script type="text/javascript" src="{{ path }}/custom/js/custom-alerts.js"></script>
 {% block javascripts %}
 <script type="text/javascript" src="{{ path }}/js/custom/custom-personal.js"></script>
 {% endblock %}

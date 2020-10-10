@@ -46,9 +46,11 @@ class Blog extends Entity
     {
         if (empty($lastname) || !preg_match('/^[a-z\'][a-z-\' ]{0,48}[a-z\']$/i', $lastname)) {
             $this->errors[] = self::INVALID_LASTNAME;
-        } else {
-            $this->lastname = $lastname;
+            return $this;
         }
+        $this->lastname = $lastname;
+
+        return $this;
     }
 
     public function setFirstname(string $firstname)

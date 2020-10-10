@@ -66,59 +66,6 @@
 			jQuery('html, body').animate({scrollTop: 0}, duration);
 			return false;
 		})
-
-			
-		// Type text
-		
-		var typed = new Typed('#typed-1', {
-			strings: ['a web developer.', 'a player', 'a lover', 'a racer', 'an elf', 'a web designer.'],
-			typeSpeed:45,
-			backSpeed:0,
-			startDelay:200,
-			backDelay:2200,
-			loop:true,
-			loopCount:false,
-			showCursor:true,
-			cursorChar:"_",
-			attr:null
-		});	
-		
-		
-		/* Progress Bar Animation */	
-		
-		$(function() {   
-			var $meters = $(".progress > .progress-bar");
-			var $section = $('#progress');
-			var $queue = $({});
-			
-			function loadDaBars() {
-						$(".progress > .progress-bar").each(function() {
-							$(this)
-								.data("origWidth", $(this).width())
-								.width(0)
-								.animate({
-									width: $(this).data("origWidth")
-								}, 2000);
-						});
-			}    
-			$(document).bind('scroll.myScroll', function(ev) {
-				var scrollOffset = $(document).scrollTop();
-				var containerOffset = $section.offset().top - window.innerHeight;
-				if (scrollOffset > containerOffset) {
-					loadDaBars();
-					// unbind event not to load scroll again
-					$(document).unbind('.myScroll');
-				}
-			});    
-		});		
-	
-	
-		// Progress Counter 
-	
-		$('.counter').counterUp({
-			delay: 20,
-			time: 2000
-		});
 		
 		
 		//Parallax

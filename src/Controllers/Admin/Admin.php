@@ -42,11 +42,14 @@ class Admin extends Controller
      */
     public function index()
     {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
         /*$config = new Config();
         echo $config->get('show_errors');*/
 
         HTTPResponse::renderTemplate('Backend/index.html.twig', [
             'section' => 'accueil',
+            'blog' => $blog,
         ]);
     }
 }

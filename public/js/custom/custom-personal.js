@@ -1,6 +1,5 @@
 (function($) { "use strict";
 
-
 	//Preloader
 
 	Royal_Preloader.config({

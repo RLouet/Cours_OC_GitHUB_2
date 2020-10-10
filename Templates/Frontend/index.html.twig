@@ -12,7 +12,7 @@
     <div class="dark-fade-over"></div>
     <div class="hero-logo hidden-lg-up">
         <a href="{{ path }}">
-            <img src="{{ path }}/uploads/logo/logo.png" alt="Logo" class="">
+            <img src="{{ path }}/uploads/logo/{{ data.id }}/{{ data.logo }}" alt="Logo" class="">
         </a>
     </div>
     <div class="hero-center-wrap z-bigger">
@@ -20,20 +20,16 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="typed text-white"><span id="typed-1"></span></h2>
-                    <div class="subtext mt-3 text text-warning">{{ data.teaserphrase }}</div>
+                    <div class="subtext mt-3 text text-warning">{{ data.teaserphrase|nl2br }}</div>
                     <ul class="hero-social img-social mb-0 mt-5">
-                        <li class="facebook">
-                            <a href="#"><img src="{{ path }}/uploads/icons/facebook_128.png" alt="logo facebook"></i></a>
-                        </li>
-                        <li class="linkedin">
-                            <a href="#"><img src="{{ path }}/uploads/icons/linkedin_128.png" alt="logo linkedIn"></i></a>
-                        </li>
-                        <li class="twitter">
-                            <a href="#"><img src="{{ path }}/uploads/icons/twitter_128.png" alt="logo twitter"></a>
-                        </li>
+                        {% for network in data.socialnetworks %}
+                            <li>
+                                <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ data.id }}/{{ network.logo }}" alt="logo {{ network.name }}"></a>
+                            </li>
+                        {% endfor %}
                     </ul>
                     <div class="clear"></div>
-                    <a href="{{ path }}/uploads/cv/{{ data.cv }}" class="btn btn-primary btn-simple btn-round btn-long mt-5 scroll" target="_blank">Voir mon CV</a>
+                    <a href="{{ path }}/uploads/cv/{{ data.id }}/{{ data.cv }}" class="btn btn-primary btn-simple btn-round btn-long mt-5" target="_blank">Voir mon CV</a>
                 </div>
             </div>
         </div>
@@ -60,7 +56,7 @@
                             <input type="text" name="lastname" value="" placeholder="Votre nom" class="form-control">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 mt-4">
                         <div class="subscribe-box-1">
                             <label>Prénom</label>
                             <input type="text" name="firstname" value="" placeholder="Votre prénom" class="form-control">
@@ -80,7 +76,7 @@
                         </div>
                     </div>
                     <div class="clear"></div>
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-8 mt-4">
                         <div class="subscribe-box-1">
                             <label>Sujet</label>
                             <input type="text" name="phone" value="" placeholder="Sujet du message" class="form-control">
@@ -98,7 +94,7 @@
                 </div>
             </div>
         </form>
-        <div class="container mt-5 contact-infos">
+        <div class="container mt-5 contact-infos pb-5">
             <div class="row justify-content-around">
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
@@ -114,9 +110,5 @@
                 </div>
             </div>
         </div>
-        <p>{{ data.logo }}</p>
-        {% for network in data.socialnetworks %}
-            <a href="{{ network.url }}" title="{{ network.name }}"><img src="{{ path }}/uploads/icons/{{ network.logo }}" alt="logo {{ network.name }}"></a>
-        {% endfor %}
     </div>
 {% endblock %}

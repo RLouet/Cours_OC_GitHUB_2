@@ -28,6 +28,7 @@ class PDOFactory
     {
         $db = new PDO('mysql:host=' . $this->config->get('db_host') . ';dbname=' . $this->config->get('db_name'), $this->config->get('db_user'), $this->config->get('db_password'));
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->exec('SET NAMES utf8');
         return $db;
     }
 }

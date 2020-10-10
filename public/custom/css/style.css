@@ -15,7 +15,7 @@
 }
 
 .form-on-dark label {
-    color: #050505;
+    color: #c6ff84;
 }
 .form-control:active, input:focus, .form-control:focus {
     border-color: #6dc234;
@@ -171,4 +171,65 @@
     padding: 0;
     height: 50px;
     width: auto;
+}
+
+#socialLogoInput, #blogLogoInput, #blogCvInput {
+    display: none;
+}
+label[for=socialLogoInput], label[for=blogLogoInput], label[for=blogCvInput] {
+    width: 100%;
+    color: white;
+}
+label[for=blogLogoInput] {
+    margin-bottom: 0;
+}
+
+.social-icon-input-area img {
+    width: 100%;
+}
+.blog-logo-input-area img {
+    background-color: white;
+    max-height: 150px;
+    padding: 5px;
+    border-radius: .15rem .15rem 0 0;
+}
+
+#socialModal .form-control {
+    font-size: 1.2em;
+    padding-top: 0;
+}
+#socialModal label {
+    font-size: 1em;
+    padding-top: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-info.btn-simple {
+    color: #5bc0de;
+    border: 2px solid #5bc0de;
+    background-color: transparent;
+}
+
+.btn-info.btn-simple:hover {
+    color: #fff;
+}
+
+.form-error ul {
+    margin-bottom: 0;
+    padding-inline-start: 0;
+}
+
+.form-error li {
+    display: block;
+}
+
+#flashAlert {
+    z-index: 9999;
+    position: fixed;
+    top: 5px;
+    left: 2%;
+    width: 96%;
 }

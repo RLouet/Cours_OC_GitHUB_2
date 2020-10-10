@@ -5,9 +5,11 @@ namespace Blog\Entities;
 
 
 use Core\Entity;
+use JsonSerializable;
 
-class SocialNetwork extends Entity
+class SocialNetwork extends Entity implements JsonSerializable
 {
+
     protected $blogId,
         $name,
         $logo,
@@ -21,6 +23,18 @@ class SocialNetwork extends Entity
     public function  isValid()
     {
         return !(empty($this->blogId) || empty($this->name) || empty($this->logo) || empty($this->url));
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id(),
+            'name' => $this->name(),
+            'url' => $this->url(),
+            'logo' => $this->logo(),
+            'errors' => $this->errors(),
+            'blogId' => $this->blogId(),
+        ];
     }
 
 
@@ -37,7 +51,7 @@ class SocialNetwork extends Entity
 
     public function setName(string $name)
     {
-        if (empty($name) || !preg_match('/^[a-z][a-z- ]{0,48}[a-z]$/i', $name)) {
+        if (empty($name) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $name)) {
             $this->errors[] = self::INVALID_NAME;
         } else {
             $this->name = $name;
@@ -55,7 +69,7 @@ class SocialNetwork extends Entity
 
     public function setUrl(string $url)
     {
-        if (empty($url)) {
+        if (empty($url) || !preg_match('/^[-&%_:?\/=.\da-z]{5,50}$/i', $url)) {
             $this->errors[] = self::INVALID_URL;
         } else {
             $this->url = $url;

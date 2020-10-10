@@ -22,7 +22,6 @@ class BlogManagerPDO extends BlogManager
         $stmt->closeCursor();
 
         $blog = new Blog($blogData);
-        //var_dump($blogData);
 
         $sqlSocial = 'SELECT * FROM social_network s WHERE s.blog_id=?';
         $stmt = $this->dao->prepare($sqlSocial);
@@ -30,14 +29,10 @@ class BlogManagerPDO extends BlogManager
         $stmt->execute(array($id));
         $socialNetworksList = $stmt->fetchAll();
 
-
-
         foreach ($socialNetworksList as $socialNetwork) {
             $socialNetwork = new SocialNetwork($socialNetwork);
             $blog->addSocialNetwork($socialNetwork);
         }
-
-        //var_dump($blog);
 
         return $blog;
     }

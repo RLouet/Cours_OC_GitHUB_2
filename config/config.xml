@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
+    <define var="blog_id" value="" />
     <define var="show_errors" value="true" />
     <define var="db_host" value="localhost" />
     <define var="db_name" value="oc_daphpsymfony_p5" />
