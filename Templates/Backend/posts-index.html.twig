@@ -1,0 +1,87 @@
+{%  extends "Backend/back-base.html.twig" %}
+
+{% block title %}Config{% endblock %}
+
+
+{% block body %}
+    <div class="section padding-top background-grey-2 over-hide">
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center">
+                        <h3>Posts</h3>
+                        <div class="main-subtitle-bottom mt-3">
+                            Gérer vos posts.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block ============================================== -->
+    <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2 text-center">
+        <a href="#" class="btn btn-primary mx-auto" title="Ajouter un post">Ajouter</a>
+    </div>
+
+    <form>
+        <!-- Block ============================================== -->
+        <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
+            <h4 class="text-center">Posts enregistrés</h4>
+            <div class="container pt-3">
+                <div class="row justify-content-around align-items-center">
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            <label>Nom</label>
+                            <input type="text" value="" placeholder="Réseau" class="form-control">
+                            <label>Logo</label>
+                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
+                            <label>Adresse</label>
+                            <input type="text" value="" placeholder="Url" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            <label>Nom</label>
+                            <input type="text" value="" placeholder="Réseau" class="form-control">
+                            <label>Logo</label>
+                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
+                            <label>Adresse</label>
+                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
+                            <label>Adresse</label>
+                            <input type="text" value="" placeholder="Url" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            <a href="#"><div class="sale btn-danger">Supprimer</div></a>
+                            <label>Nom</label>
+                            <input type="text" value="" placeholder="Réseau" class="form-control">
+                            <label>Logo</label>
+                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
+                            <label>Adresse</label>
+                            <input type="text" value="" placeholder="Url" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
+                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
+                            <label>Nom</label>
+                            <input type="text" value="" placeholder="Réseau" class="form-control">
+                            <label>Logo</label>
+                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
+                            <label>Adresse</label>
+                            <input type="text" value="" placeholder="Url" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
+                            <button class="btn btn-primary">Ajouter un réseau</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+{% endblock %}

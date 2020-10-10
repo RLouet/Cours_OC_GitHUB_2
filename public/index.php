@@ -12,6 +12,11 @@ error_reporting(E_ALL);
 set_exception_handler('\Core\Error::exceptionHandler');
 
 /**
+ * Session
+ */
+session_start();
+
+/**
  * Routing
  */
 $router = new \Core\Router();

@@ -14,8 +14,7 @@ abstract class Entity implements \ArrayAccess
 
     public function __construct(array $data = [])
     {
-        if (!empty($data))
-        {
+        if (!empty($data)) {
             $this->hydrate($data);
         }
     }
@@ -40,6 +39,10 @@ abstract class Entity implements \ArrayAccess
         $this->id = (int) $id;
     }
 
+    public function setCustomError (string $key, string $error) {
+        $this->errors[$key] = $error;
+    }
+
     public function offsetGet($var)
     {
         if (isset($this->$var) && is_callable([$this, $var]))
@@ -50,7 +53,7 @@ abstract class Entity implements \ArrayAccess
 
     public function offsetSet($var, $value)
     {
-        $method = 'set'.ucfirst($var);
+        $method = 'set'.ucfirst(str_replace('_', '', ucwords($var, '_')));
 
         if (isset($this->$var) && is_callable([$this, $method]))
         {

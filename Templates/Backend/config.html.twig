@@ -1,0 +1,243 @@
+{%  extends "Backend/back-base.html.twig" %}
+
+{% block title %}Config{% endblock %}
+
+
+{% block body %}
+
+    <div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %} alert-dismissible fade" role="alert">
+        <button type="button" class="close" aria-label="Fermer">
+            <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
+        </button>
+        {% for message in flash.messages %}<div>{{ message }}</div>{% endfor %}
+    </div>
+    <div class="modal fade default" id="socialModal" tabindex="-1" role="dialog" aria-labelledby="socialModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="socialModalLabel"><span></span> réseau social</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form action="{{ path }}/ajax/saveSocialNetwork" method="post" enctype="multipart/form-data">
+                    <div class="modal-body row form-on-dark">
+                        <div class="col-12 sn-general-error">
+                            <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                        </div>
+                        <div class="col-4 social-icon-input-area">
+                            <img src="{{ path }}/uploads/icons/empty-icon_128-128.png" alt="logo" id="socialLogoPreview" class="img-fluid">
+                            <label for="socialLogoInput" class="btn btn-primary btn-sm pt-1">Logo</label>
+                            <input type="file" name="logo" id="socialLogoInput" class="form-control social-logo" accept="image/*">
+                        </div>
+                        <div class="col-8 sn-name">
+                            <label for="socialName">Nom</label>
+                            <input type="text" name="name" id="socialNameInput" class="form-control">
+                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Entre 2 et 50 caractères, lettres et chiffres.</span></div>
+                        </div>
+                        <div class="col-12 sn-url">
+                            <label for="socialUrl">url</label>
+                            <input type="text" name="url" id="socialUrlInput" class="form-control">
+                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Entre 5 et 50 caractères, lettres, chiffres, et [:/.-_?=&%].</span></div>
+                        </div>
+                    </div>
+                    <div class="hidden-fields hidden"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <input type="submit" name="save_social_network" class="btn btn-primary valid-btn" value="Enregistrer">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade default" id="socialDeleteModal" tabindex="-1" role="dialog" aria-labelledby="socialDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="socialDeleteModalLabel">Supprimer le réseau social</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="col-12 sn-delete-error">
+                    <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                </div>
+                <div class="modal-body row form-on-dark">
+                    <div class="col-12">
+                        <p>Êtes-vous sûr de vouloir supprimer le réseau social <span class="network-name badge badge-warning"></span> ?</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary delete-btn">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section padding-top background-grey-2 over-hide">
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center">
+                        <h3>Configuration</h3>
+                        <div class="main-subtitle-bottom mt-3">
+                            Configurez la page d'accueil et les paramètres du Blog.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <form class="configform" action="" method="post" enctype="multipart/form-data">
+        <!-- Block ============================================== -->
+        <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2">
+            <h4 class="text-center dark-1-title">Identité</h4>
+            <div class="container form-on-dark pt-3">
+                <div class="row justify-content-around align-items-center">
+                    <div class="col-md-4">
+                        <div class="subscribe-box-1">
+                            <label>Nom</label>
+                            {% if blogForm.entity.errors and constant('INVALID_LASTNAME', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Nom invalide</span>
+                            {% endif %}
+                            <input type="text" name="lastname" value="{{ blogForm.entity.lastname }}" placeholder="Votre nom" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="subscribe-box-1">
+                            <label>Prénom</label>
+                            {% if blogForm.entity.errors and constant('INVALID_FIRSTNAME', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Prénom invalide</span>
+                            {% endif %}
+                            <input type="text" name="firstname" value="{{ blogForm.entity.firstname }}" placeholder="Votre prénom" class="form-control">
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="col-md-4 mt-4">
+                        <div class="subscribe-box-1">
+                            <label for="email">Email</label>
+                            {% if blogForm.entity.errors and constant('INVALID_EMAIL', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Email invalide</span>
+                            {% endif %}
+                            <input type="email" name="email" value="{{ blogForm.entity.email }}" placeholder="Votre Email" class="form-control" id="email">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-4">
+                        <div class="subscribe-box-1">
+                            <label>Téléphone</label>
+                            {% if blogForm.entity.errors and constant('INVALID_PHONE', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Téléphone invalide</span>
+                            {% endif %}
+                            <input type="text" name="phone" value="{{ blogForm.entity.phone }}" placeholder="Votre téléphone" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-8 mt-4">
+                        <div class="subscribe-box-1">
+                            <label>Accroche</label>
+                            {% if blogForm.entity.errors and constant('INVALID_TEASER', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Accroche invalide</span>
+                            {% endif %}
+                            <textarea name="teaser_phrase" placeholder="Votre phrase d'accroche" class="for-textarea form-control">{{ blogForm.entity.teaserPhrase }}</textarea>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="col-md-6 col-lg-5 mt-4">
+                        <div class="subscribe-box-1">
+                            <label>Logo</label>
+                            {% if blogForm.entity.errors and constant('INVALID_LOGO', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Logo invalide</span>
+                            {% endif %}
+                            {% if blogForm.entity.errors.logo %}
+                                <span class="badge badge-warning ml-2">{{ blogForm.entity.errors.logo }}</span>
+                            {% endif %}
+                            <div class="blog-logo-input-area text-center">
+                                <img src="{{ path }}/uploads/logo/{{ blogForm.entity.id }}/{{ blogForm.entity.logo }}" alt="logo" id="blogLogoPreview" class="img-fluid">
+                                <label for="blogLogoInput" class="btn btn-primary btn-sm pt-1">Modifier</label>
+                                <input type="file" name="logo" id="blogLogoInput" class="form-control social-logo" accept="image/gif,image/png,image/jpeg">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-5 mt-4">
+                        <div class="subscribe-box-1">
+                            <label>CV</label>
+                            {% if blogForm.entity.errors and constant('INVALID_CV', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">CV invalide</span>
+                            {% endif %}
+                            <div class="blog-cv-input-area text-center">
+                                <a href="{{ path }}/uploads/cv/{{ blogForm.entity.id }}/{{ blogForm.entity.cv }}" title="CV actuel" class="btn btn-simple btn-primary btn-round py-1" target="_blank">CV actuel</a>
+                                <label for="blogCvInput" class="btn btn-primary btn-sm pt-1 mt-2">Modifier</label>
+                                <input type="file" name="cv" id="blogCvInput" class="form-control social-logo" accept="application/pdf">
+                                <a href="test.fr" id="blogCvPreview" class="btn btn-simple btn-info btn-round py-1 hidden" target="_blank">Nouveau CV : Romain.pdf</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-4 mb-4">
+                        <div class="subscribe-box-1">
+                            <label>Destination du formulaire de contact</label>
+                            {% if blogForm.entity.errors and constant('INVALID_CONTACTMAIL', blogForm.entity) in blogForm.entity.errors %}
+                                <span class="badge badge-warning ml-2">Email invalide</span>
+                            {% endif %}
+                            <input type="email" name="contact_mail" value="{{ blogForm.entity.contactMail }}" placeholder="Email de destination" class="form-control">
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="1" placeholder="Email de destination" class="form-control">
+                    <div class="clear"></div>
+                    <input class="btn btn-primary" type="submit" name="blog-update" value="Enregistrer" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+        <!-- Block ============================================== -->
+        <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
+            <h4 class="text-center">Réseaux sociaux</h4>
+            <div class="container pt-3">
+                <div class="row justify-content-around align-items-center">
+                    {% for socialNetwork in blog.socialNetworks %}
+
+                        <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
+                            <div class="no-img-effect rounded over-hide p-4 social-box-{{ socialNetwork.id }} call-box-5">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <img src="{{ path }}/uploads/icons/{{ socialNetwork.blogId }}/{{ socialNetwork.logo }}" class="sn-logo" data-file="{{ socialNetwork.logo }}">
+                                    </div>
+                                    <div class="col-7">
+                                        <h5 class="sn-name">{{ socialNetwork.name }}</h5>
+                                    </div>
+                                    <div class="col-12 text-center mt-2">
+                                        <p class="sn-url">{{ socialNetwork.url }}</p>
+                                    </div>
+                                    <div class="col-12 row justify-content-between">
+                                        <div class="col-4 text-center">
+                                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#socialDeleteModal" data-id="{{ socialNetwork.id }}" data-name="{{ socialNetwork.name }}">Supprimer</button>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#socialModal" data-action="edit" data-id="{{ socialNetwork.id }}">Modifier</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3" id="addSocialNetworkBtn">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#socialModal" data-action="add">Ajouter un réseau</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var path = "{{ path }}";
+    </script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-config.js"></script>
+{% endblock %}

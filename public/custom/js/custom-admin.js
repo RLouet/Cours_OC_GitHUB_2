@@ -1,5 +1,6 @@
 (function($) { "use strict";
 
+
 	//Preloader
 
 	Royal_Preloader.config({
@@ -7,27 +8,6 @@
 		background     : '#ffffff',
 		showProgress   : true,
 		showPercentage : false
-	});
-
-
-	//Page Scroll to id
-
-	$(window).on("load",function(){
-
-		/* Page Scroll to id fn call */
-		$("a.nav-link,a[href='#top'],a[data-gal='m_PageScroll2id']").mPageScroll2id({
-			highlightSelector:"a.nav-link",
-			offset: 67,
-			scrollSpeed:800
-		});
-
-		/* demo functions */
-		$("a[rel='next']").click(function(e){
-			e.preventDefault();
-			var to=$(this).parent().parent("section").next().attr("id");
-			$.mPageScroll2id("scrollTo",to);
-		});
-
 	});
 
 	
@@ -43,7 +23,7 @@
 		var scrollPos = $(this).scrollTop();
 		$('.parallax-fade-top').css({
 		  'top' : (scrollPos/2)+'px',
-		  'opacity' : 1-(scrollPos/950)
+		  'opacity' : 1-(scrollPos/250)
 		});
 	  });    
 	}
@@ -86,77 +66,6 @@
 			jQuery('html, body').animate({scrollTop: 0}, duration);
 			return false;
 		})
-
-
-		// Type text
-
-		var typed;
-
-		function getTypedElements() {
-			$.ajax({
-				url: "/ajax/typedElements",
-				method: "POST",
-				dataType: "json",
-				success: function (data) {
-						typed = new Typed('#typed-1', {
-						strings: data,
-						typeSpeed:45,
-						backSpeed:0,
-						startDelay:200,
-						backDelay:2200,
-						loop:true,
-						loopCount:false,
-						showCursor:true,
-						cursorChar:"_",
-						attr:null
-					});
-					//setTypedElements(data) ;
-				},
-				error: function () {
-					alert('error');
-				}
-			})
-		}
-
-		getTypedElements();
-
-		
-		
-		/* Progress Bar Animation */	
-		
-		/*$(function() {
-			var $meters = $(".progress > .progress-bar");
-			var $section = $('#progress');
-			var $queue = $({});
-			
-			function loadDaBars() {
-						$(".progress > .progress-bar").each(function() {
-							$(this)
-								.data("origWidth", $(this).width())
-								.width(0)
-								.animate({
-									width: $(this).data("origWidth")
-								}, 2000);
-						});
-			}    
-			$(document).bind('scroll.myScroll', function(ev) {
-				var scrollOffset = $(document).scrollTop();
-				var containerOffset = $section.offset().top - window.innerHeight;
-				if (scrollOffset > containerOffset) {
-					loadDaBars();
-					// unbind event not to load scroll again
-					$(document).unbind('.myScroll');
-				}
-			});    
-		});	*/
-	
-	
-		// Progress Counter 
-	
-		$('.counter').counterUp({
-			delay: 20,
-			time: 2000
-		});
 		
 		
 		//Parallax

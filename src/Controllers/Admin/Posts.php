@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Blog\Controllers;
+namespace Blog\Controllers\Admin;
 
 
-use Core\Config;
 use Core\Controller;
 use Core\HTTPResponse;
 
-class Home extends Controller
+class Posts extends Controller
 {
+
     /**
      * Before filter
      *
@@ -40,18 +40,17 @@ class Home extends Controller
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function indexAction()
+    public function index()
     {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
         /*$config = new Config();
         echo $config->get('show_errors');*/
-         $manager = $this->managers->getManagerOf('Blog');
 
-         $homeData = $manager->getData();
-
-         //var_dump($homeData);
-
-        HTTPResponse::renderTemplate('Frontend/index.html.twig', [
-            'data' => $homeData,
+        HTTPResponse::renderTemplate('Backend/posts-index.html.twig', [
+            'section' => 'posts',
+            'blog' => $blog,
         ]);
     }
+
 }

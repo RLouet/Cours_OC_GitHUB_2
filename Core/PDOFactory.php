@@ -3,36 +3,32 @@
 
 namespace Core;
 
-use \PDO;
+use PDO;
 
 class PDOFactory
 {
 
-    private static $instance = null;
-
-    private static $pdoConnexion;
+    private static $pdoConnexion = null;
+    protected Config $config;
 
     private function __construct()
     {
-        $config = Config::getInstance();
-
-        $db = new PDO('mysql:host=' . $config->get('db_host') . ';dbname=' . $config->get('db_name'), $config->get('db_user'), $config->get('db_password'));
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        self::$pdoConnexion = $db;
-    }
-
-    public static function getInstance()
-    {
-        if(is_null(self::$instance))
-        {
-            self::$instance = new PDOFactory();
-        }
-        return self::$instance;
+        $this->config = Config::getInstance();
     }
 
     public static function getPDOConnexion()
     {
+        if (is_null(self::$pdoConnexion)) {
+            self::$pdoConnexion = (new PDOFactory())->getDb();
+        }
         return self::$pdoConnexion;
+    }
+
+    public function getDb()
+    {
+        $db = new PDO('mysql:host=' . $this->config->get('db_host') . ';dbname=' . $this->config->get('db_name'), $this->config->get('db_user'), $this->config->get('db_password'));
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->exec('SET NAMES utf8');
+        return $db;
     }
 }
