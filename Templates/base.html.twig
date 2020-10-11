@@ -61,22 +61,22 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <a class="navbar-brand hidden-md-down" href="{{ path }}">
-                        <img src="{{ path }}/uploads/logo/{{ data.id }}/{{ data.logo }}" alt="Logo" class="">
+                        <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
                     </a>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNavMenuMain">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown mega-menu active">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ path }}">
                                     Accueil
                                 </a>
                             </li>
                             <li class="nav-item dropdown mega-menu">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ path }}/book">
                                     Book
                                 </a>
                             </li>
                             <li class="nav-item dropdown mega-menu">
-                                <a class="nav-link" href="{{ path }}/uploads/cv/{{ data.id }}/{{ data.cv }}" target="_blank">
+                                <a class="nav-link" href="{{ path }}/uploads/cv/{{ blog.id }}/{{ blog.cv }}" target="_blank">
                                     CV
                                 </a>
                             </li>

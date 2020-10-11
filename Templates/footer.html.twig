@@ -1,13 +1,56 @@
 
-<div class="section background-dark-2 over-hide footer-1 dark">
+<section class="section background-dark-2 over-hide footer-1 dark">
     <div class="container scd-foot pt-4 pb-4">
-        <div class="row">
-            <div class="col-md-6 text-center">
-                <p class="mb-0">© 2018 Funky. Powerd with <i class="fa fa-heart"></i> by <a href="https://themeforest.net/user/ig_design/portfolio?ref=IG_design" target="_blank">IG Design</a>!</p>
+        <div class="row justify-content-center">
+            <div class="col-md-4 text-center mb-3">
+                <h5 class="text-light-green">Me suivre :</h5>
+                <div class="row footer-social-icons justify-content-center">
+                    {% for network in blog.socialnetworks %}
+                        <div class="col-auto p-2">
+                            <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ blog.id }}/{{ network.logo }}" alt="logo {{ network.name }}"></a>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="col-md-6 text-center">
-                <p class="mb-0"><a href="{{ path }}/admin">Admin</a></p>
+            <div class="d-md-none col-4 mb-3">
+                <div class="separator-wrap">
+                    <span class="separator"><span class="separator-line dashed"></span></span>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <h5 class="text-light-green">{{ blog.firstname }} {{ blog.lastname }}</h5>
+                <p class="mb-1"><i class="funky-ui-icon icon-Smartphone-4"></i> {{ blog.phone }}</p>
+                <p><i class="funky-ui-icon icon-Mail-Open"></i> {{ blog.email }}</p>
+                <a href="{{ path }}#contactSection" class="btn btn-primary">Contact</a>
+            </div>
+            <div class="d-md-none col-4 mb-3">
+                <div class="separator-wrap">
+                    <span class="separator"><span class="separator-line dashed"></span></span>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <h5 class="text-light-green">Plan du site</h5>
+                <ul class="sitemap">
+                    <li>
+                        <a href="{{ path }}">Accueil</a>
+                    </li>
+                    <li>
+                        <a href="{{ path }}/book">Book</a>
+                    </li>
+                    <li>
+                        <a href="{{ path }}/uploads/cv/{{ blog.id }}/{{ blog.cv }}" target="_blank">CV</a>
+                    </li>
+                    <li>
+                        <a href="{{ path }}/admin">Admin</a>
+                    </li>
+                    <li>
+                        <a href="{{ path }}/cgu">CGU</a>
+                    </li>
+                    <li>
+                        <a href="{{ path }}/confidentialite">Politique de confidentialité</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-</div>
+</section>

@@ -12,7 +12,7 @@
     <div class="dark-fade-over"></div>
     <div class="hero-logo hidden-lg-up">
         <a href="{{ path }}">
-            <img src="{{ path }}/uploads/logo/{{ data.id }}/{{ data.logo }}" alt="Logo" class="">
+            <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
         </a>
     </div>
     <div class="hero-center-wrap z-bigger">
@@ -20,16 +20,16 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="typed text-white"><span id="typed-1"></span></h2>
-                    <div class="subtext mt-3 text text-warning">{{ data.teaserphrase|nl2br }}</div>
+                    <div class="subtext mt-3 text text-warning">{{ blog.teaserphrase|nl2br }}</div>
                     <ul class="hero-social img-social mb-0 mt-5">
-                        {% for network in data.socialnetworks %}
+                        {% for network in blog.socialnetworks %}
                             <li>
-                                <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ data.id }}/{{ network.logo }}" alt="logo {{ network.name }}"></a>
+                                <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ blog.id }}/{{ network.logo }}" alt="logo {{ network.name }}"></a>
                             </li>
                         {% endfor %}
                     </ul>
                     <div class="clear"></div>
-                    <a href="{{ path }}/uploads/cv/{{ data.id }}/{{ data.cv }}" class="btn btn-primary btn-simple btn-round btn-long mt-5" target="_blank">Voir mon CV</a>
+                    <a href="{{ path }}/uploads/cv/{{ blog.id }}/{{ blog.cv }}" class="btn btn-primary btn-simple btn-round btn-long mt-5" target="_blank">Voir mon CV</a>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
         <div class="container-fluid parallax-fade-top" style="top: 0px;">
             <div class="row">
                 <div class="col-md-12">
-                    <h2>{{ data.firstname }} {{ data.lastname }}</h2>
+                    <h2>{{ blog.firstname }} {{ blog.lastname }}</h2>
                 </div>
             </div>
         </div>
@@ -99,13 +99,13 @@
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
                         <i class="funky-ui-icon icon-Smartphone-4"></i>
-                        <h5 class="mt-3 pb-0 mb-0 text">{{ data.phone }}</h5>
+                        <h5 class="mt-3 pb-0 mb-0 text">{{ blog.phone }}</h5>
                     </div>
                 </div>
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
                         <i class="funky-ui-icon icon-Mail-Open"></i>
-                        <h5 class="mt-3 pb-0 mb-0">{{ data.email }}</h5>
+                        <h5 class="mt-3 pb-0 mb-0">{{ blog.email }}</h5>
                     </div>
                 </div>
             </div>
