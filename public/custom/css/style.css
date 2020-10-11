@@ -261,3 +261,8 @@ button.fa-btn:focus {
     padding: .5em;
     margin : .3em;
 }
+
+.sn-logo {
+    height: 128px;
+    width: auto;
+}
