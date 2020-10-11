@@ -4,6 +4,7 @@
 namespace Blog\Controllers;
 
 
+use Blog\Entities\Skill;
 use Blog\Entities\SocialNetwork;
 use Blog\Services\FilesService;
 use Core\Config;
@@ -259,6 +260,108 @@ class Ajax extends Controller
 
         $handle['entity'] = $socialNetwork;
 
+        echo json_encode($handle);
+    }
+
+
+    /**
+     * Save skill
+     */
+    public function saveSkillAction()
+    {
+        //var_dump($_POST);
+
+        $blogId = '1';
+        $config = Config::getInstance();
+        if ($config->get('blog_id')) {
+            $blogId = $config->get('blog_id');
+        }
+
+        $handle = [
+            'success' => true,
+            'form_errors' => [],
+            'errors' => []
+        ];
+
+        $skill = new Skill([
+            'blogId' => $blogId,
+            'value' => $this->httpRequest->postData('skill')
+        ]);
+
+        if ($this->httpRequest->postExists('id')) {
+            $skill->setId($this->httpRequest->postData('id'));
+        }
+
+        $handle['form_errors'] = $skill->errors();
+
+        if (!empty($handle['form_errors'])) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Erreur dans le formulaire.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $manager = $this->managers->getManagerOf('Skill');
+
+        // Vérification qu'aucun autre skill du blog courant ne porte le même nom
+        $double = $manager->doubleExists($skill);
+        if ($double) {
+            $handle['errors'][] = "Un autre skill porte déjà ce nom.";
+            $handle['success'] = false;
+            echo json_encode($handle);
+            exit();
+        }
+
+        // Enregistrement du skill
+         if (!$manager->save($skill)) {
+             $handle['success'] = false;
+             $handle['errors'][] = "Erreur lors de l'enregistrement.";
+             echo json_encode($handle);
+             exit();
+         }
+
+        $handle['entity'] = $skill;
+
+         //var_dump($skill);
+
+        echo json_encode($handle);
+    }
+
+    /**
+     * Delete skill
+     */
+    public function deleteSkillAction()
+    {
+        $blogId = 1;
+        $config = Config::getInstance();
+        if ($config->get('blog_id')) {
+            $blogId = $config->get('blog_id');
+        }
+
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+        $manager = $this->managers->getManagerOf('Skill');
+
+        $oldSkill =  $manager->getUnique($this->httpRequest->postData('id'));
+
+        if (!$oldSkill || $oldSkill->blogId() != $blogId) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Le skill à supprimer est invalide.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        if (!$manager->delete($oldSkill->id())) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Error lors de la suppression du skill.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $handle['deleted'] = $oldSkill->id();
         echo json_encode($handle);
     }
 }

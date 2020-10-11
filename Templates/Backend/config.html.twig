@@ -5,12 +5,13 @@
 
 {% block body %}
 
-    <div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %} alert-dismissible fade" role="alert">
+    <div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %}{% if not flash.type %} hidden{% endif %} alert-dismissible fade" role="alert">
         <button type="button" class="close" aria-label="Fermer">
             <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
         </button>
         {% for message in flash.messages %}<div>{{ message }}</div>{% endfor %}
     </div>
+
     <div class="modal fade default" id="socialModal" tabindex="-1" role="dialog" aria-labelledby="socialModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -31,12 +32,12 @@
                             <input type="file" name="logo" id="socialLogoInput" class="form-control social-logo" accept="image/*">
                         </div>
                         <div class="col-8 sn-name">
-                            <label for="socialName">Nom</label>
+                            <label for="socialNameInput">Nom</label>
                             <input type="text" name="name" id="socialNameInput" class="form-control">
                             <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Entre 2 et 50 caractères, lettres et chiffres.</span></div>
                         </div>
                         <div class="col-12 sn-url">
-                            <label for="socialUrl">url</label>
+                            <label for="socialUrlInput">url</label>
                             <input type="text" name="url" id="socialUrlInput" class="form-control">
                             <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Entre 5 et 50 caractères, lettres, chiffres, et [:/.-_?=&%].</span></div>
                         </div>
@@ -51,21 +52,51 @@
         </div>
     </div>
 
-    <div class="modal fade default" id="socialDeleteModal" tabindex="-1" role="dialog" aria-labelledby="socialDeleteModalLabel" aria-hidden="true">
+    <div class="modal fade default" id="skillModal" tabindex="-1" role="dialog" aria-labelledby="skillModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="socialDeleteModalLabel">Supprimer le réseau social</h5>
+                    <h5 class="modal-title color-white" id="skillModalLabel"><span></span> skill</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
                 </div>
-                <div class="col-12 sn-delete-error">
+                <form action="{{ path }}/ajax/saveSkill" method="post">
+                    <div class="modal-body row form-on-dark">
+                        <div class="col-12 sk-general-error">
+                            <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                        </div>
+                        <div class="col-12 sk-value">
+                            <label for="skillInput">Valeur</label>
+                            <input type="text" name="skill" id="skillInput" class="form-control">
+                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Entre 2 et 50 caractères, lettres, chiffres, espaces, ' et -.</span></div>
+                        </div>
+                    </div>
+                    <div class="hidden-fields hidden"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <input type="submit" name="save_skill" class="btn btn-primary valid-btn" value="Enregistrer">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade default" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="deleteModalLabel">Supprimer le <span class="delete-item-type">#</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="col-12 delete-error">
                     <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
                 </div>
                 <div class="modal-body row form-on-dark">
                     <div class="col-12">
-                        <p>Êtes-vous sûr de vouloir supprimer le réseau social <span class="network-name badge badge-warning"></span> ?</p>
+                        <p>Êtes-vous sûr de vouloir supprimer le <span class="delete-item-type">#</span> <span class="delete-item-name badge badge-warning"></span> ?</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -192,6 +223,31 @@
         </div>
     </form>
 
+    <div class="section pt-4 background-dark over-hide z-bigger-2">
+        <h4 class="text-center text-white">Skills</h4>
+        <div class="container pt-3">
+
+            <div class="row justify-content-around align-items-center skills-list">
+                {% for skill in blog.skills %}
+                    <div class="col-auto mt-3 skill-item-{{ skill.id }}">
+                        <span class="text-light-green font-weight-bold bigger-1 skill-value">{{ skill.value }}</span>
+                        <div class="text-center">
+                            <button class="fa-btn" data-toggle="modal" data-target="#skillModal"data-action="edit" data-id="{{ skill.id }}"><i class="fa fa-edit"></i></button>
+                            <button class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ skill.id }}" data-name="{{ skill.value }}" data-type="skill"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row  justify-content-around">
+                <div class="col-md-6 col-lg-4 my-4 px-sm-0 px-md-3 text-center" id="addSkillBtn">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#skillModal" data-action="add">Ajouter un skill</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
         <!-- Block ============================================== -->
         <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
             <h4 class="text-center">Réseaux sociaux</h4>
@@ -199,8 +255,8 @@
                 <div class="row justify-content-around align-items-center">
                     {% for socialNetwork in blog.socialNetworks %}
 
-                        <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
-                            <div class="no-img-effect rounded over-hide p-4 social-box-{{ socialNetwork.id }} call-box-5">
+                        <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3 social-box-{{ socialNetwork.id }}">
+                            <div class="no-img-effect rounded over-hide p-4 call-box-5">
                                 <div class="row">
                                     <div class="col-5">
                                         <img src="{{ path }}/uploads/icons/{{ socialNetwork.blogId }}/{{ socialNetwork.logo }}" class="sn-logo" data-file="{{ socialNetwork.logo }}">
@@ -213,7 +269,7 @@
                                     </div>
                                     <div class="col-12 row justify-content-between">
                                         <div class="col-4 text-center">
-                                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#socialDeleteModal" data-id="{{ socialNetwork.id }}" data-name="{{ socialNetwork.name }}">Supprimer</button>
+                                            <button class="btn btn-sm btn-danger btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ socialNetwork.id }}" data-name="{{ socialNetwork.name }}" data-type="réseau social">Supprimer</button>
                                         </div>
                                         <div class="col-4 text-center">
                                             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#socialModal" data-action="edit" data-id="{{ socialNetwork.id }}">Modifier</button>
@@ -225,7 +281,7 @@
 
                     {% endfor %}
 
-                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3" id="addSocialNetworkBtn">
+                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3 text-center" id="addSocialNetworkBtn">
                             <button class="btn btn-primary" data-toggle="modal" data-target="#socialModal" data-action="add">Ajouter un réseau</button>
                     </div>
                 </div>

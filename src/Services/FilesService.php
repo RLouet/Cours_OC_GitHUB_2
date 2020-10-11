@@ -43,7 +43,7 @@ class FilesService
                 $upload['errors'][] = "Le fichier \"" . $name . "\" n'a pas le bon format (jpeg, png ou gif)";
                 return $upload;
             }
-            if (!$this->checkResolution($rules['minRes'], $rules['maxRes'], $tempFile)) {
+            if (!$this->checkResolution($rules['minRes'], $rules['maxRes'], $tempFile['tmp_name'])) {
                 $upload['errors'][] = "Le fichier \"" . $name . "\" n'a pas la bonne résolution (min : " . $rules['minRes'][0] . "*" . $rules['minRes'][1] . ", max : " . $rules['maxRes'][0] . "*" . $rules['maxRes'][1] . ")";
                 return $upload;
             }
@@ -95,6 +95,12 @@ class FilesService
 
     private function checkResolution ($min, $max, $tempFile)
     {
+        $imgInfos = getimagesize($tempFile);
+
+        if ($imgInfos[0] < $min[0] || $imgInfos[1] < $min[1] || $imgInfos[0] > $max[0] || $imgInfos[1] > $max[1]) {
+            return false;
+        }
+
         return true;
     }
 

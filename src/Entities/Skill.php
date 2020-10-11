@@ -5,8 +5,9 @@ namespace Blog\Entities;
 
 
 use Core\Entity;
+use JsonSerializable;
 
-class Skill extends Entity
+class Skill extends Entity implements JsonSerializable
 {
     protected $blogId,
         $value;
@@ -17,6 +18,16 @@ class Skill extends Entity
     public function  isValid()
     {
         return !(empty($this->blogId) || empty($this->value));
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id(),
+            'value' => $this->value(),
+            'errors' => $this->errors(),
+            'blogId' => $this->blogId(),
+        ];
     }
 
 
@@ -33,7 +44,7 @@ class Skill extends Entity
 
     public function setValue(string $value)
     {
-        if (empty($value) || !preg_match('/^[a-z][a-z- ]{0,48}[a-z]$/i', $value)) {
+        if (empty($value) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\d\'a-zÀ-ÖØ-öø-ÿœŒ -]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $value)) {
             $this->errors[] = self::INVALID_VALUE;
         } else {
             $this->value = $value;

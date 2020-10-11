@@ -17,6 +17,7 @@ class Blog extends Entity
         $teaserPhrase,
         $contactMail,
         $cv,
+        $skills,
         $socialNetworks;
 
     const INVALID_LASTNAME = 1;
@@ -32,6 +33,7 @@ class Blog extends Entity
     {
         parent::__construct($data);
         $this->socialNetworks = new SplObjectStorage();
+        $this->skills = new SplObjectStorage();
     }
 
     public function  isValid()
@@ -129,6 +131,19 @@ class Blog extends Entity
         }
     }
 
+    public function addSkill(Skill $skill)
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->attach($skill);
+        }
+    }
+    public function removeSkill(Skill $skill)
+    {
+        if ($this->skills->contains($skill)) {
+            $this->skills->detach($skill);
+        }
+    }
+
 
     // GETTERS //
 
@@ -181,5 +196,16 @@ class Blog extends Entity
         }
 
         return $socialNetworks;
+    }
+
+    public function skills() : array
+    {
+        $skills = [];
+
+        foreach ($this->skills as $skill) {
+            $skills[] = $skill;
+        }
+
+        return $skills;
     }
 }
