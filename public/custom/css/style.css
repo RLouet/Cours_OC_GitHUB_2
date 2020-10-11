@@ -233,3 +233,31 @@ label[for=blogLogoInput] {
     left: 2%;
     width: 96%;
 }
+
+button.fa-btn {
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: #6dc234;
+    font-weight: bold;
+}
+button.fa-btn:hover {
+    cursor: pointer;
+    color: #c6ff84;
+}
+button.fa-btn:focus {
+    border: none;
+    outline: none;
+}
+
+.text-light-green {
+    color: #c6ff84;
+}
+.bigger-1 {
+    font-size: 1.5em;
+}
+.skill-value {
+    border : 1px dashed #aaaaaa;
+    padding: .5em;
+    margin : .3em;
+}

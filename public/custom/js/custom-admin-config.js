@@ -1,26 +1,35 @@
 $(document).ready(function() {
 
-	let $socialDeleteModal = $('#socialDeleteModal')
+	let $deleteModal = $('#deleteModal');
 
-	$socialDeleteModal.on('show.bs.modal', function(event) {
+	$deleteModal.on('show.bs.modal', function(event) {
 
 		let $button = $(event.relatedTarget);
 		let id = $button.data('id');
 		let name = $button.data('name');
+		let type = $button.data('type');
 		let $deleteButton = $('.delete-btn', this);
 
-		$('.network-name', this).html(name);
+		$('.delete-item-name', this).html(name);
+		$('.delete-item-type', this).html(type);
 		$deleteButton.data('id', id);
-		//$deleteButton.html($deleteButton.data('id'));
+		if (type === "skill") {
+			$deleteButton.data('method', 'deleteSkill');
+			$deleteButton.data('box-prefix', '.skill-item-');
+		}
+		if (type === "réseau social") {
+			$deleteButton.data('method', 'deleteSocialNetwork');
+			$deleteButton.data('box-prefix', '.social-box-');
+		}
+		$deleteButton.data('type', type);
 	});
 
-	$socialDeleteModal.on('hide.bs.modal', function() {
-		$('.form-error', $(this)).addClass('hidden');
-	});
-
-	$('.delete-btn', $socialDeleteModal).click(function () {
+	$('.delete-btn', $deleteModal).click(function () {
+		let method = $(this).data('method');
+		let boxPrefix = $(this).data('box-prefix');
+		let type = $(this).data('type');
 		$.ajax({
-			url: window.location.origin + '/ajax/deleteSocialNetwork',
+			url: window.location.origin + '/ajax/' + method,
 			method: "POST",
 			data: {
 				'id': $(this).data('id')
@@ -33,19 +42,100 @@ $(document).ready(function() {
 						errorMessage += '<li>' + data.errors[k] + '</li>';
 					}
 					errorMessage += '</li';
-					$('.sn-delete-error .form-error span', $socialDeleteModal).html(errorMessage);
-					$('.sn-delete-error .form-error', $socialDeleteModal).removeClass('hidden');
+					$('.delete-error .form-error span', $deleteModal).html(errorMessage);
+					$('.delete-error .form-error', $deleteModal).removeClass('hidden');
 				} else {
-					let $socialBox = $('.social-box-' + data.deleted);
-					$socialBox.remove();
-					$socialDeleteModal.modal('hide');
-					showFlashMessage('success', 'Le réseau social a vien été supprimé.')
+					let $itemBox = $(boxPrefix + data.deleted);
+					$itemBox.remove();
+					$deleteModal.modal('hide');
+					showFlashMessage('success', 'Le ' + type + ' a bien été supprimé.')
+				}
+			},
+			error: function (e) {
+				$('.delete-error .form-error span', $deleteModal).html('Erreur Ajax');
+				$('.delete-error .form-error', $deleteModal).removeClass('hidden');
+			}
+		})
+	});
+
+	$('#skillModal').on('show.bs.modal', function(event) {
+
+		let $button = $(event.relatedTarget);
+		let action = $button.data('action');
+		let $form = $('form', $(this));
+
+		if (action === 'edit' && Number.isInteger($button.data('id'))) {
+			$('h5.modal-title span', this).html('Modifier le ');
+
+			let $skillBox = $('.skill-item-' + $button.data('id'));
+			$('#skillInput', this).val($('.skill-value',$skillBox).text());
+
+			let hiddenFields = '<input type="hidden" name="id" value="' + $button.data('id') + '">';
+			$('.hidden-fields', this).html(hiddenFields);
+
+			$('.valid-btn', this).val('Modifier');
+		} else {
+			$('h5.modal-title span', this).html('Ajouter un ');
+
+			$('input[type=text]', this).val('');
+
+			$('.hidden-fields input', this).remove();
+
+			$('.valid-btn', this).val('Ajouter');
+		}
+	});
+
+	$('#skillModal form').submit(function (e) {
+		e.preventDefault();
+		let $form = $(this);
+		let formAction = $(this).attr('action');
+		$('.form-error', $(this)).addClass('hidden');
+		let formData = $form.serialize();
+
+		$.ajax({
+			url: formAction,
+			method: "POST",
+			data: formData,
+			dataType: "json",
+			success: function (data) {
+				if (!data.success){
+					var errorMessage = '<ul>';
+					for (var k in data.errors) {
+						errorMessage += '<li>' + data.errors[k] + '</li>';
+					}
+					errorMessage += '</li';
+					$('.sk-general-error .form-error span', $form).html(errorMessage);
+					$('.sk-general-error .form-error', $form).removeClass('hidden');
+
+					for (var fe in data.form_errors) {
+						if (data.form_errors[fe] === 2) {
+							$('.sk-value .form-error', $form).removeClass('hidden');
+						}
+					}
+				} else {
+					let $skillBox = $('.skill-item-' + data.entity.id );
+					let action = 'modifié';
+					$('#skillModal').modal('hide');
+					if (!$skillBox.length) {
+						action = 'ajouté';
+						$('.skills-list').append('<div class="col-auto mt-3 skill-item-' + data.entity.id + '">\n' +
+							'                        <span class="text-light-green font-weight-bold bigger-1 skill-value">' + data.entity.value + '</span>\n' +
+							'                        <div class="text-center">\n' +
+							'                            <button class="fa-btn" data-toggle="modal" data-target="#skillModal"data-action="edit" data-id="' + data.entity.id + '"><i class="fa fa-edit"></i></button>\n' +
+							'                            <button class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="' + data.entity.id + '" data-name="' + data.entity.value + '" data-type="skill"><i class="fa fa-trash"></i></button>\n' +
+							'                        </div>\n' +
+							'                    </div>');
+						$skillBox = $('.social-box-' + data.entity.id );
+					}
+					$('.skill-value', $skillBox).html(data.entity.value);
+					$('.btn-delete', $skillBox).data('name', data.entity.value);
+					showFlashMessage('success', 'Le skill a bien été ' + action + '.')
 				}
 			},
 			error: function (e) {
 				//alert('ajax');
-				$('.sn-delete-error .form-error span', $socialDeleteModal).html('Erreur Ajax');
-				$('.sn-delete-error .form-error', $socialDeleteModal).removeClass('hidden');
+				$('.sk-general-error .form-error span', $form).html('Erreur Ajax');
+				$('.sk-general-error .form-error', $form).removeClass('hidden');
 			}
 		})
 	});
@@ -62,9 +152,9 @@ $(document).ready(function() {
 			$('h5.modal-title span', this).html('Modifier le ');
 
 			let $networkBox = $('.social-box-' + $button.data('id'));
-			$('#socialNameInput', this).val($('.sn-name',$networkBox).html());
+			$('#socialNameInput', this).val($('.sn-name',$networkBox).text());
 			//$('#socialNameInput', this).val('blob');
-			$('#socialUrlInput', this).val($('.sn-url',$networkBox).html());
+			$('#socialUrlInput', this).val($('.sn-url',$networkBox).text());
 			$('#socialLogoPreview', this).attr('src', $('.sn-logo',$networkBox).attr('src'));
 			$('#socialLogoInput', this).val('');
 
@@ -84,8 +174,10 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#socialModal').on('hide.bs.modal', function(event) {
-		$('form', $(this))[0].reset();
+	$('#socialModal, #skillModal, #deleteModal').on('hide.bs.modal', function(event) {
+		if ($('form', $(this)).length > 0) {
+			$('form', $(this))[0].reset();
+		}
 		$('.form-error', $(this)).addClass('hidden');
 	});
 
@@ -128,8 +220,8 @@ $(document).ready(function() {
 					$('#socialModal').modal('hide');
 					if (!$socialBox.length) {
 						action = 'ajouté';
-						$('#addSocialNetworkBtn').before('<div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">\n' +
-							'                            <div class="no-img-effect rounded over-hide p-4 social-box-' + data.entity.id + ' call-box-5">\n' +
+						$('#addSocialNetworkBtn').before('<div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3 social-box-' + data.entity.id + '">\n' +
+							'                            <div class="no-img-effect rounded over-hide p-4 call-box-5">\n' +
 							'                                <div class="row">\n' +
 							'                                    <div class="col-5">\n' +
 							'                                        <img src="" class="sn-logo" data-file="">\n' +
@@ -142,7 +234,7 @@ $(document).ready(function() {
 							'                                    </div>\n' +
 							'                                    <div class="col-12 row justify-content-between">\n' +
 							'                                        <div class="col-4 text-center">\n' +
-							'                                            <a href="#"><div class="btn btn-sm btn-danger">Supprimer</div></a>\n' +
+							'                                            <button class="btn btn-sm btn-danger btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="' + data.entity.id + '" data-name="' + data.entity.name + '" data-type="réseau social">Supprimer</button>\n' +
 							'                                        </div>\n' +
 							'                                        <div class="col-4 text-center">\n' +
 							'                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#socialModal" data-action="edit" data-id="' + data.entity.id + '">Modifier</button>\n' +
@@ -156,8 +248,9 @@ $(document).ready(function() {
 					//$socialBox.remove();
 					$('.sn-logo', $socialBox).attr('src', window.location.origin + '/uploads/icons/' + data.entity.blogId + '/' + data.entity.logo).data('file', data.entity.logo);
 					$('.sn-name', $socialBox).html(data.entity.name);
+					$('.btn-delete', $socialBox).data('name', data.entity.name);
 					$('.sn-url', $socialBox).html(data.entity.url);
-					showFlashMessage('success', 'Le réseau social a vien été ' + action + '.')
+					showFlashMessage('success', 'Le réseau social a bien été ' + action + '.')
 				}
 			},
 			error: function (e) {

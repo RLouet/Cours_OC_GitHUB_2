@@ -4,6 +4,7 @@
 namespace Blog\Models;
 
 use Blog\Entities\Blog;
+use Blog\Entities\Skill;
 use Blog\Entities\SocialNetwork;
 use PDO;
 
@@ -32,6 +33,17 @@ class BlogManagerPDO extends BlogManager
         foreach ($socialNetworksList as $socialNetwork) {
             $socialNetwork = new SocialNetwork($socialNetwork);
             $blog->addSocialNetwork($socialNetwork);
+        }
+
+        $sqlSkill = 'SELECT * FROM skill s WHERE s.blog_id=?';
+        $stmt = $this->dao->prepare($sqlSkill);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute(array($id));
+        $skillsList = $stmt->fetchAll();
+
+        foreach ($skillsList as $skill) {
+            $skill = new Skill($skill);
+            $blog->addSkill($skill);
         }
 
         return $blog;
