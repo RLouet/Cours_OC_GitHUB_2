@@ -77,10 +77,6 @@ $(document).ready(function() {
 		} else {
 			$('h5.modal-title span', this).html('Ajouter un ');
 
-			$('input[type=text]', this).val('');
-
-			$('.hidden-fields input', this).remove();
-
 			$('.valid-btn', this).val('Ajouter');
 		}
 	});
@@ -165,19 +161,17 @@ $(document).ready(function() {
 		} else {
 			$('h5.modal-title span', this).html('Ajouter un ');
 
-			$('input[type=text]', this).val('');
 			$('#socialLogoPreview').attr('src', path + "/uploads/icons/empty-icon_128-128.png");
-
-			$('.hidden-fields input', this).remove();
 
 			$('.valid-btn', this).val('Ajouter');
 		}
 	});
 
 	$('#socialModal, #skillModal, #deleteModal').on('hide.bs.modal', function(event) {
-		if ($('form', $(this)).length > 0) {
-			$('form', $(this))[0].reset();
-		}
+		$('input[type=text]', this).val('');
+		$('input[type=file]', this).val('');
+		$('.hidden-fields input', this).remove();
+
 		$('.form-error', $(this)).addClass('hidden');
 	});
 
