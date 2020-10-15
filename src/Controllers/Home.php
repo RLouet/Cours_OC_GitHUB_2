@@ -46,12 +46,12 @@ class Home extends Controller
         echo $config->get('show_errors');*/
          $manager = $this->managers->getManagerOf('Blog');
 
-         $homeData = $manager->getData();
+         $blog = $manager->getData();
 
          //var_dump($homeData);
 
         HTTPResponse::renderTemplate('Frontend/index.html.twig', [
-            'data' => $homeData,
+            'blog' => $blog,
         ]);
     }
 }

@@ -266,3 +266,22 @@ button.fa-btn:focus {
     height: 128px;
     width: auto;
 }
+
+.footer-social-icons a img {
+    height: 50px;
+}
+.footer-social-icons a {
+    position: relative;
+    bottom: 0;
+    transition: all 0.2s ease-out;
+}
+.footer-social-icons a:hover {
+    bottom: 5px;
+}
+
+ul.sitemap {
+    list-style-type: none;
+}
+ul.sitemap li {
+    margin-bottom: 0;
+}
