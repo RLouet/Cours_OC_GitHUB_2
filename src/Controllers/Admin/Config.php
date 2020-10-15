@@ -55,7 +55,7 @@ class Config extends Controller
         if ($this->httpRequest->postExists('blog-update')) {
             if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $flash['type'] = 'error';
-                $flash['messages'][] = 'Erreur dans la vérification du formulaire.';
+                $flash['messages'][] = 'Erreur lors de la vérification du formulaire.';
             } else {
                 $blogForm = $this->processForm($blog);
                 if (empty($blogForm['errors'])) {
