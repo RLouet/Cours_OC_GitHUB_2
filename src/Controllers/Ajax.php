@@ -122,6 +122,7 @@ class Ajax extends Controller
      */
     public function saveSocialNetworkAction()
     {
+
         $blogId = '1';
         $config = Config::getInstance();
         if ($config->get('blog_id')) {

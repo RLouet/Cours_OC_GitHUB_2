@@ -43,6 +43,7 @@
                         </div>
                     </div>
                     <div class="hidden-fields hidden"></div>
+                    <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <input type="submit" name="save_social_network" class="btn btn-primary valid-btn" value="Enregistrer">
@@ -73,6 +74,7 @@
                         </div>
                     </div>
                     <div class="hidden-fields hidden"></div>
+                    <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <input type="submit" name="save_skill" class="btn btn-primary valid-btn" value="Enregistrer">
@@ -101,7 +103,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary delete-btn">Supprimer</button>
+                    <button type="button" class="btn btn-primary delete-btn" data-token="{{ csrf_token }}">Supprimer</button>
                 </div>
             </div>
         </div>
@@ -215,7 +217,7 @@
                             <input type="email" name="contact_mail" value="{{ blogForm.entity.contactMail }}" placeholder="Email de destination" class="form-control">
                         </div>
                     </div>
-                    <input type="hidden" name="id" value="1" placeholder="Email de destination" class="form-control">
+                    <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                     <div class="clear"></div>
                     <input class="btn btn-primary" type="submit" name="blog-update" value="Enregistrer" />
                 </div>

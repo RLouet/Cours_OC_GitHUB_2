@@ -6,6 +6,7 @@ namespace Core;
 
 abstract class Controller
 {
+    use CsrfTokenManager;
 
     /**
      * Parameters from the matched route

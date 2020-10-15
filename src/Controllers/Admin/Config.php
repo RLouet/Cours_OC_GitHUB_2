@@ -53,21 +53,30 @@ class Config extends Controller
         ];
 
         if ($this->httpRequest->postExists('blog-update')) {
-            $blogForm = $this->processForm($blog);
-            if (empty($blogForm['errors'])) {
-                $flash['type'] = 'success';
-                $flash['messages'][] = 'Les paramètres du blog ont bien été enregistrés';
-            } else {
+            if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $flash['type'] = 'error';
-                $flash['messages'] = $blogForm['errors'];
+                $flash['messages'][] = 'Erreur dans la vérification du formulaire.';
+            } else {
+                $blogForm = $this->processForm($blog);
+                if (empty($blogForm['errors'])) {
+                    $flash['type'] = 'success';
+                    $flash['messages'][] = 'Les paramètres du blog ont bien été enregistrés';
+                } else {
+                    $flash['type'] = 'error';
+                    $flash['messages'] = $blogForm['errors'];
+                }
+
             }
         }
+
+        $csrf = $this->generateCsrfToken();
 
         HTTPResponse::renderTemplate('Backend/config.html.twig', [
             'section' => 'config',
             'blog' => $blog,
             'blogForm' => $blogForm,
-            'flash' => $flash
+            'flash' => $flash,
+            'csrf_token' => $csrf
         ]);
     }
 
