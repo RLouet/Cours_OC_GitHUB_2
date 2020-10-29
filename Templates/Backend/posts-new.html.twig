@@ -1,0 +1,69 @@
+{%  extends "Backend/back-base.html.twig" %}
+
+{% block title %}Nouveau post{% endblock %}
+
+
+{% block body %}
+
+    <div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %}{% if not flash.type %} hidden{% endif %} alert-dismissible fade" role="alert">
+        <button type="button" class="close" aria-label="Fermer">
+            <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
+        </button>
+        {% for message in flash.messages %}<div>{{ message }}</div>{% endfor %}
+    </div>
+
+    <div class="section padding-top background-grey-2 over-hide">
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center">
+                        <h3>Nouveau post</h3>
+                        <div class="main-subtitle-bottom mt-3">
+                            Ajoutez un élément dans votre book.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section pt-4 background-dark over-hide z-bigger-2">
+        <h4 class="text-center text-white">Images</h4>
+        <div class="container pt-3">
+
+            <div class="row justify-content-around align-items-center skills-list">
+                {% for skill in blog.skills %}
+                    <div class="col-auto mt-3 skill-item-{{ skill.id }}">
+                        <span class="text-light-green font-weight-bold bigger-1 skill-value">{{ skill.value }}</span>
+                        <div class="text-center">
+                            <button class="fa-btn" data-toggle="modal" data-target="#skillModal"data-action="edit" data-id="{{ skill.id }}"><i class="fa fa-edit"></i></button>
+                            <button class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ skill.id }}" data-name="{{ skill.value }}" data-type="skill"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row  justify-content-around">
+                <div class="col-md-6 col-lg-4 my-4 px-sm-0 px-md-3 text-center" id="addSkillBtn">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#skillModal" data-action="add">Ajouter une image</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Block ============================================== -->
+    <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
+        {% include 'forms/post-form.html.twig' %}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var path = "{{ path }}";
+    </script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-config.js"></script>
+{% endblock %}

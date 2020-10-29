@@ -1,0 +1,38 @@
+<form class="configform" action="" method="post" enctype="multipart/form-data">
+    <h4 class="text-center">Contenu</h4>
+    <div class="container pt-3">
+        <div class="row justify-content-around align-items-center">
+            <div class="col-md-8">
+                <div class="subscribe-box-1">
+                    <label>Titre</label>
+                    {% if blogPost.entity.errors and constant('INVALID_TITLE', blogPost.entity) in blogPost.entity.errors %}
+                        <span class="badge badge-warning ml-2">Titre invalide</span>
+                    {% endif %}
+                    <input type="text" name="title" value="{{ blogPost.entity.title }}" placeholder="Titre" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-8 mt-4">
+                <div class="subscribe-box-1">
+                    <label>Châpo</label>
+                    {% if blogPost.entity.errors and constant('INVALID_CHAPO', blogPost.entity) in blogPost.entity.errors %}
+                        <span class="badge badge-warning ml-2">Châpo invalide</span>
+                    {% endif %}
+                    <textarea name="chapo" placeholder="Châpo" class="for-textarea form-control">{{ blogPost.entity.chapo }}</textarea>
+                </div>
+            </div>
+            <div class="col-12 mt-4">
+                <div class="subscribe-box-1">
+                    <label>Contenu</label>
+                    {% if blogPost.entity.errors and constant('INVALID_CONTENT', blogPost.entity) in blogPost.entity.errors %}
+                        <span class="badge badge-warning ml-2">Contenu invalide</span>
+                    {% endif %}
+                    <textarea name="content" placeholder="Contenu" class="for-textarea form-control">{{ blogPost.entity.content }}</textarea>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
+            <div class="clear"></div>
+            <input class="btn btn-primary mt-3" type="submit" name="post-add" value="Enregistrer" />
+        </div>
+    </div>
+</form>

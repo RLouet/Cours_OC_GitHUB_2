@@ -46,7 +46,7 @@ class Blog extends Entity
 
     public function setLastname(string $lastname)
     {
-        if (empty($lastname) || !preg_match('/^[a-z\'][a-z-\' ]{0,48}[a-z\']$/i', $lastname)) {
+        if (empty($lastname) || !preg_match('/^[a-zÀ-ÖØ-öø-ÿœŒ\'][a-z-\' À-ÖØ-öø-ÿœŒ]{0,48}[a-zÀ-ÖØ-öø-ÿœŒ\']$/i', $lastname)) {
             $this->errors[] = self::INVALID_LASTNAME;
             return $this;
         }
@@ -57,7 +57,7 @@ class Blog extends Entity
 
     public function setFirstname(string $firstname)
     {
-        if (empty($firstname) || !preg_match('/^[a-z\'][a-z-\' ]{0,48}[a-z\']$/i', $firstname)) {
+        if (empty($firstname) || !preg_match('/^[a-zÀ-ÖØ-öø-ÿœŒ\'][À-ÖØ-öø-ÿœŒa-z-\' ]{0,48}[À-ÖØ-öø-ÿœŒa-z\']$/i', $firstname)) {
             $this->errors[] = self::INVALID_FIRSTNAME;
         } else {
             $this->firstname = $firstname;

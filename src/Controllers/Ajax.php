@@ -6,6 +6,7 @@ namespace Blog\Controllers;
 
 use Blog\Entities\Skill;
 use Blog\Entities\SocialNetwork;
+use Blog\Entities\User;
 use Blog\Services\FilesService;
 use Core\Config;
 use Core\Controller;
@@ -363,6 +364,50 @@ class Ajax extends Controller
         }
 
         $handle['deleted'] = $oldSkill->id();
+        echo json_encode($handle);
+    }
+
+    /**
+     * Delete post
+     */
+    public function deletePostAction()
+    {
+        $user = new User([
+           'id' => 1,
+           'username' => 'Romain',
+           'name' => 'LOUET',
+           'firstname' => 'Romain',
+           'email' => 'contact@romsworld.net',
+           'password' => 'PasswordDeTest',
+           'role' => 'ROLE_ADMIN',
+        ]);
+
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+        $manager = $this->managers->getManagerOf('BlogPost');
+
+        $oldPost =  $manager->getUnique($this->httpRequest->postData('id'));
+
+        //var_dump($oldPost->getUser() != $user, $oldPost->getUser(), $user);
+
+        if (!$oldPost || $oldPost->getUser()->id() !== $user->id() || $user->getRole() !== 'ROLE_ADMIN') {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        if (!$manager->delete($oldPost->id())) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Error lors de la suppression du post.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $handle['deleted'] = $oldPost->id();
         echo json_encode($handle);
     }
 }

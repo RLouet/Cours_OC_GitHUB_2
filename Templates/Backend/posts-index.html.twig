@@ -1,9 +1,42 @@
 {%  extends "Backend/back-base.html.twig" %}
 
-{% block title %}Config{% endblock %}
+{% block title %}Posts{% endblock %}
 
 
 {% block body %}
+
+    <div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %}{% if not flash.type %} hidden{% endif %} alert-dismissible fade" role="alert">
+        <button type="button" class="close" aria-label="Fermer">
+            <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
+        </button>
+        {% for message in flash.messages %}<div>{{ message }}</div>{% endfor %}
+    </div>
+
+    <div class="modal fade default" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="deleteModalLabel">Supprimer le post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="col-12 delete-error">
+                    <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                </div>
+                <div class="modal-body row form-on-dark">
+                    <div class="col-12">
+                        <p>Êtes-vous sûr de vouloir supprimer le post <span class="delete-item-name badge badge-warning"></span> ?</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary delete-btn" data-token="{{ csrf_token }}">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="section padding-top background-grey-2 over-hide">
         <div class="container parallax-fade-top">
             <div class="row">
@@ -22,66 +55,49 @@
 
     <!-- Block ============================================== -->
     <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2 text-center">
-        <a href="#" class="btn btn-primary mx-auto" title="Ajouter un post">Ajouter</a>
+        <a href="{{ path }}/admin/posts/new" class="btn btn-primary mx-auto" title="Ajouter un post">Ajouter</a>
     </div>
 
-    <form>
         <!-- Block ============================================== -->
         <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
             <h4 class="text-center">Posts enregistrés</h4>
-            <div class="container pt-3">
-                <div class="row justify-content-around align-items-center">
-                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
-                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
-                            <label>Nom</label>
-                            <input type="text" value="" placeholder="Réseau" class="form-control">
-                            <label>Logo</label>
-                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
-                            <label>Adresse</label>
-                            <input type="text" value="" placeholder="Url" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
-                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
-                            <label>Nom</label>
-                            <input type="text" value="" placeholder="Réseau" class="form-control">
-                            <label>Logo</label>
-                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
-                            <label>Adresse</label>
-                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
-                            <label>Adresse</label>
-                            <input type="text" value="" placeholder="Url" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
-                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
-                            <a href="#"><div class="sale btn-danger">Supprimer</div></a>
-                            <label>Nom</label>
-                            <input type="text" value="" placeholder="Réseau" class="form-control">
-                            <label>Logo</label>
-                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
-                            <label>Adresse</label>
-                            <input type="text" value="" placeholder="Url" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
-                        <div class="shop-box-1 no-img-effect rounded over-hide p-4">
-                            <label>Nom</label>
-                            <input type="text" value="" placeholder="Réseau" class="form-control">
-                            <label>Logo</label>
-                            <input type="file" value="" placeholder="Email de destination" class="form-control pt-0 px-0">
-                            <label>Adresse</label>
-                            <input type="text" value="" placeholder="Url" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 mb-4 px-sm-0 px-md-3">
-                            <button class="btn btn-primary">Ajouter un réseau</button>
+            <div class="container-fluid">
+                <div class="row">
+
+                        {% for post in posts %}
+                            <div class="grid-box float-inline quarter with-margin drop-shadow rounded post-item-{{ post.id }}">
+                                <div class="blog-box-1 blog-home blog-admin background-white over-hide">
+                                    <img src="{{ path }}/img/blog/1.jpg" alt="" class="blog-home-img"/>
+                                    <div class="padding-in">
+                                        <a href="post.html"><h5 class="pt-4 mt-3">{{ post.title }}</h5></a>
+                                        <p class="mt-3">{{ post.chapo|nl2br }}</p>
+                                        <a href="post.html" class="btn-link btn-primary pl-0 mt-4">Lire la suite</a>
+                                        <div class="separator-wrap pt-4">
+                                            <span class="separator"><span class="separator-line"></span></span>
+                                        </div>
+                                        <div class="author-wrap mt-3">
+                                            <p> Par <span class="text-primary">{{ post.user.username }}</span>, le <mark>{{ post.editDate|date('d/m/Y') }}</mark></p>
+                                        </div>
+                                        <div class="row justify-content-between">
+                                            <a class="btn btn-primary btn-sm col-auto" href="#">Modifier</a>
+                                            <button class="btn btn-danger btn-sm col-auto" data-toggle="modal" data-target="#deleteModal" data-id="{{ post.id }}" data-name="{{ post.title }}">Supprimer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>
         </div>
 
-    </form>
+{% endblock %}
 
-
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var path = "{{ path }}";
+    </script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-posts.js"></script>
 {% endblock %}

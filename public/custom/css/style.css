@@ -285,3 +285,10 @@ ul.sitemap {
 ul.sitemap li {
     margin-bottom: 0;
 }
+.blog-box-1.blog-admin {
+    padding-bottom: 1rem;
+}
+.blog-box-1 img.blog-home-img {
+    height: 15rem;
+    object-fit: cover;
+}
