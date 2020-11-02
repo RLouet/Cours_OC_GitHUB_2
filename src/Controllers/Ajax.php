@@ -400,6 +400,19 @@ class Ajax extends Controller
             exit();
         }
 
+        $deleteRules = [
+            "target" => "blog",
+            "folder" => "",
+        ];
+        $deleter = new FilesService();
+        $dir = "uploads/blog/" . $oldPost->id();
+        if (!$deleter->deleteDirectory($dir)) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Error lors de la suppression des fichiers du post.';
+            echo json_encode($handle);
+            exit();
+        }
+
         if (!$manager->delete($oldPost->id())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du post.';

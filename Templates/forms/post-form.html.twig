@@ -38,7 +38,7 @@
                     <input type="file" name="old_post_image[{{ loop.index0 }}]" id="postImageInput{{ image.id }}" class="form-control post-image-input" accept="image/*">
                     <div class="row justify-content-around">
                         <div class="pt-2">
-                            <input type="radio" id="radioHero{{ image.id }}" name="hero" value="old-{{ image.id }}">
+                            <input type="radio" id="radioHero{{ image.id }}" name="hero" value="old-{{ image.id }}" {% if image.id == blog_post.entity.hero.id %}checked{% endif %} required>
                             <label for="radioHero{{ image.id }}">Hero</label>
                         </div>
                         <div>
@@ -52,7 +52,7 @@
         <div id="imagesToDelete" class="hidden"></div>
         <div class="row  justify-content-around">
             <div class="col-md-6 col-lg-4 my-4 px-sm-0 px-md-3 text-center" id="addSkillBtn">
-                <button class="btn btn-primary" id="addPostImage">Ajouter une image</button>
+                <button type="button" class="btn btn-primary" id="addPostImage">Ajouter une image</button>
             </div>
         </div>
 
@@ -71,7 +71,7 @@
                     {% if blog_post.entity.errors and constant('INVALID_TITLE', blog_post.entity) in blog_post.entity.errors %}
                         <span class="badge badge-warning ml-2">Titre invalide</span>
                     {% endif %}
-                    <input type="text" name="title" value="{{ blog_post.entity.title }}" placeholder="Titre" class="form-control">
+                    <input type="text" name="title" value="{% if not blog_post.entity.isNew %}{{ blog_post.entity.title }}{% endif %}" placeholder="Titre" class="form-control">
                 </div>
             </div>
             <div class="col-md-8 mt-4">
@@ -80,7 +80,7 @@
                     {% if blog_post.entity.errors and constant('INVALID_CHAPO', blog_post.entity) in blog_post.entity.errors %}
                         <span class="badge badge-warning ml-2">Châpo invalide</span>
                     {% endif %}
-                    <textarea name="chapo" placeholder="Châpo" class="for-textarea form-control">{{ blog_post.entity.chapo }}</textarea>
+                    <textarea name="chapo" placeholder="Châpo" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.chapo }}{% endif %}</textarea>
                 </div>
             </div>
             <div class="col-12 mt-4">
@@ -89,14 +89,14 @@
                     {% if blog_post.entity.errors and constant('INVALID_CONTENT', blog_post.entity) in blog_post.entity.errors %}
                         <span class="badge badge-warning ml-2">Contenu invalide</span>
                     {% endif %}
-                    <textarea name="content" placeholder="Contenu" class="for-textarea form-control">{{ blog_post.entity.content }}</textarea>
+                    <textarea name="content" placeholder="Contenu" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.content }}{% endif %}</textarea>
                 </div>
             </div>
             <div class="clear"></div>
-            {% if blog_post.entity.id %}<input type="hidden" name="id" value="{{ blog_post.entity.id }}">{% endif %}
+            {% if not blog_post.entity.isNew %}<input type="hidden" name="id" value="{{ blog_post.entity.id }}">{% endif %}
             <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
             <div class="clear"></div>
-            <input class="btn btn-primary mt-3" type="submit" name="{% if blog_post.entity.id %}post-edit{% else %}post-add{% endif %}" value="Enregistrer" />
+            <input class="btn btn-primary mt-3" type="submit" name="{% if not blog_post.entity.isNew %}post-edit{% else %}post-add{% endif %}" value="Enregistrer" />
         </div>
     </div>
 </div>

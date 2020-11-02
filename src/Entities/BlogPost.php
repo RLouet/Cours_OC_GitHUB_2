@@ -20,8 +20,7 @@ class BlogPost extends Entity
 
     protected ObjectCollection $images;
 
-    protected $editDate;
-    protected ?int $heroId = null;
+    protected DateTime $editDate;
     protected ?PostImage $hero = null;
 
     const INVALID_USER_ID = 1;
@@ -35,6 +34,7 @@ class BlogPost extends Entity
     {
         parent::__construct($data);
         $this->images = new ObjectCollection();
+        $this->editDate = new DateTime();
     }
 
     public function isValid()
@@ -102,7 +102,10 @@ class BlogPost extends Entity
 
     public function setHero(PostImage $hero): BlogPost
     {
-        if (empty($hero)) {
+        if (!$this->images->contains($hero) && $hero->getBlogPostId() === $this->id()) {
+            $this->images->attach($hero);
+        }
+        if (empty($hero) || !$this->getImages()->getById($hero->id())) {
             $this->errors[] = self::INVALID_HERO;
             return $this;
         }
@@ -118,23 +121,13 @@ class BlogPost extends Entity
     }
     public function removeImage(PostImage $image)
     {
+        if ($this->getHero() === $image) {
+            $this->hero = null;
+        }
         if ($this->images->contains($image)) {
             $this->images->detach($image);
         }
     }
-
-    /*public function setHeroId(int $heroId): BlogPost
-    {
-        if (empty($heroId)) {
-            $this->errors[] = self::INVALID_HERO_ID;
-            return $this;
-        }
-        $this->heroId = $heroId;
-        return $this;
-    }*/
-
-
-
 
 
     //  -- Getters --  //
@@ -176,12 +169,6 @@ class BlogPost extends Entity
     public function getHero(): ?PostImage
     {
         return $this->hero;
-    }
-
-    public function getHeroId(): ?int
-    {
-        //return null;
-        return $this->heroId;
     }
 
     public function getImages(): ObjectCollection

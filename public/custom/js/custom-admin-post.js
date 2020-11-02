@@ -55,6 +55,7 @@ $(document).ready(function() {
             "                    </div>\n" +
             "                </div>");
 
+        $("input[name='hero']", $template).attr('required', 1);
         $('.images-list').append($template);
         initImagePreview($('.post-image-input', $template));
         $('.post-image-input', $template).click();

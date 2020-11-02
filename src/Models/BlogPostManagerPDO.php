@@ -16,7 +16,7 @@ class BlogPostManagerPDO extends BlogPostManager
     public function getList(): array
     {
         //$sql = 'SELECT id, user_id as userId, title, edit_date as editDate, hero_id as heroId, chapo, content FROM blog_post';
-        $sql = 'SELECT *, bp.id as id, user.id as user_id  FROM blog_post bp JOIN user ON user.id = bp.user_id order by bp.edit_date DESC';
+        $sql = 'SELECT *, bp.id as id, user.id as user_id, pi.name AS hero_name, pi.url AS hero_url FROM blog_post bp LEFT JOIN post_image pi ON pi.id = bp.hero_id AND pi.blog_post_id = bp.id JOIN user ON user.id = bp.user_id ORDER BY bp.edit_date DESC';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -31,6 +31,15 @@ class BlogPostManagerPDO extends BlogPostManager
             $resultitem['edit_date'] = new DateTime($resultitem['edit_date']);
             $post = new BlogPost($resultitem);
             $user = new User($resultitem);
+            if ($resultitem['hero_id']) {
+                $hero = new PostImage([
+                    'id' => $resultitem['hero_id'],
+                    'name' => $resultitem['hero_name'],
+                    'url' => $resultitem['hero_url'],
+                    'blog_post_id' => $resultitem['id']
+                ]);
+                $post->setHero($hero);
+            }
             $user->setId($resultitem['user_id']);
             $post->setUser($user);
             $blogPostsList[] = $post;
@@ -72,7 +81,7 @@ class BlogPostManagerPDO extends BlogPostManager
         foreach ($images as $image) {
             $image = new PostImage($image);
             $blogPost->addImage($image);
-            if ($image->id() === $result['hero_id']) {
+            if ($image->id() == $result['hero_id']) {
                 $blogPost->setHero($image);
             }
         }
@@ -90,7 +99,11 @@ class BlogPostManagerPDO extends BlogPostManager
 
         $stmt->bindValue(':title', $blogPost->getTitle());
         $stmt->bindValue(':editDate', $date->format('Y-m-d H:i:s'));
-        $stmt->bindValue(':heroId', $blogPost->getHeroId());
+        if ($blogPost->getHero()) {
+            $stmt->bindValue(':heroId', $blogPost->getHero()->id());
+        } else {
+            $stmt->bindValue(':heroId', null);
+        }
         $stmt->bindValue(':chapo', $blogPost->getChapo());
         $stmt->bindValue(':content', $blogPost->getContent());
         $stmt->bindValue(':id', $blogPost->id());
@@ -113,7 +126,11 @@ class BlogPostManagerPDO extends BlogPostManager
         //$stmt->bindValue(':user_id', "1");
         $stmt->bindValue(':title', $blogPost->getTitle());
         $stmt->bindValue(':editDate', $blogPost->getEditDate()->format('Y-m-d H:i:s'));
-        $stmt->bindValue(':heroId', $blogPost->getHeroId());
+        if ($blogPost->getHero()) {
+            $stmt->bindValue(':heroId', $blogPost->getHero()->id());
+        } else {
+            $stmt->bindValue(':heroId', null);
+        }
         //$stmt->bindValue(':heroId', "1");
         $stmt->bindValue(':chapo', $blogPost->getChapo());
         $stmt->bindValue(':content', $blogPost->getContent());

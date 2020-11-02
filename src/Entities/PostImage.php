@@ -63,7 +63,7 @@ class PostImage extends Entity
         return $this->url;
     }
 
-    public function getBlogPostId() : string
+    public function getBlogPostId() : int
     {
         return $this->blogPostId;
     }

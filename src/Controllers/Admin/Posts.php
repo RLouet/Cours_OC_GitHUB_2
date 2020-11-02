@@ -92,6 +92,7 @@ class Posts extends Controller
                     ]);
                     exit();
                 } else {
+                    var_dump($blogPost);
                     $flash['type'] = 'error';
                     $flash['messages'] = $blogPost['errors'];
                 }
@@ -185,13 +186,16 @@ class Posts extends Controller
         //var_dump($_POST);
 
         if ($blogPost->isValid() && empty($blogPost->errors())) {
-            $blogPost = $this->managers->getManagerOf('blogPost')->save($blogPost);
+            $blogPostManager =  $this->managers->getManagerOf('blogPost');
+            if ($blogPost->isNew()) {
+                $blogPost =$blogPostManager->save($blogPost);
+            }
 
             /*
-             * Process post images
+             * Process PostImages
              */
             if ($blogPost) {
-
+                $imageManager = $this->managers->getManagerOf('postImage');
                 /*
                  * Delete images
                  */
@@ -203,10 +207,20 @@ class Posts extends Controller
                         ];
                         $imageToDelete = $blogPost->getImages()->getById($imageToDelete);
                         if ($imageToDelete) {
+                            $isPostHero = false;
+                            if ($blogPost->getHero() === $imageToDelete) {
+                                $isPostHero = true;
+                            }
+                            $blogPost->removeImage($imageToDelete);
+
                             if ($uploader->deleteFile($imageDeleteRules, $imageToDelete->getUrl())) {
-                                if ($this->managers->getManagerOf('postImage')->delete($imageToDelete->id())) {
-                                    $blogPost->removeImage($imageToDelete);
+                                $imageManager->delete($imageToDelete->id());
+                            } else {
+                                $blogPost->addImage($imageToDelete);
+                                if ($isPostHero) {
+                                    $blogPost->setHero($imageToDelete);
                                 }
+
                             }
                         }
                     }
@@ -237,6 +251,8 @@ class Posts extends Controller
                         }
                         //var_dump($imagesCollection);
                         foreach ($imagesCollection as $key=>$image) {
+                            $oldImage = null;
+
                             $postImage = new PostImage([
                                 'name' => $this->httpRequest->postData($imagesType)[$key]['name'],
                                 'blog_post_id' => $blogPost->id(),
@@ -265,16 +281,41 @@ class Posts extends Controller
                                     }
                                 }
                             }
-                            $postImage = $this->managers->getManagerOf('postImage')->save($postImage);
+                            $postImage = $imageManager->save($postImage);
                             if ($postImage) {
                                 if (isset($oldImage)) {
                                     $blogPost->removeImage($oldImage);
                                 }
                                 $blogPost->addImage($postImage);
+
                             }
+
+                            /*
+                             * Process Hero
+                             */
+                            $oldHeroId = null;
+                            if ($blogPost->getHero()) {
+                                $oldHeroId = $blogPost->getHero()->id();
+                            }
+                            if ($imagesType === "old_post_image" && $postImage) {
+                                if ($this->httpRequest->postData('hero') === "old-" . $postImage->id()) {
+                                    if ($oldHeroId !== $postImage->id()) {
+                                        $blogPost->setHero($postImage);
+                                        $blogPostManager->save($blogPost);
+                                    }
+                                }
+                            }
+                            if ($imagesType === "new_post_image" && $postImage) {
+                                if ($this->httpRequest->postData('hero') === "new-" . $key) {
+                                    $blogPost->setHero($postImage);
+                                    $blogPostManager->save($blogPost);
+                                }
+                            }
+
                         }
                     }
                 }
+
 
                 $handle['entity'] = $blogPost;
 
