@@ -79,7 +79,7 @@
                                             <p> Par <span class="text-primary">{{ post.user.username }}</span>, le <mark>{{ post.editDate|date('d/m/Y') }}</mark></p>
                                         </div>
                                         <div class="row justify-content-between">
-                                            <a class="btn btn-primary btn-sm col-auto" href="#">Modifier</a>
+                                            <a class="btn btn-primary btn-sm col-auto" href="{{ path }}/admin/posts/{{ post.id }}/edit">Modifier</a>
                                             <button class="btn btn-danger btn-sm col-auto" data-toggle="modal" data-target="#deleteModal" data-id="{{ post.id }}" data-name="{{ post.title }}">Supprimer</button>
                                         </div>
                                     </div>

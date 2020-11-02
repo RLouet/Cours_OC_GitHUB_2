@@ -173,7 +173,7 @@
     width: auto;
 }
 
-#socialLogoInput, #blogLogoInput, #blogCvInput {
+#socialLogoInput, #blogLogoInput, #blogCvInput, .post-image-input {
     display: none;
 }
 label[for=socialLogoInput], label[for=blogLogoInput], label[for=blogCvInput] {
@@ -234,18 +234,18 @@ label[for=blogLogoInput] {
     width: 96%;
 }
 
-button.fa-btn {
+button.fa-btn, label.fa-btn {
     background: none;
     border: none;
     font-size: 2em;
     color: #6dc234;
     font-weight: bold;
 }
-button.fa-btn:hover {
+button.fa-btn:hover, label.fa-btn:hover {
     cursor: pointer;
     color: #c6ff84;
 }
-button.fa-btn:focus {
+button.fa-btn:focus, label.fa-btn:focus {
     border: none;
     outline: none;
 }

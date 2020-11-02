@@ -5,6 +5,7 @@ namespace Blog\Entities;
 
 
 use Core\Entity;
+use Core\ObjectCollection;
 use SplObjectStorage;
 use DateTime;
 
@@ -17,22 +18,23 @@ class BlogPost extends Entity
         $chapo,
         $content;
 
-    protected SplObjectStorage $images;
+    protected ObjectCollection $images;
 
     protected $editDate;
     protected ?int $heroId = null;
+    protected ?PostImage $hero = null;
 
     const INVALID_USER_ID = 1;
     const INVALID_TITLE = 2;
     const INVALID_CHAPO = 3;
     const INVALID_CONTENT = 4;
     const INVALID_EDIT_DATE = 5;
-    const INVALID_HERO_ID = 6;
+    const INVALID_HERO = 6;
 
     public function __construct(array $data = [])
     {
         parent::__construct($data);
-        $this->images = new SplObjectStorage();
+        $this->images = new ObjectCollection();
     }
 
     public function isValid()
@@ -98,6 +100,29 @@ class BlogPost extends Entity
         return $this;
     }
 
+    public function setHero(PostImage $hero): BlogPost
+    {
+        if (empty($hero)) {
+            $this->errors[] = self::INVALID_HERO;
+            return $this;
+        }
+        $this->hero = $hero;
+        return $this;
+    }
+
+    public function addImage(PostImage $image)
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->attach($image);
+        }
+    }
+    public function removeImage(PostImage $image)
+    {
+        if ($this->images->contains($image)) {
+            $this->images->detach($image);
+        }
+    }
+
     /*public function setHeroId(int $heroId): BlogPost
     {
         if (empty($heroId)) {
@@ -148,13 +173,18 @@ class BlogPost extends Entity
         return new DateTime($this->editDate);
     }
 
+    public function getHero(): ?PostImage
+    {
+        return $this->hero;
+    }
+
     public function getHeroId(): ?int
     {
         //return null;
         return $this->heroId;
     }
 
-    public function getImages(): SplObjectStorage
+    public function getImages(): ObjectCollection
     {
         return $this->images;
     }

@@ -4,6 +4,7 @@
 namespace Blog\Models;
 
 use Blog\Entities\BlogPost;
+use Blog\Entities\PostImage;
 use Blog\Entities\Skill;
 use Blog\Entities\User;
 use \PDO;
@@ -60,27 +61,48 @@ class BlogPostManagerPDO extends BlogPostManager
         $user->setId($result['user_id']);
         $blogPost->setUser($user);
 
+        $sql2 = 'SELECT * FROM post_image pi WHERE pi.blog_post_id = :bp_id';
+        $stmt = $this->dao->prepare($sql2);
+        $stmt->bindValue(':bp_id', (int) $blogPost->id(), PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        $images = $stmt->fetchAll();
+        $stmt->closeCursor();
+
+        foreach ($images as $image) {
+            $image = new PostImage($image);
+            $blogPost->addImage($image);
+            if ($image->id() === $result['hero_id']) {
+                $blogPost->setHero($image);
+            }
+        }
+
         return $blogPost;
     }
 
     protected function modify(BlogPost $blogPost)
     {
+        $date = new DateTime();
+
         $sql = 'UPDATE blog_post SET title=:title, edit_date=:editDate, hero_id=:heroId, chapo=:chapo, content=:content WHERE id=:id AND user_id=:userId';
 
         $stmt = $this->dao->prepare($sql);
 
         $stmt->bindValue(':title', $blogPost->getTitle());
-        $stmt->bindValue(':editDate', new DateTime());
+        $stmt->bindValue(':editDate', $date->format('Y-m-d H:i:s'));
         $stmt->bindValue(':heroId', $blogPost->getHeroId());
         $stmt->bindValue(':chapo', $blogPost->getChapo());
         $stmt->bindValue(':content', $blogPost->getContent());
         $stmt->bindValue(':id', $blogPost->id());
         $stmt->bindValue(':userId', $blogPost->getUserId());
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return $blogPost;
+        }
+        return false;
     }
 
-    protected function add(BlogPost $blogPost): BlogPost
+    protected function add(BlogPost $blogPost)
     {
         //$sql = 'INSERT INTO blog_post SET user_id=:userId, title=:title, edit_date=:editDate, hero_id=:heroId, chapo=:chapo, content=:content';
         $sql = 'INSERT INTO blog_post SET user_id=:userId, title=:title, edit_date=:editDate, hero_id=:heroId, chapo=:chapo, content=:content';
