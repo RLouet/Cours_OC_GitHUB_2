@@ -51,6 +51,7 @@ class Home extends Controller
          //var_dump($homeData);
 
         HTTPResponse::renderTemplate('Frontend/index.html.twig', [
+            'section' => 'home',
             'blog' => $blog,
         ]);
     }

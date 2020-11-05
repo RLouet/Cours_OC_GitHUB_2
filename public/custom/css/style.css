@@ -292,3 +292,7 @@ ul.sitemap li {
     height: 15rem;
     object-fit: cover;
 }
+
+.background-grey {
+    background-color: #aaaaaa;
+}

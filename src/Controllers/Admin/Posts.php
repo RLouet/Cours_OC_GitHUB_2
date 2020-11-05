@@ -59,6 +59,28 @@ class Posts extends Controller
         ]);
     }
 
+    public function view()
+    {
+        $blogManager = $this->managers->getManagerOf('Blog');
+        $blog = $blogManager->getData();
+
+        $flash = [
+            'type' => false,
+            'messages' => []
+        ];
+
+        $postManager = $this->managers->getManagerOf('BlogPost');
+
+        $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
+
+        HTTPResponse::renderTemplate('Backend/posts-view.html.twig', [
+            'section' => 'posts',
+            'blog' => $blog,
+            'blog_post' => $blogPost,
+            'flash' => $flash
+        ]);
+    }
+
     public function new()
     {
         $manager = $this->managers->getManagerOf('Blog');
