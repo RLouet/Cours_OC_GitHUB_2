@@ -34,4 +34,7 @@ Routes exemples :
     <route url = "admin/{controller}/{action}">
         <param name="namespace">Admin</param>
     </route>
+    <route url = "admin/{controller}/{id:\d+}/{action}">
+        <param name="namespace">Admin</param>
+    </route>
 </routes>

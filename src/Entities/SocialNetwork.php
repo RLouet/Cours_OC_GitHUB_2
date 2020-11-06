@@ -40,13 +40,14 @@ class SocialNetwork extends Entity implements JsonSerializable
 
     // SETTERS //
 
-    public function setBlogId(int $blogId)
+    public function setBlogId(int $blogId): SocialNetwork
     {
         if (empty($blogId)) {
             $this->errors[] = self::INVALID_BLOG_ID;
-        } else {
-            $this->blogId = $blogId;
+            return $this;
         }
+        $this->blogId = $blogId;
+        return $this;
     }
 
     public function setName(string $name)

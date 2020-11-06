@@ -1,0 +1,68 @@
+
+<!-- Hero Slider Block
+================================================== -->
+
+<div class="section padding-top padding-bottom-1st over-hide">
+    <div class="parallax" style="background-image: url('{{ path }}/uploads/blog/{{ blog_post.entity.id }}/{{ blog_post.entity.hero.url }}')"></div>
+    <div class="dark-fade-over"></div>
+    <div class="container z-bigger">
+        <div class="row justify-content-center">
+            <div class="col-md-7 parallax-fade-top">
+                <div class="main-title on-dark text-center mb-0">
+                    <h2>{{ blog_post.entity.title }}</h2>
+                    <div class="main-subtitle-bottom mt-4">{{ blog_post.entity.editDate|date('d/m/Y - H:i') }}</div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+<div class="section py-2 background-dark-2 over-hide z-bigger-2">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div id="carouselExampleIndicators-1" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators circle-indicators">
+                        {% for image in blog_post.entity.images %}
+                            <li data-target="#carouselExampleIndicators-1" data-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %}></li>
+                        {% endfor %}
+                    </ol>
+
+                    <div class="carousel-inner" role="listbox">
+                        {% for image in blog_post.entity.images %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                            <img class="d-block img-fluid rounded" src="{{ path }}/uploads/blog/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}">
+                            <div class="carousel-caption mb-3 d-none d-md-block">
+                                <p><span>{{ image.name }}</span></p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators-1" role="button" data-slide="prev">
+                        <i class="funky-ui-icon icon-Arrow-OutLeft"></i>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators-1" role="button" data-slide="next">
+                        <i class="funky-ui-icon icon-Arrow-OutRight"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section py-5 background-grey over-hide">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="section drop-shadow rounded">
+                    <div class="blog-box-1 pt-3 blog-home background-white over-hide">
+                        <div class="padding-in">
+                            <p class="lead">{{ blog_post.entity.content|nl2br }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

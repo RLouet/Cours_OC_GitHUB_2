@@ -136,6 +136,24 @@ class FilesService
         return true;
     }
 
+    public function deleteDirectory($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+        return rmdir($dir);
+    }
+
     public function rename(array $rules, string $old, string $new) {
         $old = "uploads/". $rules['target'] . $rules['folder'] . "/" . $old;
         $new = "uploads/". $rules['target'] . $rules['folder'] . "/" . $new;
