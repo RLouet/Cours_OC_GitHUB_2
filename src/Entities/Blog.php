@@ -147,47 +147,47 @@ class Blog extends Entity
 
     // GETTERS //
 
-    public function lastname()
+    public function getLastname()
     {
         return $this->lastname;
     }
 
-    public function firstname()
+    public function getfirstname()
     {
         return $this->firstname;
     }
 
-    public function email()
+    public function getEmail()
     {
         return $this->email;
     }
 
-    public function phone()
+    public function getPhone()
     {
         return $this->phone;
     }
 
-    public function logo()
+    public function getLogo()
     {
         return $this->logo;
     }
 
-    public function teaserPhrase()
+    public function getTeaserPhrase()
     {
         return $this->teaserPhrase;
     }
 
-    public function contactMail()
+    public function getContactMail()
     {
         return $this->contactMail;
     }
 
-    public function cv()
+    public function getCv()
     {
         return $this->cv;
     }
 
-    public function socialNetworks() : array
+    public function getSocialNetworks() : array
     {
         $socialNetworks = [];
 
@@ -198,7 +198,7 @@ class Blog extends Entity
         return $socialNetworks;
     }
 
-    public function skills() : array
+    public function getSkills() : array
     {
         $skills = [];
 

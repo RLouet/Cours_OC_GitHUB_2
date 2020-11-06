@@ -114,7 +114,7 @@ class Posts extends Controller
                     ]);
                     exit();
                 } else {
-                    var_dump($blogPost);
+                    //var_dump($blogPost);
                     $flash['type'] = 'error';
                     $flash['messages'] = $blogPost['errors'];
                 }
@@ -207,7 +207,7 @@ class Posts extends Controller
 
         //var_dump($_POST);
 
-        if ($blogPost->isValid() && empty($blogPost->errors())) {
+        if ($blogPost->isValid() && empty($blogPost->getErrors())) {
             $blogPostManager =  $this->managers->getManagerOf('blogPost');
             if ($blogPost->isNew()) {
                 $blogPost =$blogPostManager->save($blogPost);

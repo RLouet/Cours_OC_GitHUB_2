@@ -72,7 +72,7 @@ class BlogPostManagerPDO extends BlogPostManager
 
         $sql2 = 'SELECT * FROM post_image pi WHERE pi.blog_post_id = :bp_id';
         $stmt = $this->dao->prepare($sql2);
-        $stmt->bindValue(':bp_id', (int) $blogPost->id(), PDO::PARAM_INT);
+        $stmt->bindValue(':bp_id', (int) $blogPost->getId(), PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $images = $stmt->fetchAll();
@@ -81,7 +81,7 @@ class BlogPostManagerPDO extends BlogPostManager
         foreach ($images as $image) {
             $image = new PostImage($image);
             $blogPost->addImage($image);
-            if ($image->id() == $result['hero_id']) {
+            if ($image->getId() == $result['hero_id']) {
                 $blogPost->setHero($image);
             }
         }

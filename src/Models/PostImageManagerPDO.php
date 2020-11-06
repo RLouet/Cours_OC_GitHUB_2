@@ -16,7 +16,7 @@ class PostImageManagerPDO extends PostImageManager
 
         $stmt->bindValue(':name', $postImage->getName());
         $stmt->bindValue(':url', $postImage->getUrl());
-        $stmt->bindValue(':id', $postImage->id());
+        $stmt->bindValue(':id', $postImage->getId());
         $stmt->bindValue(':blogPostId', $postImage->getBlogPostId());
 
         if ($stmt->execute()) {

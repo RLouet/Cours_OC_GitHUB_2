@@ -14,7 +14,7 @@ class HTTPResponse
         header($header);
     }
 
-    public function redirect(string $location)
+    public static function redirect(string $location)
     {
         header('location: http://' . $_SERVER['HTTP_HOST'] . $location, true, 303);
         exit;

@@ -51,7 +51,8 @@
 
 	
 	$(document).ready(function() {
-	
+
+		$(".tipped").tipper();
 	
 		/* Scroll Too */
 	

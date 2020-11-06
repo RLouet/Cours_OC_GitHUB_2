@@ -102,10 +102,10 @@ class BlogPost extends Entity
 
     public function setHero(PostImage $hero): BlogPost
     {
-        if (!$this->images->contains($hero) && $hero->getBlogPostId() === $this->id()) {
+        if (!$this->images->contains($hero) && $hero->getBlogPostId() === $this->getId()) {
             $this->images->attach($hero);
         }
-        if (empty($hero) || !$this->getImages()->getById($hero->id())) {
+        if (empty($hero) || !$this->getImages()->getById($hero->getId())) {
             $this->errors[] = self::INVALID_HERO;
             return $this;
         }

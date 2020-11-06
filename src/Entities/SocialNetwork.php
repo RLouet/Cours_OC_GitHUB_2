@@ -80,22 +80,22 @@ class SocialNetwork extends Entity implements JsonSerializable
 
     // GETTERS //
 
-    public function blogId()
+    public function getBlogId()
     {
         return $this->blogId;
     }
 
-    public function name()
+    public function getName()
     {
         return $this->name;
     }
 
-    public function logo()
+    public function getLogo()
     {
         return $this->logo;
     }
 
-    public function url()
+    public function getUrl()
     {
         return $this->url;
     }

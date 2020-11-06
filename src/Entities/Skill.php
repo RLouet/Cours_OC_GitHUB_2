@@ -9,8 +9,8 @@ use JsonSerializable;
 
 class Skill extends Entity implements JsonSerializable
 {
-    protected $blogId,
-        $value;
+    protected int $blogId;
+    protected string $value;
 
     const INVALID_BLOG_ID = 1;
     const INVALID_VALUE = 2;
@@ -54,12 +54,12 @@ class Skill extends Entity implements JsonSerializable
 
     // GETTERS //
 
-    public function blogId()
+    public function getBlogId(): int
     {
         return $this->blogId;
     }
 
-    public function value()
+    public function getValue(): string
     {
         return $this->value;
     }

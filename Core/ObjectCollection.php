@@ -13,7 +13,7 @@ class ObjectCollection extends SplObjectStorage
         $this->rewind();
         while ($this->valid()) {
             $object = $this->current();
-            if ($object->id() === $id) {
+            if ($object->getId() === $id) {
                 $this->rewind();
                 return $object;
             }
