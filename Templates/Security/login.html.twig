@@ -1,0 +1,54 @@
+{%  extends "base.html.twig" %}
+
+{% block title %}Connexion{% endblock %}
+
+
+{% block body %}
+    <!-- Hero Slider Block
+    ================================================== -->
+
+    <div class="section padding-top-big padding-bottom over-hide">
+        <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/chaise-3d_1920-1080_2.jpg')"></div>
+        <div class="dark-fade-over"></div>
+        <div class="hero-logo hidden-lg-up">
+            <a href="{{ path }}">
+                <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
+            </a>
+        </div>
+        <div class="hero-bottom-wrap ver-2 text-center z-bigger" style="bottom: -20px;">
+            <div class="container-fluid parallax-fade-top" style="top: 0px;">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section pt-3 pt-lg-5 background-grey pb-md-2 pb-lg-5 over-hide z-bigger-2">
+        <h4 class="text-center section-title mb-xl-4">Connexion</h4>
+        <div class="container-fluid pb-md-2 pb-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-xl-4 p-4 mt-3 rounded background-dark text-center padding-bottom-big">
+                    <div class="main-title on-dark text-center my-0">
+                        <div class="main-subtitle-bottom smaller mt-2">Bienvenue à nouveau !</div>
+                    </div>
+                    <form method="post">
+                        <div class="subscribe-box-1 dark for-hero mt-5">
+                            <input type="email" name="email" placeholder="Email" class="form-control" value="{{ email }}"/>
+                        </div>
+                        <div class="subscribe-box-1 dark for-hero mt-2">
+                            <input type="password" name="password" placeholder="Mot de passe" class="form-control" />
+                        </div>
+                        <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
+                        <div class="clear"></div>
+                        <button type="submit" name="login-btn" class="btn btn-primary btn-simple btn-round btn-long mt-5 mb-4" >Se connecter</button>
+                    </form>
+                    <p class="color-white p-0 m-0 list-inline-item"><small>Pas encore de compte ? </small></p> <a href="{{ path }}/registration" class="btn-link btn-primary list-inline-item p-0 m-0 ml-1"><small>Inscription</small></a>
+                    <div class="clear"></div>
+                    <p class="color-white p-0 m-0 list-inline-item"><small>Mot de passe oublié ? </small></p> <a href="{{ path }}/security/recover" class="btn-link btn-primary list-inline-item p-0 m-0 ml-1"><small>Réinitialisation</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -31,9 +31,12 @@ class HTTPRequest
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    public function postData($key)
+    public function postData(string $key = null)
     {
-        return isset($_POST[$key]) ? $_POST[$key] : null;
+        if ($key) {
+            return isset($_POST[$key]) ? $_POST[$key] : null;
+        }
+        return $_POST;
     }
 
     public function postExists($key)

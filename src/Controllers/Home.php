@@ -4,6 +4,7 @@
 namespace Blog\Controllers;
 
 
+use Core\Auth;
 use Core\Config;
 use Core\Controller;
 use Core\HTTPResponse;
@@ -42,13 +43,8 @@ class Home extends Controller
      */
     public function indexAction()
     {
-        /*$config = new Config();
-        echo $config->get('show_errors');*/
          $manager = $this->managers->getManagerOf('Blog');
-
          $blog = $manager->getData();
-
-         //var_dump($homeData);
 
         HTTPResponse::renderTemplate('Frontend/index.html.twig', [
             'section' => 'home',

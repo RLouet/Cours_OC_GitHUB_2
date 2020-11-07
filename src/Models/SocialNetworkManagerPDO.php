@@ -42,9 +42,9 @@ class SocialNetworkManagerPDO extends SocialNetworkManager
         $sql = 'SELECT id FROM social_network s WHERE s.id != :id AND s.name = :name AND s.blog_id = :blog_id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $socialNetwork->id(), PDO::PARAM_INT);
-        $stmt->bindValue(':name', (string) $socialNetwork->name(), PDO::PARAM_STR);
-        $stmt->bindValue(':blog_id', (int) $socialNetwork->blogId(), PDO::PARAM_INT);
+        $stmt->bindValue(':id', (int) $socialNetwork->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':name', (string) $socialNetwork->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':blog_id', (int) $socialNetwork->getBlogId(), PDO::PARAM_INT);
         $stmt->execute();
         $socialNetwork = $stmt->fetch();
         $stmt->closeCursor();
@@ -57,11 +57,11 @@ class SocialNetworkManagerPDO extends SocialNetworkManager
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':name', $socialNetwork->name());
-        $stmt->bindValue(':logo', $socialNetwork->logo());
-        $stmt->bindValue(':url', $socialNetwork->url());
-        $stmt->bindValue(':id', $socialNetwork->id());
-        $stmt->bindValue(':blogId', $socialNetwork->blogId());
+        $stmt->bindValue(':name', $socialNetwork->getName());
+        $stmt->bindValue(':logo', $socialNetwork->getLogo());
+        $stmt->bindValue(':url', $socialNetwork->getUrl());
+        $stmt->bindValue(':id', $socialNetwork->getId());
+        $stmt->bindValue(':blogId', $socialNetwork->getBlogId());
 
         return $stmt->execute();
     }
@@ -72,10 +72,10 @@ class SocialNetworkManagerPDO extends SocialNetworkManager
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':name', $socialNetwork->name());
-        $stmt->bindValue(':logo', $socialNetwork->logo());
-        $stmt->bindValue(':url', $socialNetwork->url());
-        $stmt->bindValue(':blogId', $socialNetwork->blogId());
+        $stmt->bindValue(':name', $socialNetwork->getName());
+        $stmt->bindValue(':logo', $socialNetwork->getLogo());
+        $stmt->bindValue(':url', $socialNetwork->getUrl());
+        $stmt->bindValue(':blogId', $socialNetwork->getBlogId());
 
         if ($stmt->execute()) {
             $socialNetwork->setId($this->dao->lastInsertId());

@@ -90,6 +90,28 @@
                                     Contact
                                 </a>
                             </li>
+                            {% if current_user.isGranted('user') %}
+                            <li class="nav-item dropdown ml-md-5{% if section == "security" %} active{% endif %}">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarUserDetails" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="funky-ui-icon icon-User"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUserDetails">
+                                    <div class="dropdown-header-container text-center">
+                                        <a class="dropdown-header">{{ current_user.username }}</a>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ path }}/profile">Profile</a>
+                                    {% if current_user.isGranted('admin') %}<a class="dropdown-item" href="{{ path }}/admin">Administration</a>{% endif %}
+                                    <a class="dropdown-item" href="{{ path }}/logout">Déconnexion</a>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li class="nav-item ml-md-5{% if section == "security" %} active{% endif %}">
+                                <a class="btn btn-primary nav-link tipped" href="{{ path }}/login" data-title="Connexion / Inscription" data-tipper-options='{"direction":"bottom","margin":10}'>
+                                    Connexion
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </nav>

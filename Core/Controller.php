@@ -83,4 +83,19 @@ abstract class Controller
     {
 
     }
+
+    /**
+     * Require the user to be logged.
+     * Remember the requested page then redirect on it
+     *
+     * @param string $role  Role required
+     */
+    public function requiredLogin(string $role = 'user'): void
+    {
+        if (!Auth::getUser()->isGranted($role)) {
+            Auth::rememberRequestedPage();
+            //Auth::logout();
+            HTTPResponse::redirect('/login');
+        }
+    }
 }

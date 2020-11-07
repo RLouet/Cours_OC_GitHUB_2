@@ -60,15 +60,15 @@ class BlogManagerPDO extends BlogManager
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':lastname', $blog->lastname());
-        $stmt->bindValue(':firstname', $blog->firstname());
-        $stmt->bindValue(':email', $blog->email());
-        $stmt->bindValue(':phone', $blog->phone());
-        $stmt->bindValue(':logo', $blog->logo());
-        $stmt->bindValue(':teaser_phrase', $blog->teaserPhrase());
-        $stmt->bindValue(':contact_mail', $blog->contactMail());
-        $stmt->bindValue(':cv', $blog->cv());
-        $stmt->bindValue(':id', $blog->id());
+        $stmt->bindValue(':lastname', $blog->getLastname());
+        $stmt->bindValue(':firstname', $blog->getfirstname());
+        $stmt->bindValue(':email', $blog->getEmail());
+        $stmt->bindValue(':phone', $blog->getPhone());
+        $stmt->bindValue(':logo', $blog->getLogo());
+        $stmt->bindValue(':teaser_phrase', $blog->getTeaserPhrase());
+        $stmt->bindValue(':contact_mail', $blog->getContactMail());
+        $stmt->bindValue(':cv', $blog->getCv());
+        $stmt->bindValue(':id', $blog->getId());
 
         $stmt->execute();
 

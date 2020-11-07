@@ -24,12 +24,12 @@ abstract class Entity implements \ArrayAccess
         return empty($this->id);
     }
 
-    public function errors()
+    public function getErrors()
     {
         return $this->errors;
     }
 
-    public function id()
+    public function getId()
     {
         return $this->id;
     }

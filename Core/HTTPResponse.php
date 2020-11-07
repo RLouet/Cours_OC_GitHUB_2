@@ -4,6 +4,7 @@
 namespace Core;
 
 use \Twig;
+use Twig\TwigFunction;
 
 
 class HTTPResponse
@@ -14,7 +15,7 @@ class HTTPResponse
         header($header);
     }
 
-    public function redirect(string $location)
+    public static function redirect(string $location)
     {
         header('location: http://' . $_SERVER['HTTP_HOST'] . $location, true, 303);
         exit;
@@ -41,13 +42,14 @@ class HTTPResponse
             $twig = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
+            $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
+            $twig->addGlobal('current_user', Auth::getUser());
         }
-        $args['path'] = 'http://' . $_SERVER['HTTP_HOST'];
         echo $twig->render($template, $args);
     }
 
         public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
-        $this->setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+        setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 }

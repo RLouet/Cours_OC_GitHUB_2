@@ -43,9 +43,9 @@ class SkillManagerPDO extends SkillManager
         $sql = 'SELECT id FROM skill s WHERE s.id != :id AND s.value = :value AND s.blog_id = :blog_id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $skill->id(), PDO::PARAM_INT);
-        $stmt->bindValue(':value', (string) $skill->value(), PDO::PARAM_STR);
-        $stmt->bindValue(':blog_id', (int) $skill->blogId(), PDO::PARAM_INT);
+        $stmt->bindValue(':id', (int) $skill->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':value', (string) $skill->getValue(), PDO::PARAM_STR);
+        $stmt->bindValue(':blog_id', (int) $skill->getBlogId(), PDO::PARAM_INT);
         $stmt->execute();
         $skill = $stmt->fetch();
         $stmt->closeCursor();
@@ -58,9 +58,9 @@ class SkillManagerPDO extends SkillManager
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':value', $skill->value());
-        $stmt->bindValue(':id', $skill->id());
-        $stmt->bindValue(':blogId', $skill->blogId());
+        $stmt->bindValue(':value', $skill->getValue());
+        $stmt->bindValue(':id', $skill->getId());
+        $stmt->bindValue(':blogId', $skill->getBlogId());
 
         return $stmt->execute();
     }
@@ -71,8 +71,8 @@ class SkillManagerPDO extends SkillManager
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':value', $skill->value());
-        $stmt->bindValue(':blogId', $skill->blogId());
+        $stmt->bindValue(':value', $skill->getValue());
+        $stmt->bindValue(':blogId', $skill->getBlogId());
 
         if ($stmt->execute()) {
             $skill->setId($this->dao->lastInsertId());

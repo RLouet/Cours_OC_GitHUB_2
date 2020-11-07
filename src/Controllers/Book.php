@@ -60,6 +60,8 @@ class Book extends Controller
 
     public function viewAction()
     {
+        //$this->requiredLogin('admin');
+
         $blogManager = $this->managers->getManagerOf('Blog');
         $blog = $blogManager->getData();
 
