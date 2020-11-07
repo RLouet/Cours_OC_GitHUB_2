@@ -296,3 +296,16 @@ ul.sitemap li {
 .background-grey {
     background-color: #aaaaaa;
 }
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.dropdown-menu .dropdown-header-container .dropdown-header:not([href]):not([tabindex]) {
+    color: #171717;
+    padding: 0;
+}
+.dropdown-item:hover {
+    background: #dddddd;
+}

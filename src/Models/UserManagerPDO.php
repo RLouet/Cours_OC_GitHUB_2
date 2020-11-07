@@ -33,24 +33,28 @@ class UserManagerPDO extends UserManager
         return false;
     }
 
-    public function mailExists(User $user)
+    public function findByEmail(string $email)
     {
-        $sql = 'SELECT id FROM user WHERE email =:email';
+        $sql = 'SELECT * FROM user WHERE email =:email';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':email', (string) $user->getEmail(), PDO::PARAM_STR);
+        $stmt->bindValue(':email', (string) $email, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->closeCursor();
-        return $result ? true : false;
+        return $result ? new User($result) : false;
     }
 
-    public function userExists(User $user)
+    public function mailExists(string $email) {
+        return $this->findByEmail($email) ? true : false;
+    }
+
+    public function UserExists(string $username)
     {
         $sql = 'SELECT id FROM user WHERE username =:username';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':username', (string) $user->getUsername(), PDO::PARAM_STR);
+        $stmt->bindValue(':username', (string) $username, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->closeCursor();

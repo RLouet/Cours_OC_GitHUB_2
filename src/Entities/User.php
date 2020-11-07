@@ -97,6 +97,19 @@ class User extends Entity
     {
         // Min 8 / Max 50 characters, at least one letter uppercase, one letter lowercase and one number
 
+        if (empty($password) || !preg_match('/^(\$argon2i).*$/', $password)) {
+            $this->errors[] = self::INVALID_PASSWORD;
+            return $this;
+        }
+
+        $this->password = $password;
+        return $this;
+    }
+
+    public function setPlainPassword(string $password): self
+    {
+        // Min 8 / Max 50 characters, at least one letter uppercase, one letter lowercase and one number
+
         if (empty($password) || !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,50}$/', $password)) {
             $this->errors[] = self::INVALID_PASSWORD;
             return $this;

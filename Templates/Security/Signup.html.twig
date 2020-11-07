@@ -25,17 +25,17 @@
         </div>
     </div>
 
-    <div class="section pt-4 background-grey pb-4 over-hide z-bigger-2">
-        <h4 class="text-center">Inscription</h4>
+    <div class="section pt-4 background-grey pb-md-4 over-hide z-bigger-2">
+        <h4 class="text-center section-title">Inscription</h4>
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-md-4 p-4 mt-3 rounded background-dark text-center">
+                <div class="col-md-6 col-xl-4 p-4 mt-3 rounded background-dark text-center">
                     <div class="main-title on-dark text-center my-0">
-                        <div class="main-subtitle-bottom smaller mt-4">Inscrivez vous pour pouvoir poster des commentaires !</div>
+                        <div class="main-subtitle-bottom smaller mt-2">Inscrivez vous pour pouvoir poster des commentaires !</div>
                     </div>
                     <form method="post">
                         <div class="subscribe-box-1 dark for-hero mt-5">
-                            <input type="text" name="username" placeholder="Pseudo" class="form-control" value="{{ user.entity.username }}" />
+                            <input type="text" name="username" placeholder="Pseudo" class="form-control" value="{{ user.entity.username }}" required autofocus/>
                             {% if user.entity.errors['username'] %}
                                 <span class="badge badge-warning mt-1 mx-1">{{ user.entity.errors['username'] }}</span>
                             {% endif %}
@@ -44,35 +44,34 @@
                             {% endif %}
                         </div>
                         <div class="subscribe-box-1 dark for-hero mt-3">
-                            <input type="text" name="lastname" placeholder="Nom" class="form-control" value="{{ user.entity.lastname }}" />
+                            <input type="text" name="lastname" placeholder="Nom" class="form-control" value="{{ user.entity.lastname }}" required/>
                             {% if user.entity.errors and constant('INVALID_LASTNAME', user.entity) in user.entity.errors %}
                                 <span class="badge badge-warning mt-1 mx-1">Nom invalide (2 à 50 lettres, espaces et -)</span>
                             {% endif %}
                         </div>
                         <div class="subscribe-box-1 dark for-hero mt-2">
-                            <input type="text" name="firstname" placeholder="Prénom" class="form-control" value="{{ user.entity.firstname }}" />
+                            <input type="text" name="firstname" placeholder="Prénom" class="form-control" value="{{ user.entity.firstname }}" required/>
                             {% if user.entity.errors and constant('INVALID_FIRSTNAME', user.entity) in user.entity.errors %}
                                 <span class="badge badge-warning mt-1 mx-1">Prénom invalide (2 à 50 lettres, espaces et -)</span>
                             {% endif %}
                         </div>
                         <div class="subscribe-box-1 dark for-hero mt-3">
-                            <input type="email" name="email" placeholder="Email" class="form-control" value="{{ user.entity.email }}" />
+                            <input type="email" name="email" placeholder="Email" class="form-control" value="{{ user.entity.email }}" required/>
                             {% if user.entity.errors['mail'] %}
                                 <span class="badge badge-warning mt-1">{{ user.entity.errors['mail'] }}</span>
                             {% endif %}
-                            <input type="text" name="firstname" placeholder="Prénom" class="form-control" value="{{ user.entity.firstname }}" />
                             {% if user.entity.errors and constant('INVALID_EMAIL', user.entity) in user.entity.errors %}
                                 <span class="badge badge-warning mt-1 mx-1">Email invalide</span>
                             {% endif %}
                         </div>
                         <div class="subscribe-box-1 dark for-hero mt-2">
-                            <input type="password" name="password" placeholder="Mot de passe" class="form-control" />
+                            <input type="password" name="plain_password" placeholder="Mot de passe" class="form-control" required/>
                             {% if user.entity.errors and constant('INVALID_PASSWORD', user.entity) in user.entity.errors %}
                                 <span class="badge badge-warning mt-1 mx-1">Mot de passe invalide :<ul class="mt-1 mb-0 text-left"><li>8 à 50 caractères</li><li>Au moins une lettre minuscule</li><li>Au moins une lettre majuscule</li><li>Au moins un chiffre</li></ul></span>
                             {% endif %}
                         </div>
                         <div class="subscribe-box-1 dark for-hero mt-1">
-                            <input type="password" name="confirm_password" placeholder="Confirmation du mot de passe" class="form-control" />
+                            <input type="password" name="confirm_password" placeholder="Confirmation du mot de passe" class="form-control" required/>
                             {% if user.entity.errors['confirm_pass'] %}
                                 <span class="badge badge-warning mt-1">{{ user.entity.errors['confirm_pass'] }}</span>
                             {% endif %}
@@ -81,7 +80,7 @@
                         <div class="clear"></div>
                         <button type="submit" name="register-btn" class="btn btn-primary btn-simple btn-round btn-long mt-4 mb-3" >S'enregistrer</button>
                     </form>
-                    <p class="color-white p-0 m-0 list-inline-item"><small>En vous inscrivant, vous acceptez nos </small></p> <a href="#" class="btn-link btn-primary list-inline-item p-0 m-0 ml-1"><small>conditions générales d'utilisation</small></a>
+                    <p class="color-white p-0 m-0 list-inline-item"><small>En vous inscrivant, vous acceptez nos </small></p> <a href="{{ path }}/legal/cgu" class="btn-link btn-primary list-inline-item p-0 m-0 ml-1"><small>conditions générales d'utilisation</small></a>
                 </div>
             </div>
         </div>

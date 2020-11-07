@@ -4,6 +4,7 @@
 namespace Core;
 
 use \Twig;
+use Twig\TwigFunction;
 
 
 class HTTPResponse
@@ -41,13 +42,16 @@ class HTTPResponse
             $twig = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
+            $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
+            $twig->addFunction(new TwigFunction('user_role', function ($role) {
+                return Auth::userRole($role);
+            }));
         }
-        $args['path'] = 'http://' . $_SERVER['HTTP_HOST'];
         echo $twig->render($template, $args);
     }
 
         public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
-        $this->setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+        setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 }

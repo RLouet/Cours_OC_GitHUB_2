@@ -18,6 +18,18 @@ Routes exemples :
         <param name="controller">Home</param>
         <param name="action">index</param>
     </route>
+    <route url = "login">
+        <param name="controller">Security</param>
+        <param name="action">login</param>
+    </route>
+    <route url = "logout">
+        <param name="controller">Security</param>
+        <param name="action">logout</param>
+    </route>
+    <route url = "registration">
+        <param name="controller">Security</param>
+        <param name="action">registration</param>
+    </route>
     <route url = "admin">
         <param name="namespace">Admin</param>
         <param name="controller">Admin</param>

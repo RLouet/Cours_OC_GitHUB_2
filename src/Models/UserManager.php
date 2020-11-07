@@ -13,9 +13,11 @@ abstract class UserManager extends Manager
 
     abstract public function getList();
 
-    abstract public function mailExists(User $user);
+    abstract public function mailExists(string $email);
 
-    abstract public function userExists(User $user);
+    abstract public function findByEmail(string $email);
+
+    abstract public function userExists(string $username);
 
     abstract protected function add(User $user);
 

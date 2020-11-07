@@ -40,9 +40,11 @@
                     <li>
                         <a href="{{ path }}/uploads/cv/{{ blog.id }}/{{ blog.cv }}" target="_blank">CV</a>
                     </li>
+                    {% if user_role('admin') %}
                     <li>
                         <a href="{{ path }}/admin">Admin</a>
                     </li>
+                    {% endif %}
                     <li>
                         <a href="{{ path }}/cgu">CGU</a>
                     </li>
