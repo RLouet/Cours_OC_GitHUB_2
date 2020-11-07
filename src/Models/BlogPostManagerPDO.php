@@ -64,6 +64,10 @@ class BlogPostManagerPDO extends BlogPostManager
         $result = $stmt->fetch();
         $stmt->closeCursor();
 
+        if (!$result) {
+            return null;
+        }
+
         $result['edit_date'] = new DateTime($result['edit_date']);
         $blogPost = new BlogPost($result);
         $user = new User($result);

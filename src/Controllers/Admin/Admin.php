@@ -12,23 +12,17 @@ class Admin extends Controller
 
     /**
      * Before filter
-     *
-     * @return void
      */
-    protected function before()
+    protected function before(): void
     {
-        //echo '<p>(before)</p>';
-        //return false;
+        $this->requiredLogin('admin');
     }
 
     /**
      * After filter
-     *
-     * @return void
      */
-    protected function after()
+    protected function after(): void
     {
-        //echo '<p>(after)</p>';
     }
 
     /**
@@ -40,7 +34,7 @@ class Admin extends Controller
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function index()
+    public function indexAction()
     {
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();

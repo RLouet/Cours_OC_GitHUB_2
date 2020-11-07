@@ -40,7 +40,7 @@
                     <li>
                         <a href="{{ path }}/uploads/cv/{{ blog.id }}/{{ blog.cv }}" target="_blank">CV</a>
                     </li>
-                    {% if user_role('admin') %}
+                    {% if current_user.isGranted('admin') %}
                     <li>
                         <a href="{{ path }}/admin">Admin</a>
                     </li>

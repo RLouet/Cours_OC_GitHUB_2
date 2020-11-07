@@ -43,9 +43,7 @@ class HTTPResponse
                 //'cache' => '../cache'
             ]);
             $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
-            $twig->addFunction(new TwigFunction('user_role', function ($role) {
-                return Auth::userRole($role);
-            }));
+            $twig->addGlobal('current_user', Auth::getUser());
         }
         echo $twig->render($template, $args);
     }

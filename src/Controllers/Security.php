@@ -92,7 +92,7 @@ class Security extends Controller
                 if ($user) {
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
                         Auth::login($user);
-                        HTTPResponse::redirect('');
+                        HTTPResponse::redirect(Auth::GetRequestedPage());
                     }
                 }
                 $flash['type'] = 'error';

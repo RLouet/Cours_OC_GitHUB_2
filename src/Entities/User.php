@@ -134,6 +134,21 @@ class User extends Entity
         return $this;
     }
 
-
+    public function isGranted($role):bool
+    {
+        if (isset($this->role)) {
+            if ($role === "user") {
+                if ($this->role === "ROLE_USER" || $this->role === "ROLE_ADMIN") {
+                    return true;
+                }
+            }
+            if ($role === "admin") {
+                if ($this->role === "ROLE_ADMIN") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

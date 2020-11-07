@@ -5,6 +5,7 @@ namespace Core;
 
 
 use Blog\Entities\User;
+use Blog\Models\UserManagerPDO;
 
 class Auth
 {
@@ -14,11 +15,7 @@ class Auth
     public static function login(User $user): void
     {
         session_regenerate_id(true);
-        $_SESSION['user'] = [
-            'id' => $user->getId(),
-            'username' => $user->getUsername(),
-            'role' => $user->getRole()
-        ];
+        $_SESSION['user_id'] = $user->getId();
     }
 
     /**
@@ -43,22 +40,30 @@ class Auth
     }
 
     /**
-     * Check user roles
+     * Remember the requested page
      */
-    public static function userRole($role): bool
+    public static function rememberRequestedPage(): void
     {
-        if (isset($_SESSION['user']['role'])) {
-            if ($role === "user") {
-                if ($_SESSION['user']['role'] === "ROLE_USER" || $_SESSION['user']['role'] === "ROLE_ADMIN") {
-                    return true;
-                }
-            }
-            if ($role === "admin") {
-                if ($_SESSION['user']['role'] === "ROLE_ADMIN") {
-                    return true;
-                }
-            }
-        }
-        return false;
+        $_SESSION['return_to'] = $_SERVER['REQUEST_URI'];
+    }
+
+    /**
+     * Get the requested page
+     */
+    public static function GetRequestedPage(): string
+    {
+       return $_SESSION['return_to'] ?? '';
+    }
+
+    /**
+     * Get the current user
+     */
+    public static function getUser(): ?User
+    {
+        $userManager = new UserManagerPDO(PDOFactory::getPDOConnexion());
+       if (isset($_SESSION['user_id'])) {
+           return $userManager->findById($_SESSION['user_id']);
+       }
+       return null;
     }
 }

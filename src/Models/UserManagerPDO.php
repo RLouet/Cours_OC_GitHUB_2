@@ -14,12 +14,12 @@ class UserManagerPDO extends UserManager
         return [];
     }
 
-    public function getUnique(string $email)
+    public function findById(int $id)
     {
-        $sql = 'SELECT * FROM user WHERE user.email =:email';
+        $sql = 'SELECT * FROM user WHERE id =:id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $result = $stmt->fetch();

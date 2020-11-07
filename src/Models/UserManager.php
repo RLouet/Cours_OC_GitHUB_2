@@ -9,19 +9,19 @@ use Core\Manager;
 
 abstract class UserManager extends Manager
 {
-    abstract public function getUnique(string $email);
-
     abstract public function getList();
 
-    abstract public function mailExists(string $email);
+    abstract public function findById(int $id);
 
     abstract public function findByEmail(string $email);
 
+    abstract public function mailExists(string $email);
+
     abstract public function userExists(string $username);
 
-    abstract protected function add(User $user);
-
     abstract protected function modify(User $user);
+
+    abstract protected function add(User $user);
 
     abstract public function delete(int $id);
 

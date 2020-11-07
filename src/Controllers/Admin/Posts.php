@@ -15,23 +15,17 @@ class Posts extends Controller
 
     /**
      * Before filter
-     *
-     * @return void
      */
-    protected function before()
+    protected function before(): void
     {
-        //echo '<p>(before)</p>';
-        //return false;
+        $this->requiredLogin('admin');
     }
 
     /**
      * After filter
-     *
-     * @return void
      */
-    protected function after()
+    protected function after(): void
     {
-        //echo '<p>(after)</p>';
     }
 
     /**
@@ -43,7 +37,7 @@ class Posts extends Controller
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function index()
+    public function indexAction()
     {
         $blogManager = $this->managers->getManagerOf('Blog');
         $blog = $blogManager->getData();
@@ -59,7 +53,7 @@ class Posts extends Controller
         ]);
     }
 
-    public function view()
+    public function viewAction()
     {
         $blogManager = $this->managers->getManagerOf('Blog');
         $blog = $blogManager->getData();
@@ -81,7 +75,7 @@ class Posts extends Controller
         ]);
     }
 
-    public function new()
+    public function newAction()
     {
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();
@@ -133,7 +127,7 @@ class Posts extends Controller
         ]);
     }
 
-    public function edit()
+    public function editAction()
     {
         $blogManager = $this->managers->getManagerOf('Blog');
         $blog = $blogManager->getData();
@@ -147,7 +141,9 @@ class Posts extends Controller
 
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
 
-        //var_dump($blogPost['entity']->getImages());
+        if (!$blogPost['entity']) {
+            throw new \Exception("Le post n'existe pas", 404);
+        }
 
         //var_dump($_POST['old_post_image'], $_FILES['old_post_image']);
 
