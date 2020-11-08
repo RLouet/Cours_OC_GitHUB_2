@@ -2,6 +2,7 @@
 <definitions>
     <define var="blog_id" value="" />
     <define var="show_errors" value="true" />
+    <define var="secret_key" value="kKQmgw23BPTQa2hk1el3hSlmVBIKHQ4k" />
     <define var="db_host" value="localhost" />
     <define var="db_name" value="oc_daphpsymfony_p5" />
     <define var="db_user" value="root" />

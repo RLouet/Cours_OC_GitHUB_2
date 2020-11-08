@@ -22,14 +22,10 @@ class Ajax extends Controller
      */
     protected function before()
     {
-        //var_dump($_POST);
         if ($this->httpRequest->method() !== 'POST' || !$this->httpRequest->isAjax())
         {
             throw new \Exception('not found', 404);
         }
-
-        //var_dump($this->httpRequest->isAjax());
-        //return false;
     }
 
     /**
