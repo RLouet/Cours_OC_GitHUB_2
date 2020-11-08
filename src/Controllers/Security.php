@@ -7,6 +7,7 @@ namespace Blog\Controllers;
 use Blog\Entities\User;
 use Core\Auth;
 use Core\Controller;
+use Core\Flash;
 use Core\HTTPResponse;
 
 class Security extends Controller
@@ -62,7 +63,7 @@ class Security extends Controller
     }
 
     /**
-     * Show the index page
+     * Log in the user
      *
      * @return void
      *
@@ -75,16 +76,9 @@ class Security extends Controller
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();
 
-        $flash = [
-            'type' => false,
-            'messages' => []
-        ];
-
-
         if ($this->httpRequest->postExists('login-btn')) {
             if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                $flash['type'] = 'error';
-                $flash['messages'][] = 'Erreur lors de la vérification du formulaire.';
+                Flash::addMessage('Erreur lors de la vérification du formulaire.', Flash::WARNING);
             } else {
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
@@ -92,11 +86,13 @@ class Security extends Controller
                 if ($user) {
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
                         Auth::login($user);
+
+                        Flash::addMessage('Vous êtes connectés en tant que ' . $user->getUsername());
+
                         HTTPResponse::redirect(Auth::GetRequestedPage());
                     }
                 }
-                $flash['type'] = 'error';
-                $flash['messages'][] = 'Mauvaise combinaison email / mot de passe.';
+                Flash::addMessage('Mauvaise combinaison email / mot de passe.', Flash::WARNING);
             }
         }
 
@@ -105,14 +101,13 @@ class Security extends Controller
         HTTPResponse::renderTemplate('Security/login.html.twig', [
             'section' => 'security',
             'blog' => $blog,
-            'flash' => $flash,
             'email' => $this->httpRequest->postData('email'),
             'csrf_token' => $csrf
         ]);
     }
 
     /**
-     * Show the index page
+     * log out the user
      *
      * @return void
      *
@@ -120,10 +115,26 @@ class Security extends Controller
     public function logoutAction()
     {
         Auth::logout();
+
+        HTTPResponse::redirect('/security/show-logout-message');
+    }
+
+    /**
+     * Show a message when user log out.
+     * Necessary to add a flash message because the session is destroyed at the end of the logout method.
+     */
+    public function showLogoutMessageAction()
+    {
+        Flash::addMessage('Vous êtes déconnectés. A bientôt !');
+
         HTTPResponse::redirect('');
     }
 
-    function processForm()
+
+    /**
+     * process the registration form
+     */
+    function processForm(): array
     {
         $userManager =  $this->managers->getManagerOf('user');
 

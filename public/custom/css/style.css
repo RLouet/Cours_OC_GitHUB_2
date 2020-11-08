@@ -226,7 +226,7 @@ label[for=blogLogoInput] {
     display: block;
 }
 
-#flashAlert {
+#flashMessages {
     z-index: 9999;
     position: fixed;
     top: 5px;

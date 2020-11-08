@@ -44,6 +44,7 @@ class HTTPResponse
             ]);
             $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
             $twig->addGlobal('current_user', Auth::getUser());
+            $twig->addGlobal('flash_messages', Flash::getMessages());
         }
         echo $twig->render($template, $args);
     }

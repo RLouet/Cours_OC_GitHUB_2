@@ -1,14 +1,27 @@
 $(document).ready(function() {
 
-    var $flashContainer = $('#flashAlert');
+    //var $flashContainer = $('#flashAlert');
 
-    $('button.close', $flashContainer).click(function () {
+    $('.alert', $('#flashMessages')).each(function () {
+        let $alertContainer = $(this);
+        /*$('button.close', $(this)).click(function () {
+            $alertContainer.hide(400);
+        });*/
+        setTimeout(function(){
+            $alertContainer.alert('close');
+        }, 15000);
+    });
+
+
+    /*$('button.close', $flashContainer).click(function () {
         $flashContainer.hide(400);
-    })
+    });
 
     setTimeout(function(){
         $flashContainer.hide(400);
     }, 10000);
+    */
+
 
 
 })

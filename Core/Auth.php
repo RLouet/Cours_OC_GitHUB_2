@@ -19,7 +19,7 @@ class Auth
     }
 
     /**
-     * Logout th user
+     * Logout the user
      */
     public static function logout(): void
     {
