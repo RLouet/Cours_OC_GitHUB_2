@@ -26,28 +26,18 @@ class Security extends Controller
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();
 
-        $flash = [
-            'type' => false,
-            'messages' => []
-        ];
-
         $user['entity'] = new User();
 
         if ($this->httpRequest->postExists('register-btn')) {
-            if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                $flash['type'] = 'error';
-                $flash['messages'][] = 'Erreur lors de la vérification du formulaire.';
-            } else {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $user = $this->processForm();
                 if (empty($user['errors'])) {
-                    $flash['type'] = 'success';
-                    $flash['messages'][] = 'Vous avez bien été enregistrés';
+                    Flash::addMessage('Vous avez bien été enregistré.');
                     HTTPResponse::redirect('');
-                } else {
-                    $flash['type'] = 'error';
-                    $flash['messages'] = $user['errors'];
                 }
-
+                foreach ($user['errors'] as $error) {
+                    Flash::addMessage($error, Flash::WARNING);
+                }
             }
         }
 
@@ -56,7 +46,6 @@ class Security extends Controller
         HTTPResponse::renderTemplate('Security/Signup.html.twig', [
             'section' => 'security',
             'blog' => $blog,
-            'flash' => $flash,
             'user' => $user,
             'csrf_token' => $csrf
         ]);
@@ -77,9 +66,7 @@ class Security extends Controller
         $blog = $manager->getData();
 
         if ($this->httpRequest->postExists('login-btn')) {
-            if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                Flash::addMessage('Erreur lors de la vérification du formulaire.', Flash::WARNING);
-            } else {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
@@ -163,7 +150,6 @@ class Security extends Controller
             return $handle;
         }
         $handle['errors'][] = "Vos informations sont invalides.";
-        //var_dump($user);
         return $handle;
     }
 }

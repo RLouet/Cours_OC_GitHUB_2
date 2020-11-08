@@ -197,7 +197,7 @@ $(document).ready(function() {
 						errorMessage += '<li>' + data.errors[k] + '</li>';
 					}
 					errorMessage += '</li';
-					$('.sn-general-error .form-error span', $form).html(errorMessage);
+					$('.sn-general-error .form-error div', $form).html(errorMessage);
 					$('.sn-general-error .form-error', $form).removeClass('hidden');
 
 					for (var fe in data.form_errors) {

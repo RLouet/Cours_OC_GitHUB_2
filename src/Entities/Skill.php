@@ -23,10 +23,10 @@ class Skill extends Entity implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'id' => $this->id(),
-            'value' => $this->value(),
-            'errors' => $this->errors(),
-            'blogId' => $this->blogId(),
+            'id' => $this->getId(),
+            'value' => $this->getValue(),
+            'errors' => $this->getErrors(),
+            'blogId' => $this->getBlogId(),
         ];
     }
 

@@ -7,6 +7,7 @@ namespace Blog\Controllers\Admin;
 use Blog\Entities\Blog;
 use Blog\Services\FilesService;
 use Core\Controller;
+use Core\Flash;
 use Core\HTTPResponse;
 
 class Config extends Controller
@@ -41,25 +42,16 @@ class Config extends Controller
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $blogForm['entity'] = $manager->getData();
 
-        $flash = [
-            'type' => false,
-            'messages' => []
-        ];
-
         if ($this->httpRequest->postExists('blog-update')) {
-            if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                $flash['type'] = 'error';
-                $flash['messages'][] = 'Erreur lors de la vérification du formulaire.';
-            } else {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogForm = $this->processForm($blog);
                 if (empty($blogForm['errors'])) {
-                    $flash['type'] = 'success';
-                    $flash['messages'][] = 'Les paramètres du blog ont bien été enregistrés';
+                    Flash::addMessage('Les paramètres du blog ont bien été enregistrés');
                 } else {
-                    $flash['type'] = 'error';
-                    $flash['messages'] = $blogForm['errors'];
+                    foreach ($blogForm['errors'] as $error) {
+                        Flash::addMessage($error, Flash::WARNING);
+                    }
                 }
-
             }
         }
 
@@ -69,7 +61,6 @@ class Config extends Controller
             'section' => 'config',
             'blog' => $blog,
             'blogForm' => $blogForm,
-            'flash' => $flash,
             'csrf_token' => $csrf
         ]);
     }
@@ -77,8 +68,8 @@ class Config extends Controller
     private function processForm(Blog $blog) {
         $logoUploadRules = [
             'target' => 'logo',
-            'folder' => '/' . $blog->id(),
-            'old' => $blog->logo(),
+            'folder' => '/' . $blog->getId(),
+            'old' => $blog->getLogo(),
             'maxSize' => 1,
             'type' => 'image',
             'minRes' => [150, 60],
@@ -86,8 +77,8 @@ class Config extends Controller
         ];
         $cvUploadRules = [
             'target' => 'cv',
-            'folder' => '/' . $blog->id(),
-            'old' => $blog->cv(),
+            'folder' => '/' . $blog->getId(),
+            'old' => $blog->getCv(),
             'maxSize' => 3,
             'type' => 'pdf'
         ];
@@ -103,17 +94,17 @@ class Config extends Controller
             'email' => $this->httpRequest->postData('email'),
             'phone' => $this->httpRequest->postData('phone'),
             'teaserPhrase' => $this->httpRequest->postData('teaser_phrase'),
-            'logo' => $blog->logo(),
-            'cv' => $blog->cv(),
+            'logo' => $blog->getLogo(),
+            'cv' => $blog->getCv(),
             'contactMail' => $this->httpRequest->postData('contact_mail'),
-            'id' => $blog->id(),
+            'id' => $blog->getId(),
         ]);
 
         $uploader = new FilesService();
 
         foreach ($filesFields as $filesField=>$upload) {
             if (!empty($this->httpRequest->filesData($filesField)['name'])){
-                $fileName = ${$filesField . "UploadRules"}['target'] . "-" . $formBlog->firstname() . "_" . $formBlog->lastname();
+                $fileName = ${$filesField . "UploadRules"}['target'] . "-" . $formBlog->getfirstname() . "_" . $formBlog->getLastname();
                 $upload = $uploader->upload($this->httpRequest->filesData($filesField), ${$filesField . "UploadRules"}, $fileName);
 
                 if ($upload['success']) {

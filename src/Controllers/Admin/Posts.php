@@ -7,7 +7,9 @@ namespace Blog\Controllers\Admin;
 use Blog\Entities\BlogPost;
 use Blog\Entities\PostImage;
 use Blog\Services\FilesService;
+use Core\Auth;
 use Core\Controller;
+use Core\Flash;
 use Core\HTTPResponse;
 
 class Posts extends Controller
@@ -58,11 +60,6 @@ class Posts extends Controller
         $blogManager = $this->managers->getManagerOf('Blog');
         $blog = $blogManager->getData();
 
-        $flash = [
-            'type' => false,
-            'messages' => []
-        ];
-
         $postManager = $this->managers->getManagerOf('BlogPost');
 
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
@@ -71,7 +68,6 @@ class Posts extends Controller
             'section' => 'posts',
             'blog' => $blog,
             'blog_post' => $blogPost,
-            'flash' => $flash
         ]);
     }
 
@@ -80,39 +76,19 @@ class Posts extends Controller
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();
 
-        $flash = [
-            'type' => false,
-            'messages' => []
-        ];
-
         $blogPost['entity'] = new BlogPost(['user_id' => 1]);
 
         if ($this->httpRequest->postExists('post-add')) {
-            if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                $flash['type'] = 'error';
-                $flash['messages'][] = 'Erreur lors de la vérification du formulaire.';
-            } else {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogPost = $this->processForm($blogPost['entity']);
                 if (empty($blogPost['errors'])) {
-                    $flash['type'] = 'success';
-                    $flash['messages'][] = 'Le post a bien été enregistrés';
+                    Flash::addMessage('Le post a bien été enregistrés');
 
-                    $postManager = $this->managers->getManagerOf('BlogPost');
-                    $posts = $postManager->getList();
-
-                    HTTPResponse::renderTemplate('Backend/posts-index.html.twig', [
-                        'section' => 'posts',
-                        'blog' => $blog,
-                        'posts' => $posts,
-                        'flash' => $flash,
-                    ]);
-                    exit();
-                } else {
-                    //var_dump($blogPost);
-                    $flash['type'] = 'error';
-                    $flash['messages'] = $blogPost['errors'];
+                    HTTPResponse::redirect('/admin/posts');
                 }
-
+                foreach ($blogPost['errors'] as $error) {
+                    Flash::addMessage($error, Flash::WARNING);
+                }
             }
         }
 
@@ -122,7 +98,6 @@ class Posts extends Controller
             'section' => 'posts',
             'blog' => $blog,
             'blog_post' => $blogPost,
-            'flash' => $flash,
             'csrf_token' => $csrf
         ]);
     }
@@ -132,11 +107,6 @@ class Posts extends Controller
         $blogManager = $this->managers->getManagerOf('Blog');
         $blog = $blogManager->getData();
 
-        $flash = [
-            'type' => false,
-            'messages' => []
-        ];
-
         $postManager = $this->managers->getManagerOf('BlogPost');
 
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
@@ -144,31 +114,20 @@ class Posts extends Controller
         if (!$blogPost['entity']) {
             throw new \Exception("Le post n'existe pas", 404);
         }
-
-        //var_dump($_POST['old_post_image'], $_FILES['old_post_image']);
+        if ($blogPost['entity']->getUser() != Auth::getUser()) {
+            throw new \Exception("Vous n'êtes pas autorisé à éditer ce post.", 401);
+        }
 
         if ($this->httpRequest->postExists('post-edit')) {
-            if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                $flash['type'] = 'error';
-                $flash['messages'][] = 'Erreur lors de la vérification du formulaire.';
-            } else {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogPost = $this->processForm($blogPost['entity']);
                 if (empty($blogPost['errors'])) {
-                    $flash['type'] = 'success';
-                    $flash['messages'][] = 'Le post a bien été modifié.';
+                    Flash::addMessage('Le post a bien été modifié.');
 
-                    $posts = $postManager->getList();
-
-                    HTTPResponse::renderTemplate('Backend/posts-index.html.twig', [
-                        'section' => 'posts',
-                        'blog' => $blog,
-                        'posts' => $posts,
-                        'flash' => $flash,
-                    ]);
-                    exit();
-                } else {
-                    $flash['type'] = 'error';
-                    $flash['messages'] = $blogPost['errors'];
+                    HTTPResponse::redirect('/admin/posts');
+                }
+                foreach ($blogPost['errors'] as $error) {
+                    Flash::addMessage($error, Flash::WARNING);
                 }
 
             }
@@ -180,7 +139,6 @@ class Posts extends Controller
             'section' => 'posts',
             'blog' => $blog,
             'blog_post' => $blogPost,
-            'flash' => $flash,
             'csrf_token' => $csrf
         ]);
     }
@@ -201,7 +159,7 @@ class Posts extends Controller
 
         $handle['entity'] = $blogPost;
 
-        //var_dump($_POST);
+
 
         if ($blogPost->isValid() && empty($blogPost->getErrors())) {
             $blogPostManager =  $this->managers->getManagerOf('blogPost');
@@ -249,9 +207,10 @@ class Posts extends Controller
                  */
                 foreach ($imagesCollections as $imagesType=>$values) {
 
+
                     $imageUploadRules = [
                         'target' => 'blog',
-                        'folder' => '/' . $blogPost->id(),
+                        'folder' => '/' . $blogPost->getId(),
                         'maxSize' => 4,
                         'type' => 'image',
                         'minRes' => [500, 350],
@@ -273,13 +232,13 @@ class Posts extends Controller
 
                             $postImage = new PostImage([
                                 'name' => $this->httpRequest->postData($imagesType)[$key]['name'],
-                                'blog_post_id' => $blogPost->id(),
+                                'blog_post_id' => $blogPost->getId(),
                             ]);
                             if ($imagesType === "old_post_image") {
                                 $oldImage = $blogPost->getImages()->getById($this->httpRequest->postData('old_post_image')[$key]['id']);
                                 $imageUploadRules['old'] = $oldImage->getUrl();
                                 $postImage->setUrl($oldImage->getUrl());
-                                $postImage->setId($oldImage->id());
+                                $postImage->setId($oldImage->getId());
                                 //var_dump($key,$this->httpRequest->postData('old_post_image')[$key]['id']);
                             }
 
@@ -299,6 +258,7 @@ class Posts extends Controller
                                     }
                                 }
                             }
+                            //var_dump($blogPost->getHero());
                             $postImage = $imageManager->save($postImage);
                             if ($postImage) {
                                 if (isset($oldImage)) {
@@ -312,12 +272,15 @@ class Posts extends Controller
                              * Process Hero
                              */
                             $oldHeroId = null;
+                            //var_dump('1');
                             if ($blogPost->getHero()) {
-                                $oldHeroId = $blogPost->getHero()->id();
+                                //var_dump('2');
+                                $oldHeroId = $blogPost->getHero()->getId();
+                                //$handle['errors'][] = "Erreur d'enregistrement";
                             }
                             if ($imagesType === "old_post_image" && $postImage) {
-                                if ($this->httpRequest->postData('hero') === "old-" . $postImage->id()) {
-                                    if ($oldHeroId !== $postImage->id()) {
+                                if ($this->httpRequest->postData('hero') === "old-" . $postImage->getId()) {
+                                    if ($oldHeroId !== $postImage->getId()) {
                                         $blogPost->setHero($postImage);
                                         $blogPostManager->save($blogPost);
                                     }

@@ -1,6 +1,0 @@
-[02-Oct-2020 16:06:46 UTC] Uncaught exception : 'Exception' Message : 'not found'
-Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\Core\Controller.php(56): Blog\Controllers\Ajax->before()
-#1 B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php(143): Core\Controller->__call('typedelements', Array)
-#2 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(25): Core\Router->dispatch(Object(Core\HTTPRequest))
-#3 {main}
-Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\src\Controllers\Ajax.php' on line 22

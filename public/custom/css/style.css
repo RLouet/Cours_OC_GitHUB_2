@@ -309,3 +309,7 @@ ul.sitemap li {
 .dropdown-item:hover {
     background: #dddddd;
 }
+
+.badge {
+    white-space: unset;
+}

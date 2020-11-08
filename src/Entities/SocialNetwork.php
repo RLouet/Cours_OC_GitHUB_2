@@ -28,12 +28,12 @@ class SocialNetwork extends Entity implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'id' => $this->id(),
-            'name' => $this->name(),
-            'url' => $this->url(),
-            'logo' => $this->logo(),
-            'errors' => $this->errors(),
-            'blogId' => $this->blogId(),
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'url' => $this->getUrl(),
+            'logo' => $this->getLogo(),
+            'errors' => $this->getErrors(),
+            'blogId' => $this->getBlogId(),
         ];
     }
 

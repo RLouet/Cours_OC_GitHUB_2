@@ -8,6 +8,7 @@ use Blog\Entities\Skill;
 use Blog\Entities\SocialNetwork;
 use Blog\Entities\User;
 use Blog\Services\FilesService;
+use Core\Auth;
 use Core\Config;
 use Core\Controller;
 use Core\HTTPResponse;
@@ -46,21 +47,14 @@ class Ajax extends Controller
      */
     public function typedElementsAction()
     {
-        /*$config = new Config();
-        echo $config->get('show_errors');*/
         $manager = $this->managers->getManagerOf('skill');
         $skills = $manager->getListByBlog();
 
-        //var_dump($skills);
         $elements = [];
         foreach ($skills as $skill) {
             $elements[]=$skill['value'];
         }
-        //var_dump($elements);
-        //$elements = ["Développeur PHP", "Développeur Symfony", "Développeur Wordpress", "WebDesigner", "Infographiste 3D", "Maker"];
 
-        //var_dump($elements);
-        //echo "test";
         echo json_encode($elements);
     }
 
@@ -85,14 +79,14 @@ class Ajax extends Controller
 
         $oldSocialNetwork =  $manager->getUnique($this->httpRequest->postData('id'));
 
-        if (!$oldSocialNetwork || $oldSocialNetwork->blogId() != $blogId) {
+        if (!$oldSocialNetwork || $oldSocialNetwork->getBlogId() != $blogId) {
             $handle['success'] = false;
             $handle['errors'][] = 'Le réseau social à supprimer est invalide.';
             echo json_encode($handle);
             exit();
         }
 
-        if (!$manager->delete($oldSocialNetwork->id())) {
+        if (!$manager->delete($oldSocialNetwork->getId())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du réseau social de la base de données.';
             echo json_encode($handle);
@@ -105,7 +99,7 @@ class Ajax extends Controller
             'folder' => '/' . $blogId
         ];
 
-        if (!$uploader->deleteFile($iconRules, $oldSocialNetwork->logo())) {
+        if (!$uploader->deleteFile($iconRules, $oldSocialNetwork->getLogo())) {
             $manager->save($oldSocialNetwork);
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du logo du réseau social.';
@@ -113,7 +107,7 @@ class Ajax extends Controller
             exit();
         }
 
-        $handle['deleted'] = $oldSocialNetwork->id();
+        $handle['deleted'] = $oldSocialNetwork->getId();
         echo json_encode($handle);
     }
 
@@ -156,7 +150,7 @@ class Ajax extends Controller
             $socialNetwork->setId($this->httpRequest->postData('id'));
         }
 
-        $handle['form_errors'] = $socialNetwork->errors();
+        $handle['form_errors'] = $socialNetwork->getErrors();
 
         if (!empty($handle['form_errors'])) {
             $handle['success'] = false;
@@ -181,13 +175,13 @@ class Ajax extends Controller
             // Création du nom de l'icone
             if (!empty($this->httpRequest->filesData('logo')['name'])) {
                 $ext = pathinfo($this->httpRequest->filesData('logo')['name'], PATHINFO_EXTENSION);
-                $socialNetwork->setLogo($socialNetwork->name() . '.' . $ext);
+                $socialNetwork->setLogo($socialNetwork->getName() . '.' . $ext);
             } else {
                 $ext = pathinfo($this->httpRequest->postData('old_logo'), PATHINFO_EXTENSION);
-                $socialNetwork->setLogo($socialNetwork->name() . '.' . $ext);
+                $socialNetwork->setLogo($socialNetwork->getName() . '.' . $ext);
             }
 
-            $oldSocialNetwork =  $manager->getUnique($socialNetwork->id());
+            $oldSocialNetwork =  $manager->getUnique($socialNetwork->getId());
 
             // Enregistrement du réseau social
              if (!$manager->save($socialNetwork)) {
@@ -201,7 +195,7 @@ class Ajax extends Controller
 
              // Enregistrement de l'icone si elle a changé
             if (!empty($this->httpRequest->filesData('logo')['name'])) {
-                $upload = $uploader->upload($this->httpRequest->filesData('logo'), $logoUploadRules, $socialNetwork->name());
+                $upload = $uploader->upload($this->httpRequest->filesData('logo'), $logoUploadRules, $socialNetwork->getName());
 
                 if (!$upload['success']) {
                     $manager->save($oldSocialNetwork);
@@ -213,10 +207,10 @@ class Ajax extends Controller
             }
 
             // Renommage de l'icone si le nom du réseau a changé
-            if (($oldSocialNetwork->name() !== $socialNetwork->name()) && empty($this->httpRequest->filesData('logo')['name'])) {
-                $oldPath = $oldSocialNetwork->logo();
+            if (($oldSocialNetwork->getName() !== $socialNetwork->getName()) && empty($this->httpRequest->filesData('logo')['name'])) {
+                $oldPath = $oldSocialNetwork->getLogo();
                 $ext = pathinfo($oldPath, PATHINFO_EXTENSION);
-                $newPath = $socialNetwork->name() . '.' . $ext;
+                $newPath = $socialNetwork->getName() . '.' . $ext;
 
                 if (!$uploader->rename($logoUploadRules, $oldPath, $newPath)){
                     $manager->save($oldSocialNetwork);
@@ -235,7 +229,7 @@ class Ajax extends Controller
             }
 
             $ext = pathinfo($this->httpRequest->filesData('logo')['name'], PATHINFO_EXTENSION);
-            $socialNetwork->setLogo($socialNetwork->name() . '.' . $ext);
+            $socialNetwork->setLogo($socialNetwork->getName() . '.' . $ext);
 
             // Enregistrement du réseau social
             $socialNetwork = $manager->save($socialNetwork);
@@ -249,10 +243,10 @@ class Ajax extends Controller
             $uploader = new FilesService();
 
             // Enregistrement de l'icone
-            $upload = $uploader->upload($this->httpRequest->filesData('logo'), $logoUploadRules, $socialNetwork->name());
+            $upload = $uploader->upload($this->httpRequest->filesData('logo'), $logoUploadRules, $socialNetwork->getName());
 
             if (!$upload['success']) {
-                $manager->delete($socialNetwork->id());
+                $manager->delete($socialNetwork->getId());
                 $handle['success'] = false;
                 $handle['errors'][] = $upload['errors'];
                 echo json_encode($handle);
@@ -294,7 +288,7 @@ class Ajax extends Controller
             $skill->setId($this->httpRequest->postData('id'));
         }
 
-        $handle['form_errors'] = $skill->errors();
+        $handle['form_errors'] = $skill->getErrors();
 
         if (!empty($handle['form_errors'])) {
             $handle['success'] = false;
@@ -349,21 +343,21 @@ class Ajax extends Controller
 
         $oldSkill =  $manager->getUnique($this->httpRequest->postData('id'));
 
-        if (!$oldSkill || $oldSkill->blogId() != $blogId) {
+        if (!$oldSkill || $oldSkill->getBlogId() != $blogId) {
             $handle['success'] = false;
             $handle['errors'][] = 'Le skill à supprimer est invalide.';
             echo json_encode($handle);
             exit();
         }
 
-        if (!$manager->delete($oldSkill->id())) {
+        if (!$manager->delete($oldSkill->getId())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du skill.';
             echo json_encode($handle);
             exit();
         }
 
-        $handle['deleted'] = $oldSkill->id();
+        $handle['deleted'] = $oldSkill->getId();
         echo json_encode($handle);
     }
 
@@ -372,15 +366,7 @@ class Ajax extends Controller
      */
     public function deletePostAction()
     {
-        $user = new User([
-           'id' => 1,
-           'username' => 'Romain',
-           'name' => 'LOUET',
-           'firstname' => 'Romain',
-           'email' => 'contact@romsworld.net',
-           'password' => 'PasswordDeTest',
-           'role' => 'ROLE_ADMIN',
-        ]);
+        $user = Auth::getUser();
 
         $handle = [
             'success' => true,
@@ -393,7 +379,7 @@ class Ajax extends Controller
 
         //var_dump($oldPost->getUser() != $user, $oldPost->getUser(), $user);
 
-        if (!$oldPost || $oldPost->getUser()->id() !== $user->id() || $user->getRole() !== 'ROLE_ADMIN') {
+        if (!$oldPost || $oldPost->getUser() != $user || $user->getRole() !== 'ROLE_ADMIN') {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
             echo json_encode($handle);
@@ -405,7 +391,7 @@ class Ajax extends Controller
             "folder" => "",
         ];
         $deleter = new FilesService();
-        $dir = "uploads/blog/" . $oldPost->id();
+        $dir = "uploads/blog/" . $oldPost->getId();
         if (!$deleter->deleteDirectory($dir)) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression des fichiers du post.';
@@ -413,14 +399,14 @@ class Ajax extends Controller
             exit();
         }
 
-        if (!$manager->delete($oldPost->id())) {
+        if (!$manager->delete($oldPost->getId())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du post.';
             echo json_encode($handle);
             exit();
         }
 
-        $handle['deleted'] = $oldPost->id();
+        $handle['deleted'] = $oldPost->getId();
         echo json_encode($handle);
     }
 }
