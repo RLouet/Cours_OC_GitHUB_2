@@ -60,7 +60,7 @@ abstract class Controller
             }
         } else {
             //echo "Method $method not found in controller" . get_class($this);
-            throw new \Exception("Method $method not found in controller " . get_class($this));
+            throw new \Exception("Method $method not found in controller " . get_class($this), 500);
         }
     }
 
@@ -92,9 +92,9 @@ abstract class Controller
      */
     public function requiredLogin(string $role = 'user'): void
     {
-        if (!Auth::getUser()->isGranted($role)) {
+        if (!Auth::getUser() || !Auth::getUser()->isGranted($role)) {
+            Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::INFO);
             Auth::rememberRequestedPage();
-            //Auth::logout();
             HTTPResponse::redirect('/login');
         }
     }

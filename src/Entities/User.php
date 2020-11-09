@@ -8,7 +8,6 @@ use Core\Entity;
 
 class User extends Entity
 {
-    protected int $id;
     protected string $username = "";
     protected string $lastname = "";
     protected string $firstname = "";

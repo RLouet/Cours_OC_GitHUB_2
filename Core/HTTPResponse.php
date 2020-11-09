@@ -44,11 +44,12 @@ class HTTPResponse
             ]);
             $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
             $twig->addGlobal('current_user', Auth::getUser());
+            $twig->addGlobal('flash_messages', Flash::getMessages());
         }
         echo $twig->render($template, $args);
     }
 
-        public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    public static function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }

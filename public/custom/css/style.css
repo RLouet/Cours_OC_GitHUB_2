@@ -226,7 +226,7 @@ label[for=blogLogoInput] {
     display: block;
 }
 
-#flashAlert {
+#flashMessages {
     z-index: 9999;
     position: fixed;
     top: 5px;
@@ -308,4 +308,8 @@ ul.sitemap li {
 }
 .dropdown-item:hover {
     background: #dddddd;
+}
+
+.badge {
+    white-space: unset;
 }

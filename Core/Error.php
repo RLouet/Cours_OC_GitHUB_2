@@ -20,20 +20,25 @@ class Error
      */
     public static function exceptionHandler(Throwable $exception)
     {
-        // Code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
-        if ($code != 404) {
-            $code = 500;
-        }
-        http_response_code($code);
         $config = Config::getInstance();
         if ($config->get('show_errors') === "true") {
+            if (!is_int($code)) {
+                $code = 500;
+            }
+            http_response_code($code);
             echo "<h1>Fatal error</h1>";
             echo "<p>Uncaught exception : '" . get_class($exception) . "'</p>";
             echo "<p>Message : '" . $exception->getMessage() . "'</p>";
             echo "<p>Stack trace : <pre>" . $exception->getTraceAsString() . "</pre></p>";
             echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
         } else {
+            // Code is 404 (not found) or 500 (general error)
+            if ($code != 404) {
+                $code = 500;
+            }
+            http_response_code($code);
+
             $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
             ini_set('error_log', $log);
 

@@ -1,4 +1,0 @@
-[30-Aug-2020 17:18:37 UTC] Uncaught exception : 'Exception' Message : 'No route matched'
-Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(20): Core\Router->dispatch(Object(Core\HTTPRequest))
-#1 {main}
-Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 154

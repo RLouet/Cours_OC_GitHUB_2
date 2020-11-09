@@ -104,13 +104,13 @@ class BlogPostManagerPDO extends BlogPostManager
         $stmt->bindValue(':title', $blogPost->getTitle());
         $stmt->bindValue(':editDate', $date->format('Y-m-d H:i:s'));
         if ($blogPost->getHero()) {
-            $stmt->bindValue(':heroId', $blogPost->getHero()->id());
+            $stmt->bindValue(':heroId', $blogPost->getHero()->getId());
         } else {
             $stmt->bindValue(':heroId', null);
         }
         $stmt->bindValue(':chapo', $blogPost->getChapo());
         $stmt->bindValue(':content', $blogPost->getContent());
-        $stmt->bindValue(':id', $blogPost->id());
+        $stmt->bindValue(':id', $blogPost->getId());
         $stmt->bindValue(':userId', $blogPost->getUserId());
 
         if ($stmt->execute()) {
@@ -131,7 +131,7 @@ class BlogPostManagerPDO extends BlogPostManager
         $stmt->bindValue(':title', $blogPost->getTitle());
         $stmt->bindValue(':editDate', $blogPost->getEditDate()->format('Y-m-d H:i:s'));
         if ($blogPost->getHero()) {
-            $stmt->bindValue(':heroId', $blogPost->getHero()->id());
+            $stmt->bindValue(':heroId', $blogPost->getHero()->getId());
         } else {
             $stmt->bindValue(':heroId', null);
         }

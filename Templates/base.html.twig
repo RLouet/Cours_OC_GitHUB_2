@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="fr"> <![endif]-->
 <!--[if gt IE 8]>
-<!--><html class="no-js" lang="en"><!--<![endif]-->
+<!--><html class="no-js" lang="fr"><!--<![endif]-->
 <head>
 
     <!-- Basic Page Needs
@@ -47,12 +47,24 @@
 
 <div id="royal_preloader"></div>
 
+<div id="flashMessages">
+    {% for flash in flash_messages %}
+        <div class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
+            </button>
+            <div>{{ flash.message }}</div>
+        </div>
+    {% endfor %}
+</div>
+{#
 <div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %}{% if not flash.type %} hidden{% endif %} alert-dismissible fade" role="alert">
     <button type="button" class="close" aria-label="Fermer">
         <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
     </button>
     {% for message in flash.messages %}<div>{{ message }}</div>{% endfor %}
 </div>
+#}
 
 <!-- Nav and Logo
 ================================================== -->
@@ -142,6 +154,7 @@
 <script type="text/javascript" src="{{ path }}/custom/js/custom-alerts.js"></script>
 {% block javascripts %}
 <script type="text/javascript" src="{{ path }}/js/custom/custom-personal.js"></script>
+<script type="text/javascript" src="{{ path }}/js/custom/custom-elements.js"></script>
 {% endblock %}
 <!-- End Document
 ================================================== -->

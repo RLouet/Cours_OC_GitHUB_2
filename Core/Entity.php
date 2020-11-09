@@ -10,7 +10,7 @@ abstract class Entity implements \ArrayAccess
     use Hydrator;
 
     protected array $errors = [];
-    protected int $id;
+    protected ?int $id = null;
 
     public function __construct(array $data = [])
     {
@@ -19,22 +19,22 @@ abstract class Entity implements \ArrayAccess
         }
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         return empty($this->id);
     }
 
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = (int) $id;
     }
