@@ -42,6 +42,8 @@ class Auth
 
         // Détruit la session.
         session_destroy();
+
+        static::forgetLogin();
     }
 
     /**
@@ -80,7 +82,7 @@ class Auth
         $cookie = HTTPRequest::cookieData('remember_me');
         if ($cookie) {
             $rememberedLogin = static::findByToken($cookie);
-            if ($rememberedLogin) {
+            if ($rememberedLogin && !static::hasExpired($rememberedLogin)) {
                 $user = $userManager->findById($rememberedLogin['user_id']);
                 static::login($user, false);
                 return $user;
@@ -109,6 +111,22 @@ class Auth
         return false;
     }
 
+    private static function forgetLogin()
+    {
+        $cookie = HTTPRequest::cookieData('remember_me');
+        if ($cookie) {
+            $token = new Token($cookie);
+            $hashedToken = $token->getHash();
+            $sql = 'DELETE FROM remembered_login WHERE token_hash=:token_hash';
+            $stmt = PDOFactory::getPDOConnexion()->prepare($sql);
+            $stmt->bindValue(':token_hash', $hashedToken, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            HTTPResponse::setCookie('remember_me', '', time() - 36000);
+        }
+    }
+
     private static function findByToken($token)
     {
         $token = new Token($token);
@@ -121,5 +139,10 @@ class Auth
         $stmt->execute();
 
         return $stmt->fetch();
+    }
+
+    private static function hasExpired(array $token)
+    {
+        return strtotime($token['expires_at']) < time();
     }
 }
