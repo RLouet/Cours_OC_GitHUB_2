@@ -40,9 +40,15 @@
                         <div class="subscribe-box-1 dark for-hero mt-2">
                             <input type="password" name="password" placeholder="Mot de passe" class="form-control" />
                         </div>
+                        <div class="checkbox primary line-icon mt-4">
+                            <input id="rememberCheck" name="remember_me" type="checkbox"{% if remember_me %} checked="checked"{% endif %}>
+                            <label for="rememberCheck">
+                                Se souvenir de moi
+                            </label>
+                        </div>
                         <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                         <div class="clear"></div>
-                        <button type="submit" name="login-btn" class="btn btn-primary btn-simple btn-round btn-long mt-5 mb-4" >Se connecter</button>
+                        <button type="submit" name="login-btn" class="btn btn-primary btn-simple btn-round btn-long mt-2 mb-4" >Se connecter</button>
                     </form>
                     <p class="color-white p-0 m-0 list-inline-item"><small>Pas encore de compte ? </small></p> <a href="{{ path }}/registration" class="btn-link btn-primary list-inline-item p-0 m-0 ml-1"><small>Inscription</small></a>
                     <div class="clear"></div>

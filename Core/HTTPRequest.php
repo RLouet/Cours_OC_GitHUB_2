@@ -6,12 +6,12 @@ namespace Core;
 
 class HTTPRequest
 {
-    public function cookieData($key)
+    public static function cookieData(string $key)
     {
         return isset($_COOKIE[$key]) ? $_COOKIE[$key] : null;
     }
 
-    public function cookieExists($key)
+    public function cookieExists(string $key): bool
     {
         return isset($_COOKIE[$key]);
     }

@@ -49,7 +49,7 @@ class HTTPResponse
         echo $twig->render($template, $args);
     }
 
-        public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    public static function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }

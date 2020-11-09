@@ -9,6 +9,7 @@ use Core\Auth;
 use Core\Controller;
 use Core\Flash;
 use Core\HTTPResponse;
+use Core\Token;
 
 class Security extends Controller
 {
@@ -65,6 +66,7 @@ class Security extends Controller
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();
 
+        $rememberMe = $this->httpRequest->postExists('remember_me');
         if ($this->httpRequest->postExists('login-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $userManager =  $this->managers->getManagerOf('user');
@@ -72,10 +74,9 @@ class Security extends Controller
 
                 if ($user) {
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
-                        Auth::login($user);
+                        Auth::login($user, $rememberMe);
 
                         Flash::addMessage('Vous êtes connectés en tant que ' . $user->getUsername());
-
                         HTTPResponse::redirect(Auth::GetRequestedPage());
                     }
                 }
@@ -89,6 +90,7 @@ class Security extends Controller
             'section' => 'security',
             'blog' => $blog,
             'email' => $this->httpRequest->postData('email'),
+            'remember_me' => $rememberMe,
             'csrf_token' => $csrf
         ]);
     }

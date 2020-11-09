@@ -8,13 +8,13 @@ class Token
 {
     protected string $token;
 
-    public function __construct(?string $tokenValue = null)
+    public function __construct(string $tokenValue = null)
     {
         if ($tokenValue) {
             $this->token = $tokenValue;
+        } else {
+            $this->token = bin2hex(random_bytes(16));
         }
-
-        $this->token = bin2hex(random_bytes(16));
     }
 
     public function getValue(): string
