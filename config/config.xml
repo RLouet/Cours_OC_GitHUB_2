@@ -7,4 +7,10 @@
     <define var="db_name" value="oc_daphpsymfony_p5" />
     <define var="db_user" value="root" />
     <define var="db_password" value="" />
+    <define var="mailer_host" value="localhost" />
+    <define var="mailer_port" value="1025" />
+    <define var="mailer_username" value="contact@romsworld.net" />
+    <define var="mailer_password" value="mdp" />
+    <define var="mailer_from_mail" value="contact@romsworld.net" />
+    <define var="mailer_from_name" value="Romain LOUET" />
 </definitions>
