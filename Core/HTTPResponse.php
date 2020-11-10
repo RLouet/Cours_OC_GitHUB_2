@@ -35,6 +35,19 @@ class HTTPResponse
      */
     public static function renderTemplate (string $template, array $args = [])
     {
+        echo static::getTemplate($template, $args);
+    }
+
+    /**
+     * @param string $template
+     * @param array $args
+     * @return string
+     * @throws Twig\Error\LoaderError
+     * @throws Twig\Error\RuntimeError
+     * @throws Twig\Error\SyntaxError
+     */
+    public static function getTemplate (string $template, array $args = [])
+    {
         static $twig = null;
 
         if ($twig === null) {
@@ -46,8 +59,9 @@ class HTTPResponse
             $twig->addGlobal('current_user', Auth::getUser());
             $twig->addGlobal('flash_messages', Flash::getMessages());
         }
-        echo $twig->render($template, $args);
+        return $twig->render($template, $args);
     }
+
 
     public static function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {

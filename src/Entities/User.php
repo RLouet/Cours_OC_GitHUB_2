@@ -5,6 +5,7 @@ namespace Blog\Entities;
 
 
 use Core\Entity;
+use \DateTime;
 
 class User extends Entity
 {
@@ -14,6 +15,8 @@ class User extends Entity
     protected string $email = "";
     protected string $password;
     protected string $role = "ROLE_USER";
+    protected ?string $passwordResetHash = null;
+    protected ?DateTime $passwordResetExpiry = null;
 
     const INVALID_USERNAME = 1;
     const INVALID_LASTNAME = 2;
@@ -130,6 +133,28 @@ class User extends Entity
             return $this;
         }
         $this->role = $role;
+        return $this;
+    }
+
+    public function getPasswordResetHash(): ?string
+    {
+        return $this->passwordResetHash;
+    }
+
+    public function setPasswordResetHash(?string $passwordResetHash): self
+    {
+        $this->passwordResetHash = $passwordResetHash;
+        return $this;
+    }
+
+    public function getPasswordResetExpiry(): ?DateTime
+    {
+        return $this->passwordResetExpiry;
+    }
+
+    public function setPasswordResetExpiry(?DateTime $passwordResetExpiry): self
+    {
+        $this->passwordResetExpiry = $passwordResetExpiry;
         return $this;
     }
 

@@ -5,11 +5,14 @@ namespace Blog\Controllers;
 
 
 use Blog\Entities\User;
+use Blog\Services\MailService;
 use Core\Auth;
 use Core\Controller;
 use Core\Flash;
 use Core\HTTPResponse;
 use Core\Token;
+use \DateTime;
+use \DateInterval;
 
 class Security extends Controller
 {
@@ -107,20 +110,30 @@ class Security extends Controller
         $manager = $this->managers->getManagerOf('Blog');
         $blog = $manager->getData();
 
-        if ($this->httpRequest->postExists('forget-btn')) {
+        if ($this->httpRequest->postExists('forgot-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
                 if ($user) {
-                    if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
-                        Auth::login($user, $rememberMe);
-
-                        Flash::addMessage('Vous êtes connectés en tant que ' . $user->getUsername());
-                        HTTPResponse::redirect(Auth::GetRequestedPage());
+                    $token = new Token();
+                    $hashedToken = $token->getHash();
+                    $expiryDate = new DateTime();
+                    $expiryDate->add(new DateInterval('PT2H'));
+                    $user->setPasswordResetHash($hashedToken);
+                    $user->setPasswordResetExpiry($expiryDate);
+                    if ($userManager->startPasswordReset($user)) {
+                        $mailer = new MailService();
+                        if ($mailer->sendPasswordResetEmail($user)) {
+                            Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                            HTTPResponse::redirect('/login');
+                        }
                     }
+                    Flash::addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
+                } else {
+                    Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                    HTTPResponse::redirect('/login');
                 }
-                Flash::addMessage('Mauvaise combinaison email / mot de passe.', Flash::WARNING);
             }
         }
 

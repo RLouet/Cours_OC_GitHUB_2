@@ -21,6 +21,8 @@ abstract class UserManager extends Manager
 
     abstract protected function modify(User $user);
 
+    abstract public function startPasswordReset(User $user);
+
     abstract protected function add(User $user);
 
     abstract public function delete(int $id);

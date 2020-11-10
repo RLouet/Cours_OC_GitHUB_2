@@ -17,6 +17,11 @@ set_exception_handler('\Core\Error::exceptionHandler');
 session_start();
 
 /**
+ * Set timezone
+ */
+date_default_timezone_set("Europe/Paris");
+
+/**
  * Routing
  */
 $router = new \Core\Router();

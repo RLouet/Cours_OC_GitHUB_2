@@ -3,7 +3,9 @@
 
 namespace Blog\Services;
 
+use Blog\Entities\User;
 use Core\Config;
+use Core\HTTPResponse;
 use Swift_SmtpTransport;
 use Swift_Message;
 use Swift_Mailer;
@@ -46,5 +48,20 @@ class MailService
         $message->addPart($text, 'text/plain');
 
         return self::$mailer->send($message);
+    }
+
+    public function sendPasswordResetEmail(User $user)
+    {
+        $url = "http://" . $_SERVER['HTTP_HOST'] . '/password/reset/' . $user->getPasswordResetHash();
+
+        $text = HTTPResponse::getTemplate('Emails/reset-password.txt.twig', [
+            'url' => $url
+        ]);
+
+        $html = HTTPResponse::getTemplate('Emails/reset-password.html.twig', [
+            'url' => $url
+        ]);
+
+        return $this->send($user->getEmail(), 'Réinitialisation de votre mot de passe', $text, $html);
     }
 }

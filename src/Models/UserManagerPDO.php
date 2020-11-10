@@ -73,7 +73,25 @@ class UserManagerPDO extends UserManager
         $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
         $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
-        $stmt->bindValue(':id', $user->id(), PDO::PARAM_INT);
+        $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return $user;
+        }
+        return false;
+    }
+
+    public function startPasswordReset(User $user)
+    {
+        $sql = 'UPDATE user SET password_reset_hash=:password_reset_hash, password_reset_expires_at=:password_reset_expires_at WHERE id=:id';
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':password_reset_hash', $user->getPasswordResetHash(), PDO::PARAM_STR);
+        $stmt->bindValue(':password_reset_expires_at', $user->getPasswordResetExpiry()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
+        var_dump($user->getPasswordResetHash());
+        var_dump($user->getPasswordResetExpiry()->format('Y-m-d H:i:s'));
+        var_dump($user->getId());
 
         if ($stmt->execute()) {
             return $user;
