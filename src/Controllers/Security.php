@@ -124,6 +124,64 @@ class Security extends Controller
                     $user->setPasswordResetExpiry($expiryDate);
                     if ($userManager->startPasswordReset($user)) {
                         $mailer = new MailService();
+                        if ($mailer->sendPasswordResetEmail($user, $token->getValue())) {
+                            Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                            HTTPResponse::redirect('/login');
+                        }
+                    }
+                    Flash::addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
+                } else {
+                    Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                    HTTPResponse::redirect('/login');
+                }
+            }
+        }
+
+        $csrf = $this->generateCsrfToken();
+
+        HTTPResponse::renderTemplate('Security/forgot-password.html.twig', [
+            'section' => 'security',
+            'blog' => $blog,
+            'csrf_token' => $csrf
+        ]);
+    }
+
+    /**
+     * Reset password
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function resetPasswordAction(): void
+    {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
+
+        $token = $this->route_params['token'];
+
+        $userManager =  $this->managers->getManagerOf('user');
+        $user = $userManager->findByPasswordToken($token);
+
+        if ($user->getPasswordResetExpiry() < new DateTime()) {
+            Flash::addMessage("Votre demande de réinitialisation a expiré. Merci de la renouveler.", Flash::WARNING);
+            HTTPResponse::redirect('/security/forgot-password');
+        }
+
+        if ($this->httpRequest->postExists('reset-btn')) {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                $userManager =  $this->managers->getManagerOf('user');
+                $user = $userManager->findByEmail($this->httpRequest->postData('email'));
+
+                if ($user) {
+                    $token = new Token();
+                    $hashedToken = $token->getHash();
+                    $expiryDate = new DateTime();
+                    $expiryDate->add(new DateInterval('PT2H'));
+                    $user->setPasswordResetHash($hashedToken);
+                    $user->setPasswordResetExpiry($expiryDate);
+                    if ($userManager->startPasswordReset($user)) {
+                        $mailer = new MailService();
                         if ($mailer->sendPasswordResetEmail($user)) {
                             Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
                             HTTPResponse::redirect('/login');

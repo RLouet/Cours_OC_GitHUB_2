@@ -50,9 +50,9 @@ class MailService
         return self::$mailer->send($message);
     }
 
-    public function sendPasswordResetEmail(User $user)
+    public function sendPasswordResetEmail(User $user, string $token)
     {
-        $url = "http://" . $_SERVER['HTTP_HOST'] . '/password/reset/' . $user->getPasswordResetHash();
+        $url = "http://" . $_SERVER['HTTP_HOST'] . '/password/reset/' . $token;
 
         $text = HTTPResponse::getTemplate('Emails/reset-password.txt.twig', [
             'url' => $url
