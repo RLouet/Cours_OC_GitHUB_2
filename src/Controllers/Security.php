@@ -96,6 +96,44 @@ class Security extends Controller
     }
 
     /**
+     * Forgot password
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function forgotPasswordAction(): void
+    {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
+
+        if ($this->httpRequest->postExists('forget-btn')) {
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                $userManager =  $this->managers->getManagerOf('user');
+                $user = $userManager->findByEmail($this->httpRequest->postData('email'));
+
+                if ($user) {
+                    if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
+                        Auth::login($user, $rememberMe);
+
+                        Flash::addMessage('Vous êtes connectés en tant que ' . $user->getUsername());
+                        HTTPResponse::redirect(Auth::GetRequestedPage());
+                    }
+                }
+                Flash::addMessage('Mauvaise combinaison email / mot de passe.', Flash::WARNING);
+            }
+        }
+
+        $csrf = $this->generateCsrfToken();
+
+        HTTPResponse::renderTemplate('Security/forgot-password.html.twig', [
+            'section' => 'security',
+            'blog' => $blog,
+            'csrf_token' => $csrf
+        ]);
+    }
+
+    /**
      * log out the user
      *
      * @return void
