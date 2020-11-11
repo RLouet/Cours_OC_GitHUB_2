@@ -62,6 +62,19 @@ class UserManagerPDO extends UserManager
         return null;
     }
 
+    public function activate(string $token)
+    {
+        $token = new Token($token);
+        $hashedToken = $token->getHash();
+
+        $sql = 'UPDATE user SET enabled = 1, activation_hash = NULL WHERE activation_hash = :hashed_token';
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':hashed_token', $hashedToken, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
     public function findByEmail(string $email)
     {
         $sql = 'SELECT * FROM user WHERE email =:email';
@@ -141,7 +154,7 @@ class UserManagerPDO extends UserManager
 
     protected function add(User $user)
     {
-        $sql = 'INSERT INTO user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role';
+        $sql = 'INSERT INTO user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role, activation_hash=:activation_hash';
 
         $stmt = $this->dao->prepare($sql);
 
@@ -151,6 +164,7 @@ class UserManagerPDO extends UserManager
         $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
         $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
+        $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             $user->setId($this->dao->lastInsertId());

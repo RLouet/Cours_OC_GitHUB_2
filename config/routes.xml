@@ -43,6 +43,10 @@ Routes exemples :
         <param name="controller">Security</param>
         <param name="action">resetPassword</param>
     </route>
+    <route url = "account/activate/{token:[\da-f]+}">
+        <param name="controller">Security</param>
+        <param name="action">activateAccount</param>
+    </route>
     <route url = "{controller}/{action}">
     </route>
     <route url = "{controller}/{id:\d+}/{action}">

@@ -64,4 +64,19 @@ class MailService
 
         return $this->send($user->getEmail(), 'Réinitialisation de votre mot de passe', $text, $html);
     }
+
+    public function sendAccountActivationEmail(User $user, string $token)
+    {
+        $url = "http://" . $_SERVER['HTTP_HOST'] . '/account/activate/' . $token;
+
+        $text = HTTPResponse::getTemplate('Emails/activate-account.txt.twig', [
+            'url' => $url
+        ]);
+
+        $html = HTTPResponse::getTemplate('Emails/activate-account.html.twig', [
+            'url' => $url
+        ]);
+
+        return $this->send($user->getEmail(), 'Activez votre compte', $text, $html);
+    }
 }

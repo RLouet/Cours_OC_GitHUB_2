@@ -17,6 +17,8 @@ class User extends Entity
     protected string $role = "ROLE_USER";
     protected ?string $passwordResetHash = null;
     protected ?DateTime $passwordResetExpiry = null;
+    protected ?string $activationHash = null;
+    protected bool $enabled = false;
 
     const INVALID_USERNAME = 1;
     const INVALID_LASTNAME = 2;
@@ -155,6 +157,28 @@ class User extends Entity
     public function setPasswordResetExpiry(?DateTime $passwordResetExpiry): self
     {
         $this->passwordResetExpiry = $passwordResetExpiry;
+        return $this;
+    }
+
+    public function getActivationHash(): ?string
+    {
+        return $this->activationHash;
+    }
+
+    public function setActivationHash(?string $activationHash): self
+    {
+        $this->activationHash = $activationHash;
+        return $this;
+    }
+
+    public function getEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
         return $this;
     }
 

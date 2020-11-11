@@ -36,8 +36,9 @@ class Security extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $user = $this->processRegistrationForm();
                 if (empty($user['errors'])) {
-                    Flash::addMessage('Vous avez bien été enregistré.');
-                    HTTPResponse::redirect('');
+                        Flash::addMessage("Vous avez bien été enregistré. Un email de confimation vous a été envoyé afin d'activer votre compte.");
+                        HTTPResponse::redirect('/login');
+
                 }
                 foreach ($user['errors'] as $error) {
                     Flash::addMessage($error, Flash::WARNING);
@@ -53,6 +54,28 @@ class Security extends Controller
             'user' => $user,
             'csrf_token' => $csrf
         ]);
+    }
+
+    /**
+     * Reset password
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function activateAccountAction(): void
+    {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
+
+        $token = $this->route_params['token'];
+
+        $userManager =  $this->managers->getManagerOf('user');
+
+        $userManager->activate($token);
+        
+        Flash::addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
+        HTTPResponse::redirect('/login');
     }
 
     /**
@@ -75,7 +98,7 @@ class Security extends Controller
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
-                if ($user) {
+                if ($user && $user->getEnabled()) {
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
                         Auth::login($user, $rememberMe);
 
@@ -83,7 +106,7 @@ class Security extends Controller
                         HTTPResponse::redirect(Auth::GetRequestedPage());
                     }
                 }
-                Flash::addMessage('Mauvaise combinaison email / mot de passe.', Flash::WARNING);
+                Flash::addMessage('Mauvaise combinaison email / mot de passe ou compte non activé.', Flash::WARNING);
             }
         }
 
@@ -236,16 +259,25 @@ class Security extends Controller
             $user->setCustomError('mail', 'Vous êtes déjà enregistré avec cette adresse Email');
         }
 
-        if ($userManager->userExists($user->getEmail())) {
+        if ($userManager->userExists($user->getUsername())) {
             $user->setCustomError('username', 'Ce pseudo est déjà utilisé');
         }
 
         $handle['entity'] = $user;
 
         if ($user->isValid() && empty($user->getErrors())) {
+            $token = new Token();
+            $user->setActivationHash($token->getHash());
             $user = $userManager->save($user);
             if ($user) {
+                $mailer = new MailService();
+                if ($mailer->sendAccountActivationEmail($user, $token->getValue())) {
+                    return $handle;
+                }
+                $userManager->delete($user->getId());
+                $handle['errors'][] = "L'Email de confirmation n'a pas put être envoyé. Merci de rééssayer.";
                 return $handle;
+
             }
             $handle['errors'][] = "L'enregistrement a échoué.";
             return $handle;

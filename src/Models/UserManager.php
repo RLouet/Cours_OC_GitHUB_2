@@ -17,6 +17,8 @@ abstract class UserManager extends Manager
 
     abstract public function findByPasswordToken(string $token);
 
+    abstract public function activate(string $token);
+
     abstract public function mailExists(string $email);
 
     abstract public function userExists(string $username);
