@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
-    <define var="blog_id" value="" />
+    <define var="blog_id" value="2" />
     <define var="show_errors" value="true" />
     <define var="secret_key" value="kKQmgw23BPTQa2hk1el3hSlmVBIKHQ4k" />
     <define var="db_host" value="localhost" />

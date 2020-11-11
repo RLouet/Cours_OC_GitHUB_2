@@ -3,6 +3,7 @@
 
 namespace Core;
 
+use Blog\Models\BlogManagerPDO;
 use \Twig;
 use Twig\TwigFunction;
 
@@ -58,6 +59,7 @@ class HTTPResponse
             $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
             $twig->addGlobal('current_user', Auth::getUser());
             $twig->addGlobal('flash_messages', Flash::getMessages());
+            $twig->addGlobal('blog', static::getBlog());
         }
         return $twig->render($template, $args);
     }
@@ -66,5 +68,13 @@ class HTTPResponse
     public static function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+    }
+
+    private static function getBlog()
+    {
+        $config = Config::getInstance();
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogManager = new BlogManagerPDO(PDOFactory::getPDOConnexion());
+        return $blogManager->getData($blogId);
     }
 }

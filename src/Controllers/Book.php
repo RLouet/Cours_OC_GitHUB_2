@@ -21,10 +21,6 @@ class Book extends Controller
      */
     public function indexAction()
     {
-        /*$config = new Config();
-        echo $config->get('show_errors');*/
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts = $postManager->getList();
 
@@ -32,18 +28,12 @@ class Book extends Controller
 
         HTTPResponse::renderTemplate('Frontend/blog.html.twig', [
             'section' => 'book',
-            'blog' => $blog,
             'posts' => $posts,
         ]);
     }
 
     public function viewAction()
     {
-        //$this->requiredLogin('admin');
-
-        $blogManager = $this->managers->getManagerOf('Blog');
-        $blog = $blogManager->getData();
-
         $flash = [
             'type' => false,
             'messages' => []
@@ -54,7 +44,6 @@ class Book extends Controller
 
         HTTPResponse::renderTemplate('Frontend/post-view.html.twig', [
             'section' => 'book',
-            'blog' => $blog,
             'blog_post' => $blogPost,
             'flash' => $flash
         ]);

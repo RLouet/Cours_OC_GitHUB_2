@@ -33,8 +33,10 @@ class Ajax extends Controller
      */
     public function typedElementsAction()
     {
+        $config = Config::getInstance();
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
         $manager = $this->managers->getManagerOf('skill');
-        $skills = $manager->getListByBlog();
+        $skills = $manager->getListByBlog($blogId);
 
         $elements = [];
         foreach ($skills as $skill) {
@@ -50,11 +52,8 @@ class Ajax extends Controller
      */
     public function deleteSocialNetworkAction()
     {
-        $blogId = 1;
         $config = Config::getInstance();
-        if ($config->get('blog_id')) {
-            $blogId = $config->get('blog_id');
-        }
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
         $handle = [
             'success' => true,
@@ -103,12 +102,8 @@ class Ajax extends Controller
      */
     public function saveSocialNetworkAction()
     {
-
-        $blogId = '1';
         $config = Config::getInstance();
-        if ($config->get('blog_id')) {
-            $blogId = $config->get('blog_id');
-        }
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
         $logoUploadRules = [
             'target' => 'icons',
@@ -251,13 +246,8 @@ class Ajax extends Controller
      */
     public function saveSkillAction()
     {
-        //var_dump($_POST);
-
-        $blogId = '1';
         $config = Config::getInstance();
-        if ($config->get('blog_id')) {
-            $blogId = $config->get('blog_id');
-        }
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
         $handle = [
             'success' => true,
@@ -314,11 +304,8 @@ class Ajax extends Controller
      */
     public function deleteSkillAction()
     {
-        $blogId = 1;
         $config = Config::getInstance();
-        if ($config->get('blog_id')) {
-            $blogId = $config->get('blog_id');
-        }
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
         $handle = [
             'success' => true,

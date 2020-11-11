@@ -9,6 +9,7 @@ use Blog\Services\FilesService;
 use Core\Controller;
 use Core\Flash;
 use Core\HTTPResponse;
+use Core\Config as BlogConfig;
 
 class Config extends Controller
 {
@@ -32,12 +33,14 @@ class Config extends Controller
      */
     public function indexAction()
     {
+        $config = BlogConfig::getInstance();
+        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
         $manager = $this->managers->getManagerOf('Blog');
-        $blog = $blogForm['entity'] = $manager->getData();
+        $blogForm['entity'] = $manager->getData($blogId);
 
         if ($this->httpRequest->postExists('blog-update')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-                $blogForm = $this->processForm($blog);
+                $blogForm = $this->processForm($blogForm['entity']);
                 if (empty($blogForm['errors'])) {
                     Flash::addMessage('Les paramètres du blog ont bien été enregistrés');
                 } else {
@@ -52,7 +55,6 @@ class Config extends Controller
 
         HTTPResponse::renderTemplate('Backend/config.html.twig', [
             'section' => 'config',
-            'blog' => $blog,
             'blogForm' => $blogForm,
             'csrf_token' => $csrf
         ]);
