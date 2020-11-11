@@ -11,27 +11,6 @@ use Core\HTTPResponse;
 class Book extends Controller
 {
     /**
-     * Before filter
-     *
-     * @return void
-     */
-    protected function before()
-    {
-        //echo '<p>(before)</p>';
-        //return false;
-    }
-
-    /**
-     * After filter
-     *
-     * @return void
-     */
-    protected function after()
-    {
-        //echo '<p>(after)</p>';
-    }
-
-    /**
      * Show the index page
      *
      * @return void

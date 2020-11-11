@@ -117,7 +117,7 @@ class User extends Entity
             return $this;
         }
 
-        $this->password = password_hash($password, PASSWORD_ARGON2ID);
+        $this->setPassword(password_hash($password, PASSWORD_ARGON2ID));
         return $this;
     }
 
