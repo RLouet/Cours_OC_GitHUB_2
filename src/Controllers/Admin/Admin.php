@@ -29,16 +29,11 @@ class Admin extends Controller
      */
     public function indexAction()
     {
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts = $postManager->getList();
-        /*$config = new Config();
-        echo $config->get('show_errors');*/
 
         HTTPResponse::renderTemplate('Backend/index.html.twig', [
             'section' => 'accueil',
-            'blog' => $blog,
             'posts' => $posts,
         ]);
     }

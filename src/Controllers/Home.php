@@ -22,12 +22,8 @@ class Home extends Controller
      */
     public function indexAction()
     {
-         $manager = $this->managers->getManagerOf('Blog');
-         $blog = $manager->getData();
-
         HTTPResponse::renderTemplate('Frontend/index.html.twig', [
             'section' => 'home',
-            'blog' => $blog,
         ]);
     }
 }

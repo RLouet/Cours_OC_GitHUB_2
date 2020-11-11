@@ -73,7 +73,7 @@ class Security extends Controller
         $userManager =  $this->managers->getManagerOf('user');
 
         $userManager->activate($token);
-        
+
         Flash::addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
         HTTPResponse::redirect('/login');
     }

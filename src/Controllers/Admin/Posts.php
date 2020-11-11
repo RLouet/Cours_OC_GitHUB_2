@@ -34,8 +34,6 @@ class Posts extends Controller
      */
     public function indexAction()
     {
-        $blogManager = $this->managers->getManagerOf('Blog');
-        $blog = $blogManager->getData();
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts = $postManager->getList();
 
@@ -43,32 +41,24 @@ class Posts extends Controller
 
         HTTPResponse::renderTemplate('Backend/posts-index.html.twig', [
             'section' => 'posts',
-            'blog' => $blog,
             'posts' => $posts,
         ]);
     }
 
     public function viewAction()
     {
-        $blogManager = $this->managers->getManagerOf('Blog');
-        $blog = $blogManager->getData();
-
         $postManager = $this->managers->getManagerOf('BlogPost');
 
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
 
         HTTPResponse::renderTemplate('Backend/posts-view.html.twig', [
             'section' => 'posts',
-            'blog' => $blog,
             'blog_post' => $blogPost,
         ]);
     }
 
     public function newAction()
     {
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
-
         $blogPost['entity'] = new BlogPost(['user_id' => 1]);
 
         if ($this->httpRequest->postExists('post-add')) {
@@ -89,7 +79,6 @@ class Posts extends Controller
 
         HTTPResponse::renderTemplate('Backend/posts-new.html.twig', [
             'section' => 'posts',
-            'blog' => $blog,
             'blog_post' => $blogPost,
             'csrf_token' => $csrf
         ]);
@@ -97,9 +86,6 @@ class Posts extends Controller
 
     public function editAction()
     {
-        $blogManager = $this->managers->getManagerOf('Blog');
-        $blog = $blogManager->getData();
-
         $postManager = $this->managers->getManagerOf('BlogPost');
 
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
@@ -130,7 +116,6 @@ class Posts extends Controller
 
         HTTPResponse::renderTemplate('Backend/posts-edit.html.twig', [
             'section' => 'posts',
-            'blog' => $blog,
             'blog_post' => $blogPost,
             'csrf_token' => $csrf
         ]);
@@ -232,11 +217,9 @@ class Posts extends Controller
                                 $imageUploadRules['old'] = $oldImage->getUrl();
                                 $postImage->setUrl($oldImage->getUrl());
                                 $postImage->setId($oldImage->getId());
-                                //var_dump($key,$this->httpRequest->postData('old_post_image')[$key]['id']);
                             }
 
                             if (!empty($image['name'])){
-                                //var_dump($imageUploadRules);
                                 $fileName = uniqid(rand(1000, 9999), true);
                                 $upload = $uploader->upload($image, $imageUploadRules, $fileName);
 
