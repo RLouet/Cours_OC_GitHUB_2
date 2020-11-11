@@ -62,6 +62,19 @@ class UserManagerPDO extends UserManager
         return null;
     }
 
+    public function activate(string $token)
+    {
+        $token = new Token($token);
+        $hashedToken = $token->getHash();
+
+        $sql = 'UPDATE user SET enabled = 1, activation_hash = NULL WHERE activation_hash = :hashed_token';
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':hashed_token', $hashedToken, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
     public function findByEmail(string $email)
     {
         $sql = 'SELECT * FROM user WHERE email =:email';

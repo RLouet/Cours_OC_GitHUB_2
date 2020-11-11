@@ -57,6 +57,28 @@ class Security extends Controller
     }
 
     /**
+     * Reset password
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function activateAccountAction(): void
+    {
+        $manager = $this->managers->getManagerOf('Blog');
+        $blog = $manager->getData();
+
+        $token = $this->route_params['token'];
+
+        $userManager =  $this->managers->getManagerOf('user');
+
+        $userManager->activate($token);
+        
+        Flash::addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
+        HTTPResponse::redirect('/login');
+    }
+
+    /**
      * Log in the user
      *
      * @return void
@@ -76,7 +98,7 @@ class Security extends Controller
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
-                if ($user) {
+                if ($user && $user->getEnabled()) {
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
                         Auth::login($user, $rememberMe);
 
@@ -84,7 +106,7 @@ class Security extends Controller
                         HTTPResponse::redirect(Auth::GetRequestedPage());
                     }
                 }
-                Flash::addMessage('Mauvaise combinaison email / mot de passe.', Flash::WARNING);
+                Flash::addMessage('Mauvaise combinaison email / mot de passe ou compte non activé.', Flash::WARNING);
             }
         }
 
