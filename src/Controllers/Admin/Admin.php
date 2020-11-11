@@ -19,13 +19,6 @@ class Admin extends Controller
     }
 
     /**
-     * After filter
-     */
-    protected function after(): void
-    {
-    }
-
-    /**
      * Show the index page
      *
      * @return void

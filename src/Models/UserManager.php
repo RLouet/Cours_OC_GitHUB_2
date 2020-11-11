@@ -15,11 +15,17 @@ abstract class UserManager extends Manager
 
     abstract public function findByEmail(string $email);
 
+    abstract public function findByPasswordToken(string $token);
+
     abstract public function mailExists(string $email);
 
     abstract public function userExists(string $username);
 
     abstract protected function modify(User $user);
+
+    abstract public function startPasswordReset(User $user);
+
+    abstract public function resetPassword(User $user);
 
     abstract protected function add(User $user);
 

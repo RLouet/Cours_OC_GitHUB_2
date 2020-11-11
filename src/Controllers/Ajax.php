@@ -29,16 +29,6 @@ class Ajax extends Controller
     }
 
     /**
-     * After filter
-     *
-     */
-    protected function after()
-    {
-        //echo '<p>(after)</p>';
-    }
-
-
-    /**
      * get skills
      */
     public function typedElementsAction()

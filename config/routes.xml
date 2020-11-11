@@ -39,6 +39,10 @@ Routes exemples :
         <param name="namespace">Admin</param>
         <param name="action">index</param>
     </route>
+    <route url = "password/reset/{token:[\da-f]+}">
+        <param name="controller">Security</param>
+        <param name="action">resetPassword</param>
+    </route>
     <route url = "{controller}/{action}">
     </route>
     <route url = "{controller}/{id:\d+}/{action}">
