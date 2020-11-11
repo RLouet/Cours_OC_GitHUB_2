@@ -36,8 +36,9 @@ class Security extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $user = $this->processRegistrationForm();
                 if (empty($user['errors'])) {
-                    Flash::addMessage('Vous avez bien été enregistré.');
-                    HTTPResponse::redirect('');
+                        Flash::addMessage("Vous avez bien été enregistré. Un email de confimation vous a été envoyé afin d'activer votre compte.");
+                        HTTPResponse::redirect('/login');
+
                 }
                 foreach ($user['errors'] as $error) {
                     Flash::addMessage($error, Flash::WARNING);
@@ -236,16 +237,25 @@ class Security extends Controller
             $user->setCustomError('mail', 'Vous êtes déjà enregistré avec cette adresse Email');
         }
 
-        if ($userManager->userExists($user->getEmail())) {
+        if ($userManager->userExists($user->getUsername())) {
             $user->setCustomError('username', 'Ce pseudo est déjà utilisé');
         }
 
         $handle['entity'] = $user;
 
         if ($user->isValid() && empty($user->getErrors())) {
+            $token = new Token();
+            $user->setActivationHash($token->getHash());
             $user = $userManager->save($user);
             if ($user) {
+                $mailer = new MailService();
+                if ($mailer->sendAccountActivationEmail($user, $token->getValue())) {
+                    return $handle;
+                }
+                $userManager->delete($user->getId());
+                $handle['errors'][] = "L'Email de confirmation n'a pas put être envoyé. Merci de rééssayer.";
                 return $handle;
+
             }
             $handle['errors'][] = "L'enregistrement a échoué.";
             return $handle;
