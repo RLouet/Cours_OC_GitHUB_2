@@ -19,9 +19,9 @@ abstract class UserManager extends Manager
 
     abstract public function activate(string $token);
 
-    abstract public function mailExists(string $email);
+    abstract public function mailExists(string $email, ?int $ignoreId = null);
 
-    abstract public function userExists(string $username);
+    abstract public function userExists(string $username, ?int $ignoreId = null);
 
     abstract protected function modify(User $user);
 

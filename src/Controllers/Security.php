@@ -65,9 +65,6 @@ class Security extends Controller
      */
     public function activateAccountAction(): void
     {
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
-
         $token = $this->route_params['token'];
 
         $userManager =  $this->managers->getManagerOf('user');
