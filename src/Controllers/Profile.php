@@ -32,8 +32,11 @@ class Profile extends Controller
      */
     public function showAction()
     {
+
+        $csrf = $this->generateCsrfToken();
         HTTPResponse::renderTemplate('Profile/show.html.twig', [
             'section' => 'security',
+            'csrf_token' => $csrf,
         ]);
     }
 

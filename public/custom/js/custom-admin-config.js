@@ -121,7 +121,6 @@ $(document).ready(function() {
 							'                            <button class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="' + data.entity.id + '" data-name="' + data.entity.value + '" data-type="skill"><i class="fa fa-trash"></i></button>\n' +
 							'                        </div>\n' +
 							'                    </div>');
-						$skillBox = $('.social-box-' + data.entity.id );
 					}
 					$('.skill-value', $skillBox).html(data.entity.value);
 					$('.btn-delete', $skillBox).data('name', data.entity.value);

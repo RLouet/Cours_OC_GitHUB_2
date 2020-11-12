@@ -4,6 +4,47 @@
 
 
 {% block body %}
+    <div class="modal fade default" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="passwordModalLabel"><span></span> Changer de mot de passe</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form action="{{ path }}/ajax/changePassword" method="post" enctype="multipart/form-data">
+                    <div class="modal-body row form-on-dark">
+                        <div class="col-12 pw-general-error">
+                            <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                        </div>
+                        <div class="col-12 pw-old">
+                            <label for="oldPasswordInput" class="mb-0">Mot de passe actuel</label>
+                            <input type="password" name="old_password" id="oldPasswordInput" class="form-control" required>
+                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Mot de passe incorrect.</span></div>
+                        </div>
+                        <div class="col-12 pw-new mt-4">
+                            <label for="newPasswordInput" class="mb-0">Nouveau mot de passe</label>
+                            <input type="password" name="new_password" id="newPasswordInput" class="form-control" required>
+                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Mot de passe invalide :<ul class="mt-1 mb-0 text-left"><li>8 à 50 caractères</li><li>Au moins une lettre minuscule</li><li>Au moins une lettre majuscule</li><li>Au moins un chiffre</li></ul></span></div>
+                        </div>
+                        <div class="col-12 pw-conf mt-2">
+                            <label for="newPasswordConfirmationInput" class="mb-0">Confirmation du nouveau mot de passe</label>
+                            <input type="password" name="new_password_confirmation" id="newPasswordConfirmationInput" class="form-control" required>
+                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Le mot de passe et sa confirmation doivent être identiques.</span></div>
+                        </div>
+                    </div>
+                    <div class="hidden-fields hidden"></div>
+                    <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <input type="submit" name="change_password" class="btn btn-primary valid-btn" value="Valider">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Slider Block
     ================================================== -->
 
@@ -41,10 +82,20 @@
                         <dl class="col-8 text-left">{{ current_user.firstname }}</dl>
                         <dt class="col-4 text-right">Email</dt>
                         <dl class="col-8 text-left">{{ current_user.email }}</dl>
+                        <dt class="col-4 text-right">Mot de passe</dt>
+                        <dl class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round">Changer de mot de passe</button></dl>
                     </dl>
                     <a class="btn btn-primary" href="{{ path }}/profile/edit">Modifier</a>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var path = "{{ path }}";
+    </script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-profile-password.js"></script>
 {% endblock %}

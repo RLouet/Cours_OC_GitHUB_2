@@ -172,6 +172,7 @@ class UserManagerPDO extends UserManager
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':password_hash', $user->getPassword(), PDO::PARAM_STR);
+        //$stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
         $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
 
         if ($stmt->execute()) {

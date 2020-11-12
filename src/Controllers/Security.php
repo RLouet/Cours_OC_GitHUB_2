@@ -27,9 +27,6 @@ class Security extends Controller
      */
     public function registrationAction()
     {
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
-
         $user['entity'] = new User();
 
         if ($this->httpRequest->postExists('register-btn')) {
@@ -50,7 +47,6 @@ class Security extends Controller
 
         HTTPResponse::renderTemplate('Security/Signup.html.twig', [
             'section' => 'security',
-            'blog' => $blog,
             'user' => $user,
             'csrf_token' => $csrf
         ]);
@@ -105,9 +101,6 @@ class Security extends Controller
      */
     public function loginAction()
     {
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
-
         $rememberMe = $this->httpRequest->postExists('remember_me');
         if ($this->httpRequest->postExists('login-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
@@ -130,7 +123,6 @@ class Security extends Controller
 
         HTTPResponse::renderTemplate('Security/login.html.twig', [
             'section' => 'security',
-            'blog' => $blog,
             'email' => $this->httpRequest->postData('email'),
             'remember_me' => $rememberMe,
             'csrf_token' => $csrf
@@ -146,9 +138,6 @@ class Security extends Controller
      */
     public function forgotPasswordAction(): void
     {
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
-
         if ($this->httpRequest->postExists('forgot-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $userManager =  $this->managers->getManagerOf('user');
@@ -180,7 +169,6 @@ class Security extends Controller
 
         HTTPResponse::renderTemplate('Security/forgot-password.html.twig', [
             'section' => 'security',
-            'blog' => $blog,
             'csrf_token' => $csrf
         ]);
     }
@@ -195,9 +183,6 @@ class Security extends Controller
     public function resetPasswordAction(): void
     {
         $formUser = [];
-
-        $manager = $this->managers->getManagerOf('Blog');
-        $blog = $manager->getData();
 
         $token = $this->route_params['token'];
 
@@ -227,7 +212,6 @@ class Security extends Controller
 
         HTTPResponse::renderTemplate('Security/reset-password.html.twig', [
             'section' => 'security',
-            'blog' => $blog,
             'user' => $formUser,
             'csrf_token' => $csrf
         ]);
