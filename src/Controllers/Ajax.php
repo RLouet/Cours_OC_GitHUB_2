@@ -52,6 +52,7 @@ class Ajax extends Controller
      */
     public function deleteSocialNetworkAction()
     {
+        $this->requiredLogin('admin');
         $config = Config::getInstance();
         $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
@@ -102,6 +103,7 @@ class Ajax extends Controller
      */
     public function saveSocialNetworkAction()
     {
+        $this->requiredLogin('admin');
         $config = Config::getInstance();
         $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
@@ -246,6 +248,8 @@ class Ajax extends Controller
      */
     public function saveSkillAction()
     {
+        $this->requiredLogin('admin');
+
         $config = Config::getInstance();
         $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
@@ -304,6 +308,8 @@ class Ajax extends Controller
      */
     public function deleteSkillAction()
     {
+
+        $this->requiredLogin('admin');
         $config = Config::getInstance();
         $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
 
@@ -339,6 +345,8 @@ class Ajax extends Controller
      */
     public function deletePostAction()
     {
+        $this->requiredLogin('admin');
+
         $user = Auth::getUser();
 
         $handle = [
@@ -352,7 +360,7 @@ class Ajax extends Controller
 
         //var_dump($oldPost->getUser() != $user, $oldPost->getUser(), $user);
 
-        if (!$oldPost || $oldPost->getUser() != $user || $user->getRole() !== 'ROLE_ADMIN') {
+        if (!$oldPost || $oldPost->getUser() != $user) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
             echo json_encode($handle);
@@ -380,6 +388,67 @@ class Ajax extends Controller
         }
 
         $handle['deleted'] = $oldPost->getId();
+        echo json_encode($handle);
+    }
+
+    /**
+     * change Password from profile
+     */
+    public function changePassword()
+    {
+        $this->requiredLogin('user');
+
+        $user = Auth::getUser();
+
+        $handle = [
+            'success' => true,
+            'token_error' => false,
+            'old_error' => false,
+            'new_error' => false,
+            'conf_error' => false,
+            'user_error' => false,
+            'db_error' => false,
+        ];
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $handle['success'] = false;
+            $handle['token_error'] = true;
+            echo json_encode($handle);
+            exit();
+        }
+        if (!password_verify($this->httpRequest->postData('old_password'), $user->getPassword())) {
+            $handle['success'] = false;
+            $handle['old_error'] = true;
+        }
+        if (!$this->httpRequest->postData('new_password') === $this->httpRequest->postData('conf_password')) {
+            $handle['success'] = false;
+            $handle['conf_error'] = true;
+        }
+        $user->setPlainPassword($this->httpRequest->postData('new_password'));
+        //$user->setEmail('zd.fr');
+        if (!empty($user->getErrors())) {
+            $handle['success'] = false;
+            foreach ($user->getErrors() as $key => $error) {
+                if ($error === User::INVALID_PASSWORD) {
+                    $handle['new_error'] = true;
+                } else {
+                    $handle['user_error'] = true;
+                }
+            }
+        }
+        if ($handle['success']) {
+            if ($user->isValid()) {
+                $userManager =  $this->managers->getManagerOf('user');
+                $user = $userManager->resetPassword($user);
+                if ($user) {
+                    echo json_encode($handle);
+                    exit();
+                }
+                $handle['db_error'] = true;
+            } else {
+                $handle['user_error'] = true;
+            }
+        }
+        $handle['success'] = false;
         echo json_encode($handle);
     }
 }

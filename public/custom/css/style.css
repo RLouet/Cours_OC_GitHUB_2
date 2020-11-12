@@ -313,3 +313,23 @@ ul.sitemap li {
 .badge {
     white-space: unset;
 }
+
+.bigger-2 {
+    font-size: 1.2em;
+}
+
+.edit-profile-form label {
+     font-weight: bold;
+     font-size: 1.0rem;
+ }
+.edit-profile-form .form-control {
+    font-size: 1.2em;
+    padding-top: 0;
+}
+
+.background-dark dl {
+    color: #6dc234;
+}
+.background-dark dt {
+    color: #c6ff84;
+}

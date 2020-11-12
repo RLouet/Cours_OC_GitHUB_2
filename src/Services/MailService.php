@@ -5,6 +5,7 @@ namespace Blog\Services;
 
 use Blog\Entities\User;
 use Core\Config;
+use Core\Error;
 use Core\HTTPResponse;
 use Swift_SmtpTransport;
 use Swift_Message;
@@ -47,18 +48,23 @@ class MailService
         $message->setBody($html, 'text/html');
         $message->addPart($text, 'text/plain');
 
-        return self::$mailer->send($message);
+        try {
+            return self::$mailer->send($message);
+        } catch (\Exception $e) {
+            Error::exceptionLogWriter($e);
+            return false;
+        }
     }
 
     public function sendPasswordResetEmail(User $user, string $token)
     {
         $url = "http://" . $_SERVER['HTTP_HOST'] . '/password/reset/' . $token;
 
-        $text = HTTPResponse::getTemplate('Emails/reset-password.txt.twig', [
+        $text = HTTPResponse::getMailTemplate('Emails/reset-password.txt.twig', [
             'url' => $url
         ]);
 
-        $html = HTTPResponse::getTemplate('Emails/reset-password.html.twig', [
+        $html = HTTPResponse::getMailTemplate('Emails/reset-password.html.twig', [
             'url' => $url
         ]);
 
@@ -69,14 +75,29 @@ class MailService
     {
         $url = "http://" . $_SERVER['HTTP_HOST'] . '/account/activate/' . $token;
 
-        $text = HTTPResponse::getTemplate('Emails/activate-account.txt.twig', [
+        $text = HTTPResponse::getMailTemplate('Emails/activate-account.txt.twig', [
             'url' => $url
         ]);
 
-        $html = HTTPResponse::getTemplate('Emails/activate-account.html.twig', [
+        $html = HTTPResponse::getMailTemplate('Emails/activate-account.html.twig', [
             'url' => $url
         ]);
 
         return $this->send($user->getEmail(), 'Activez votre compte', $text, $html);
+    }
+
+    public function sendMailChangeEmail(User $user, string $token)
+    {
+        $url = "http://" . $_SERVER['HTTP_HOST'] . '/account/change-email/' . $token;
+
+        $text = HTTPResponse::getMailTemplate('Emails/change-mail.txt.twig', [
+            'url' => $url
+        ]);
+
+        $html = HTTPResponse::getMailTemplate('Emails/change-mail.html.twig', [
+            'url' => $url
+        ]);
+
+        return $this->send($user->getNewEmail(), 'Activez votre compte', $text, $html);
     }
 }

@@ -34,20 +34,21 @@ class HTTPResponse
      * @throws Twig\Error\RuntimeError
      * @throws Twig\Error\SyntaxError
      */
-    public static function renderTemplate (string $template, array $args = [])
+    public static function renderTemplate (string $template, array $args = [], bool $messages = true)
     {
-        echo static::getTemplate($template, $args);
+        echo static::getTemplate($template, $args, $messages);
     }
 
     /**
      * @param string $template
      * @param array $args
+     * @param bool $messages
      * @return string
      * @throws Twig\Error\LoaderError
      * @throws Twig\Error\RuntimeError
      * @throws Twig\Error\SyntaxError
      */
-    public static function getTemplate (string $template, array $args = [])
+    public static function getTemplate (string $template, array $args = [], bool $messages = true)
     {
         static $twig = null;
 
@@ -58,10 +59,36 @@ class HTTPResponse
             ]);
             $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
             $twig->addGlobal('current_user', Auth::getUser());
-            $twig->addGlobal('flash_messages', Flash::getMessages());
+            if ($messages) {
+                $twig->addGlobal('flash_messages', Flash::getMessages());
+            }
             $twig->addGlobal('blog', static::getBlog());
         }
         return $twig->render($template, $args);
+    }
+
+    /**
+     * @param string $template
+     * @param array $args
+     * @return string
+     * @throws Twig\Error\LoaderError
+     * @throws Twig\Error\RuntimeError
+     * @throws Twig\Error\SyntaxError
+     */
+    public static function getMailTemplate (string $template, array $args = [])
+    {
+        static $twig2 = null;
+
+        if ($twig2 === null) {
+            $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
+            $twig2 = new Twig\Environment($loader, [
+                //'cache' => '../cache'
+            ]);
+            $twig2->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
+            $twig2->addGlobal('current_user', Auth::getUser());
+            $twig2->addGlobal('blog', static::getBlog());
+        }
+        return $twig2->render($template, $args);
     }
 
 

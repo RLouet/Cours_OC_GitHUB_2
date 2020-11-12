@@ -1,0 +1,79 @@
+{%  extends "base.html.twig" %}
+
+{% block title %}Modifier votre profil{% endblock %}
+
+
+{% block body %}
+    <!-- Hero Slider Block
+    ================================================== -->
+
+    <div class="section padding-top-big padding-bottom over-hide">
+        <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/chaise-3d_1920-1080_2.jpg')"></div>
+        <div class="dark-fade-over"></div>
+        <div class="hero-logo hidden-lg-up">
+            <a href="{{ path }}">
+                <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
+            </a>
+        </div>
+        <div class="hero-bottom-wrap ver-2 text-center z-bigger" style="bottom: -20px;">
+            <div class="container-fluid parallax-fade-top" style="top: 0px;">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section pt-0 pt-md-3 background-grey pb-md-4 over-hide z-bigger-2">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-xl-4 p-4 mt-md-3 rounded background-dark text-center">
+                    <div class="main-title on-dark text-center mb-0">
+                        <h2 class="text-center dark-1-title">Modifier votre profil</h2>
+                    </div>
+                    <form method="post" class="form-on-dark edit-profile-form">
+                        <div class="for-hero mt-3">
+                            <label for="usernameInput" class="mb-0">Pseudo</label>
+                            <input type="text" name="username" id="usernameInput" placeholder="Pseudo" class="form-control" value="{{ user.entity.username }}" required/>
+                            {% if user.entity.errors['username'] %}
+                                <span class="badge badge-warning mt-1 mx-1">{{ user.entity.errors['username'] }}</span>
+                            {% endif %}
+                            {% if user.entity.errors and constant('INVALID_USERNAME', user.entity) in user.entity.errors %}
+                                <span class="badge badge-warning mt-1 mx-1">Pseudo invalide (2 à 32 caractères)</span>
+                            {% endif %}
+                        </div>
+                        <div class="for-hero mt-3">
+                            <label for="lastnameInput" class="mb-0">Nom</label>
+                            <input type="text" id="lastnameInput" name="lastname" placeholder="Nom" class="form-control" value="{{ user.entity.lastname }}" required/>
+                            {% if user.entity.errors and constant('INVALID_LASTNAME', user.entity) in user.entity.errors %}
+                                <span class="badge badge-warning mt-1 mx-1">Nom invalide (2 à 50 lettres, espaces et -)</span>
+                            {% endif %}
+                        </div>
+                        <div class="for-hero mt-2">
+                            <label for="firstnameInput" class="mb-0">Prénom</label>
+                            <input type="text" id="firstnameInput" name="firstname" placeholder="Prénom" class="form-control" value="{{ user.entity.firstname }}" required/>
+                            {% if user.entity.errors and constant('INVALID_FIRSTNAME', user.entity) in user.entity.errors %}
+                                <span class="badge badge-warning mt-1 mx-1">Prénom invalide (2 à 50 lettres, espaces et -)</span>
+                            {% endif %}
+                        </div>
+                        <div class="for-hero mt-3">
+                            <label for="emailInput" class="mb-0">Email</label>
+                            <input type="email" id="emailInput" name="new_email" placeholder="Email" class="form-control" value="{% if user.entity.newEmail %}{{ user.entity.newEmail }}{% else %}{{ user.entity.email }}{% endif %}" required/>
+                            {% if user.entity.errors['mail'] %}
+                                <span class="badge badge-warning mt-1">{{ user.entity.errors['mail'] }}</span>
+                            {% endif %}
+                            {% if user.entity.errors and constant('INVALID_NEW_EMAIL', user.entity) in user.entity.errors %}
+                                <span class="badge badge-warning mt-1 mx-1">Email invalide</span>
+                            {% endif %}
+                        </div>
+                        <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
+                        <div class="clear"></div>
+                        <button type="submit" name="edit-profile-btn" class="btn btn-primary btn-simple btn-round btn-long mt-4 mb-1" >Valider</button><br>
+                        <a href="{{ path }}/profile/show">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

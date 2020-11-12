@@ -75,6 +75,19 @@ class UserManagerPDO extends UserManager
         return $stmt->execute();
     }
 
+    public function changeEmail(string $token)
+    {
+        $token = new Token($token);
+        $hashedToken = $token->getHash();
+
+        $sql = 'UPDATE user SET activation_hash = NULL, email = new_email, new_email = NULL WHERE activation_hash = :hashed_token';
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':hashed_token', $hashedToken, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
     public function findByEmail(string $email)
     {
         $sql = 'SELECT * FROM user WHERE email =:email';
@@ -87,11 +100,18 @@ class UserManagerPDO extends UserManager
         return $result ? new User($result) : false;
     }
 
-    public function mailExists(string $email) {
-        return $this->findByEmail($email) ? true : false;
+    public function mailExists(string $email, ?int $ignoreId = null) {
+        $user =  $this->findByEmail($email);
+
+        if ($user) {
+            if ($user->getId() != $ignoreId) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public function UserExists(string $username)
+    public function UserExists(string $username, ?int $ignoreId = null)
     {
         $sql = 'SELECT id FROM user WHERE username =:username';
 
@@ -100,12 +120,19 @@ class UserManagerPDO extends UserManager
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->closeCursor();
-        return $result ? true : false;
+
+        if ($result) {
+            $user = new User($result);
+            if ($user->getId() != $ignoreId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected function modify(User $user)
     {
-        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role WHERE id=:id';
+        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, activation_hash = :activation_hash, new_email = :new_email WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
@@ -114,7 +141,8 @@ class UserManagerPDO extends UserManager
         $stmt->bindValue(':firstname', $user->getFirstname(), PDO::PARAM_STR);
         $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-        $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
+        $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
+        $stmt->bindValue(':new_email', $user->getNewEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
 
         if ($stmt->execute()) {
@@ -144,6 +172,7 @@ class UserManagerPDO extends UserManager
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':password_hash', $user->getPassword(), PDO::PARAM_STR);
+        //$stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
         $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
 
         if ($stmt->execute()) {
@@ -163,7 +192,7 @@ class UserManagerPDO extends UserManager
         $stmt->bindValue(':firstname', $user->getFirstname(), PDO::PARAM_STR);
         $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-        $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
+        $stmt->bindValue(':role', "ROLE_USER", PDO::PARAM_STR);
         $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
 
         if ($stmt->execute()) {
