@@ -76,6 +76,25 @@ class Security extends Controller
     }
 
     /**
+     * change Email
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function changeEmailAction(): void
+    {
+        $token = $this->route_params['token'];
+
+        $userManager =  $this->managers->getManagerOf('user');
+
+        $userManager->changeEmail($token);
+
+        Flash::addMessage('Votre nouvelle adresse Email est validée. Vous pouvez vous reconnecter');
+        HTTPResponse::redirect('/login');
+    }
+
+    /**
      * Log in the user
      *
      * @return void

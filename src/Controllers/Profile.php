@@ -46,13 +46,16 @@ class Profile extends Controller
      */
     public function editAction()
     {
-        $user['entity'] = Auth::getUser();
+        $user['entity'] = Auth::getUser()->resetNewEmail();
 
         if ($this->httpRequest->postExists('edit-profile-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $user = $this->processEditProfileForm($user['entity']);
                 if (empty($user['errors'])) {
                     Flash::addMessage("Votre profile a bien été modifié.");
+                    if ($user['new_email']) {
+                        Flash::addMessage("Pour confirmer le changement de votre adresse Email, merci de suivre les instructions envoyées à l'adresse " . $user['entity']->getNewEmail(), Flash::WARNING);
+                    }
                     HTTPResponse::redirect('/profile/show');
 
                 }
@@ -75,15 +78,19 @@ class Profile extends Controller
      */
     private function processEditProfileForm(User $user): array
     {
-        $user->hydrate($this->httpRequest->postData());
+        $user->resetNewEmail();
+        $user->hydrate([
+            'username' => $this->httpRequest->postData('username'),
+            'firstname' => $this->httpRequest->postData('firstname'),
+            'lastname' => $this->httpRequest->postData('lastname'),
+        ]);
         $userManager =  $this->managers->getManagerOf('user');
 
-        /*if ($this->httpRequest->postData('new_password') !== $this->httpRequest->postData('confirm_password')) {
-            $user->setCustomError('confirm_pass', 'Les mots de passe doivent être identiques');
-        }*/
-
-        if ($userManager->mailExists($user->getEmail(), $user->getId())) {
-            $user->setCustomError('mail', "Cette adresse email n'est pas disponible.");
+        if ($this->httpRequest->postData('new_email') !== $user->getEmail()) {
+            $user->setNewEmail($this->httpRequest->postData('new_email'));
+            if ($userManager->mailExists($user->getNewEmail(), $user->getId())) {
+                $user->setCustomError('mail', "Cette adresse email n'est pas disponible.");
+            }
         }
 
         if ($userManager->userExists($user->getUsername(), $user->getId())) {
@@ -93,18 +100,20 @@ class Profile extends Controller
         $handle['entity'] = $user;
 
         if ($user->isValid() && empty($user->getErrors())) {
-            $token = new Token();
-            $user->setActivationHash($token->getHash());
-            $user = $userManager->save($user);
-            if ($user) {
+            if ($user->getNewEmail()) {
+                $token = new Token();
+                $user->setActivationHash($token->getHash());
                 $mailer = new MailService();
-                if ($mailer->sendAccountActivationEmail($user, $token->getValue())) {
+                if (!$mailer->sendMailChangeEmail($user, $token->getValue())) {
+                    $handle['errors'][] = "Une erreur s'est produite. Merci de rééssayer ultérieurement";
                     return $handle;
                 }
-                $userManager->delete($user->getId());
-                $handle['errors'][] = "L'Email de confirmation n'a pas put être envoyé. Merci de rééssayer.";
+                $handle['new_email'] = true;
+            }
+            $user = $userManager->save($user);
+            if ($user) {
+                $handle['entity'] = $user;
                 return $handle;
-
             }
             $handle['errors'][] = "L'enregistrement a échoué.";
             return $handle;

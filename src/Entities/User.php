@@ -19,6 +19,7 @@ class User extends Entity
     protected ?DateTime $passwordResetExpiry = null;
     protected ?string $activationHash = null;
     protected bool $enabled = false;
+    protected ?string $newEmail = null;
 
     const INVALID_USERNAME = 1;
     const INVALID_LASTNAME = 2;
@@ -26,6 +27,7 @@ class User extends Entity
     const INVALID_EMAIL = 4;
     const INVALID_PASSWORD = 5;
     const INVALID_ROLE = 6;
+    const INVALID_NEW_EMAIL = 7;
 
     public function isValid()
     {
@@ -179,6 +181,31 @@ class User extends Entity
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+        return $this;
+    }
+
+    public function getNewEmail(): ?string
+    {
+        return $this->newEmail;
+    }
+
+    public function setNewEmail(?string $newEmail): self
+    {
+        if (!isset($newEmail)) {
+            return $this;
+        }
+        if (empty($newEmail) || !filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+            $this->errors[] = self::INVALID_NEW_EMAIL;
+            return $this;
+        }
+        $this->newEmail = $newEmail;
+        return $this;
+    }
+
+    public function resetNewEmail(): self
+    {
+        $this->newEmail = null;
+        $this->activationHash = null;
         return $this;
     }
 

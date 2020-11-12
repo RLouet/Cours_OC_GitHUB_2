@@ -1,6 +1,6 @@
 {%  extends "base.html.twig" %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}Profil{% endblock %}
 
 
 {% block body %}
@@ -25,22 +25,22 @@
         </div>
     </div>
 
-    <div class="section pt-0 pt-md-3 background-grey pb-md-4 over-hide z-bigger-2">
+    <div class="section pt-0 pt-md-4 background-grey pb-md-5 over-hide z-bigger-2">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-md-6 col-xl-4 p-4 mt-md-3 rounded background-dark text-center">
+                <div class="col-md-6 col-xl-4 p-4 mt-md-3 mb-md-2 rounded background-dark text-center">
                     <div class="main-title on-dark text-center mb-3">
-                        <h4 class="text-center section-title">Profile</h4>
+                        <h2 class="text-center dark-1-title">Profil</h2>
                     </div>
-                    <dl>
-                        <dt>Pseudo</dt>
-                        <dl>{{ current_user.username }}</dl>
-                        <dt>Nom</dt>
-                        <dl>{{ current_user.lastname }}</dl>
-                        <dt>Prénom</dt>
-                        <dl>{{ current_user.firstname }}</dl>
-                        <dt>Email</dt>
-                        <dl>{{ current_user.email }}</dl>
+                    <dl class="row bigger-2">
+                        <dt class="col-4 text-right">Pseudo</dt>
+                        <dl class="col-8 text-left">{{ current_user.username }}</dl>
+                        <dt class="col-4 text-right">Nom</dt>
+                        <dl class="col-8 text-left">{{ current_user.lastname }}</dl>
+                        <dt class="col-4 text-right">Prénom</dt>
+                        <dl class="col-8 text-left">{{ current_user.firstname }}</dl>
+                        <dt class="col-4 text-right">Email</dt>
+                        <dl class="col-8 text-left">{{ current_user.email }}</dl>
                     </dl>
                     <a class="btn btn-primary" href="{{ path }}/profile/edit">Modifier</a>
                 </div>

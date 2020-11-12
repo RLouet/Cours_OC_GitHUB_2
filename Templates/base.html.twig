@@ -43,7 +43,7 @@
     <link rel="apple-touch-icon" sizes="114x114" href="{{ path }}/favicons/apple-touch-icon-114x114.png">
 
 </head>
-<body class="royal_preloader">
+<body class="royal_preloader background-dark-2">
 
 <div id="royal_preloader"></div>
 
@@ -112,7 +112,7 @@
                                         <a class="dropdown-header">{{ current_user.username }}</a>
                                     </div>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ path }}/profile">Profile</a>
+                                    <a class="dropdown-item" href="{{ path }}/profile/show">Profil</a>
                                     {% if current_user.isGranted('admin') %}<a class="dropdown-item" href="{{ path }}/admin">Administration</a>{% endif %}
                                     <a class="dropdown-item" href="{{ path }}/logout">Déconnexion</a>
                                 </div>
