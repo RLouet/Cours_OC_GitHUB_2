@@ -47,50 +47,69 @@
 
     <div class="section background-dark z-bigger-2 text-white padding-top-small" id="contactSection">
         <h2 class="dark-1-title text-center">Me contacter</h2>
-        <form class="contactform mt-5">
+        <form class="contactform mt-5" method="post" action="">
             <div class="container form-on-dark">
                 <div class="row justify-content-around">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mt-4">
                         <div class="subscribe-box-1">
-                            <label>Nom</label>
-                            <input type="text" name="lastname" value="" placeholder="Votre nom" class="form-control">
+                            <label for="lastnameInput">Nom</label>
+                            {% if contact_message.errors and constant('INVALID_LASTNAME', contact_message) in contact_message.errors %}
+                                <span class="badge badge-warning ml-2">Nom invalide (2 à 50 lettres, espaces et -)</span>
+                            {% endif %}
+                            <input maxlength="50" id="lastnameInput" type="text" name="lastname" value="{% if posted_data %}{{ posted_data.lastname }}{% endif %}" placeholder="Votre nom" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-4 mt-4">
                         <div class="subscribe-box-1">
-                            <label>Prénom</label>
-                            <input type="text" name="firstname" value="" placeholder="Votre prénom" class="form-control">
+                            <label for="firstnameInput">Prénom</label>
+                            {% if contact_message.errors and constant('INVALID_FIRSTNAME', contact_message) in contact_message.errors %}
+                                <span class="badge badge-warning ml-2">Prénom invalide (2 à 50 lettres, espaces et -)</span>
+                            {% endif %}
+                            <input maxlength="50" id="firstnameInput" type="text" name="firstname" value="{% if posted_data %}{{ posted_data.firstname }}{% endif %}" placeholder="Votre prénom" class="form-control" required>
                         </div>
                     </div>
                     <div class="clear"></div>
                     <div class="col-md-4 mt-4">
                         <div class="subscribe-box-1">
-                            <label>Email</label>
-                            <input type="email" name="email" value="" placeholder="Votre Email" class="form-control">
+                            <label for="emailInput">Email</label>
+                            {% if contact_message.errors and constant('INVALID_EMAIL', contact_message) in contact_message.errors %}
+                                <span class="badge badge-warning ml-2">Email invalide</span>
+                            {% endif %}
+                            <input maxlength="255" id="emailInput" type="email" name="email" value="{% if posted_data %}{{ posted_data.email }}{% endif %}" placeholder="Votre Email" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-4 mt-4">
                         <div class="subscribe-box-1">
-                            <label>Téléphone</label>
-                            <input type="text" name="phone" value="" placeholder="Votre téléphone" class="form-control">
+                            <label for="phoneInput">Téléphone</label>
+                            {% if contact_message.errors and constant('INVALID_PHONE', contact_message) in contact_message.errors %}
+                                <span class="badge badge-warning ml-2">Téléphone invalide (nul, ou entre 6 et 30 chiffres, +,-, . ou espaces)</span>
+                            {% endif %}
+                            <input maxlength="30" id="phoneInput" type="tel" name="phone" value="{% if posted_data %}{{ posted_data.phone }}{% endif %}" placeholder="Votre téléphone" class="form-control">
                         </div>
                     </div>
                     <div class="clear"></div>
                     <div class="col-md-8 mt-4">
                         <div class="subscribe-box-1">
-                            <label>Sujet</label>
-                            <input type="text" name="phone" value="" placeholder="Sujet du message" class="form-control">
+                            <label for="subjectInput">Sujet</label>
+                            {% if contact_message.errors and constant('INVALID_SUBJECT', contact_message) in contact_message.errors %}
+                                <span class="badge badge-warning ml-2">Sujet invalide (nul, ou entre 3 et 30 caractères)</span>
+                            {% endif %}
+                            <input maxlength="30" id="subjectInput" type="text" name="subject" value="{% if posted_data %}{{ posted_data.subject }}{% endif %}" placeholder="Sujet du message" class="form-control">
                         </div>
                     </div>
                     <div class="clear"></div>
                     <div class="col-md-8 mt-4">
                         <div class="subscribe-box-1">
-                            <label>Message</label>
-                            <textarea name="teaser_phrase" placeholder="Votre message" class="for-textarea form-control"></textarea>
+                            <label for="messageInput">Message</label>
+                            {% if contact_message.errors and constant('INVALID_MESSAGE', contact_message) in contact_message.errors %}
+                                <span class="badge badge-warning ml-2">Message invalide (entre 15 et 1000 caractères)</span>
+                            {% endif %}
+                            <textarea maxlength="1000" id="messageInput" name="message" placeholder="Votre message" class="for-textarea form-control" required>{% if posted_data %}{{ posted_data.message }}{% endif %}</textarea>
                         </div>
                     </div>
+                    <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                     <div class="clear mb-4"></div>
-                    <input class="btn btn-primary" type="submit" name="blog-update" value="Envoyer" />
+                    <input class="btn btn-primary" type="submit" name="contact-send" value="Envoyer" />
                 </div>
             </div>
         </form>
@@ -111,4 +130,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if posted_data is not empty %}
+        <script>
+            location.href = "#contactSection";
+        </script>
+    {% endif %}
 {% endblock %}
