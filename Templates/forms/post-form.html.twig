@@ -24,80 +24,80 @@
 </div>
 
 <form class="configform" action="" method="post" enctype="multipart/form-data">
-<!-- images ============================================== -->
-<div class="section pt-4 background-dark over-hide z-bigger-2">
-    <h4 class="text-center text-white">Images</h4>
-    <div class="container pt-3">
+    <!-- images ============================================== -->
+    <div class="section pt-4 background-dark over-hide z-bigger-2">
+        <h4 class="text-center text-white">Images</h4>
+        <div class="container pt-3">
 
-        <div class="row justify-content-around align-items-center images-list">
-            {% for image in blog_post.entity.images %}
-                <div class="col-md-6 col-lg-4 col-xl-3  mt-3 post-image-item old-post-image-{{ image.id }}">
-                    <div><img src="{{ path }}/uploads/blog/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}" class="img-fluid post-image-preview"></div>
-                    <input type="hidden" name="old_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>
-                    <div><input type="text" name="old_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field" required></div>
-                    <input type="file" name="old_post_image[{{ loop.index0 }}]" id="postImageInput{{ image.id }}" class="form-control post-image-input" accept="image/*">
-                    <div class="row justify-content-around">
-                        <div class="pt-2">
-                            <input type="radio" id="radioHero{{ image.id }}" name="hero" value="old-{{ image.id }}" {% if image.id == blog_post.entity.hero.id %}checked{% endif %} required>
-                            <label for="radioHero{{ image.id }}">Hero</label>
-                        </div>
-                        <div>
-                            <label for="postImageInput{{ image.id }}" class="fa-btn"><i class="fa fa-edit"></i></label>
-                            <button type="button" class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ image.id }}" data-type="old-image"><i class="fa fa-trash"></i></button>
+            <div class="row justify-content-around align-items-center images-list">
+                {% for image in blog_post.entity.images %}
+                    <div class="col-md-6 col-lg-4 col-xl-3  mt-3 post-image-item old-post-image-{{ image.id }}">
+                        <div><img src="{{ path }}/uploads/blog/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}" class="img-fluid post-image-preview"></div>
+                        <input type="hidden" name="old_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>
+                        <div><input type="text" name="old_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field" required></div>
+                        <input type="file" name="old_post_image[{{ loop.index0 }}]" id="postImageInput{{ image.id }}" class="form-control post-image-input" accept="image/*">
+                        <div class="row justify-content-around">
+                            <div class="pt-2">
+                                <input type="radio" id="radioHero{{ image.id }}" name="hero" value="old-{{ image.id }}" {% if image.id == blog_post.entity.hero.id %}checked{% endif %} required>
+                                <label for="radioHero{{ image.id }}">Hero</label>
+                            </div>
+                            <div>
+                                <label for="postImageInput{{ image.id }}" class="fa-btn"><i class="fa fa-edit"></i></label>
+                                <button type="button" class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ image.id }}" data-type="old-image"><i class="fa fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-        <div id="imagesToDelete" class="hidden"></div>
-        <div class="row  justify-content-around">
-            <div class="col-md-6 col-lg-4 my-4 px-sm-0 px-md-3 text-center" id="addSkillBtn">
-                <button type="button" class="btn btn-primary" id="addPostImage">Ajouter une image</button>
+                {% endfor %}
             </div>
-        </div>
+            <div id="imagesToDelete" class="hidden"></div>
+            <div class="row  justify-content-around">
+                <div class="col-md-6 col-lg-4 my-4 px-sm-0 px-md-3 text-center" id="addSkillBtn">
+                    <button type="button" class="btn btn-primary" id="addPostImage">Ajouter une image</button>
+                </div>
+            </div>
 
 
-    </div>
-</div>
-
-<!-- Content ============================================== -->
-<div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
-    <h4 class="text-center">Contenu</h4>
-    <div class="container pt-3">
-        <div class="row justify-content-around align-items-center">
-            <div class="col-md-8">
-                <div class="subscribe-box-1">
-                    <label>Titre</label>
-                    {% if blog_post.entity.errors and constant('INVALID_TITLE', blog_post.entity) in blog_post.entity.errors %}
-                        <span class="badge badge-warning ml-2">Titre invalide</span>
-                    {% endif %}
-                    <input type="text" name="title" value="{% if not blog_post.entity.isNew %}{{ blog_post.entity.title }}{% endif %}" placeholder="Titre" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-8 mt-4">
-                <div class="subscribe-box-1">
-                    <label>Châpo</label>
-                    {% if blog_post.entity.errors and constant('INVALID_CHAPO', blog_post.entity) in blog_post.entity.errors %}
-                        <span class="badge badge-warning ml-2">Châpo invalide</span>
-                    {% endif %}
-                    <textarea name="chapo" placeholder="Châpo" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.chapo }}{% endif %}</textarea>
-                </div>
-            </div>
-            <div class="col-12 mt-4">
-                <div class="subscribe-box-1">
-                    <label>Contenu</label>
-                    {% if blog_post.entity.errors and constant('INVALID_CONTENT', blog_post.entity) in blog_post.entity.errors %}
-                        <span class="badge badge-warning ml-2">Contenu invalide</span>
-                    {% endif %}
-                    <textarea name="content" placeholder="Contenu" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.content }}{% endif %}</textarea>
-                </div>
-            </div>
-            <div class="clear"></div>
-            {% if not blog_post.entity.isNew %}<input type="hidden" name="id" value="{{ blog_post.entity.id }}">{% endif %}
-            <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
-            <div class="clear"></div>
-            <input class="btn btn-primary mt-3" type="submit" name="{% if not blog_post.entity.isNew %}post-edit{% else %}post-add{% endif %}" value="Enregistrer" />
         </div>
     </div>
-</div>
+
+    <!-- Content ============================================== -->
+    <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
+        <h4 class="text-center">Contenu</h4>
+        <div class="container pt-3">
+            <div class="row justify-content-around align-items-center">
+                <div class="col-md-8">
+                    <div class="subscribe-box-1">
+                        <label>Titre</label>
+                        {% if blog_post.entity.errors and constant('INVALID_TITLE', blog_post.entity) in blog_post.entity.errors %}
+                            <span class="badge badge-warning ml-2">Titre invalide</span>
+                        {% endif %}
+                        <input type="text" name="title" value="{% if not blog_post.entity.isNew %}{{ blog_post.entity.title }}{% endif %}" placeholder="Titre" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-8 mt-4">
+                    <div class="subscribe-box-1">
+                        <label>Châpo</label>
+                        {% if blog_post.entity.errors and constant('INVALID_CHAPO', blog_post.entity) in blog_post.entity.errors %}
+                            <span class="badge badge-warning ml-2">Châpo invalide</span>
+                        {% endif %}
+                        <textarea name="chapo" placeholder="Châpo" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.chapo }}{% endif %}</textarea>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="subscribe-box-1">
+                        <label>Contenu</label>
+                        {% if blog_post.entity.errors and constant('INVALID_CONTENT', blog_post.entity) in blog_post.entity.errors %}
+                            <span class="badge badge-warning ml-2">Contenu invalide</span>
+                        {% endif %}
+                        <textarea name="content" placeholder="Contenu" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.content }}{% endif %}</textarea>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                {% if not blog_post.entity.isNew %}<input type="hidden" name="id" value="{{ blog_post.entity.id }}">{% endif %}
+                <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
+                <div class="clear"></div>
+                <input class="btn btn-primary mt-3" type="submit" name="{% if not blog_post.entity.isNew %}post-edit{% else %}post-add{% endif %}" value="Enregistrer" />
+            </div>
+        </div>
+    </div>
 </form>

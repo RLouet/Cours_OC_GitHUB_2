@@ -29,7 +29,7 @@ class User extends Entity
     const INVALID_ROLE = 6;
     const INVALID_NEW_EMAIL = 7;
 
-    public function isValid()
+    public function isValid(): bool
     {
         return !(empty($this->username) || empty($this->lastname) || empty($this->firstname) || empty($this->email) || empty($this->password) || empty($this->role));
     }
