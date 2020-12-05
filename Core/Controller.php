@@ -25,12 +25,19 @@ abstract class Controller
      * http request
      * @var HTTPRequest
      */
-    protected $httpRequest = null;
+    protected HTTPRequest $httpRequest;
+
+    /**
+     * http response
+     * @var HTTPResponse
+     */
+    protected HTTPResponse $httpResponse;
 
 
     public function __construct(array $routeParams, HTTPRequest $request)
     {
        $this->httpRequest = $request;
+       $this->httpResponse = new HTTPResponse();
 
         $this->route_params = $routeParams;
 

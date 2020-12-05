@@ -39,7 +39,7 @@ class Posts extends Controller
 
         //var_dump($posts);
 
-        HTTPResponse::renderTemplate('Backend/posts-index.html.twig', [
+        $this->httpResponse->renderTemplate('Backend/posts-index.html.twig', [
             'section' => 'posts',
             'posts' => $posts,
         ]);
@@ -51,7 +51,7 @@ class Posts extends Controller
 
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
 
-        HTTPResponse::renderTemplate('Backend/posts-view.html.twig', [
+        $this->httpResponse->renderTemplate('Backend/posts-view.html.twig', [
             'section' => 'posts',
             'blog_post' => $blogPost,
         ]);
@@ -67,7 +67,7 @@ class Posts extends Controller
                 if (empty($blogPost['errors'])) {
                     Flash::addMessage('Le post a bien été enregistrés');
 
-                    HTTPResponse::redirect('/admin/posts');
+                    $this->httpResponse->redirect('/admin/posts');
                 }
                 foreach ($blogPost['errors'] as $error) {
                     Flash::addMessage($error, Flash::WARNING);
@@ -77,7 +77,7 @@ class Posts extends Controller
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Backend/posts-new.html.twig', [
+        $this->httpResponse->renderTemplate('Backend/posts-new.html.twig', [
             'section' => 'posts',
             'blog_post' => $blogPost,
             'csrf_token' => $csrf
@@ -103,7 +103,7 @@ class Posts extends Controller
                 if (empty($blogPost['errors'])) {
                     Flash::addMessage('Le post a bien été modifié.');
 
-                    HTTPResponse::redirect('/admin/posts');
+                    $this->httpResponse->redirect('/admin/posts');
                 }
                 foreach ($blogPost['errors'] as $error) {
                     Flash::addMessage($error, Flash::WARNING);
@@ -114,7 +114,7 @@ class Posts extends Controller
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Backend/posts-edit.html.twig', [
+        $this->httpResponse->renderTemplate('Backend/posts-edit.html.twig', [
             'section' => 'posts',
             'blog_post' => $blogPost,
             'csrf_token' => $csrf

@@ -13,7 +13,25 @@ class UserManagerPDO extends UserManager
 {
     public function getList(): array
     {
-        return [];
+        $sql = 'SELECT * FROM user';
+
+        $stmt = $this->dao->prepare($sql);
+        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Entities\Blog');
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $stmt->closeCursor();
+        //var_dump($blogData);
+
+
+        $userList = [];
+
+        foreach ($result as $resultitem) {
+            $user = new User($resultitem);
+            $userList[] = $user;
+        }
+
+        return $userList;
     }
 
     public function findById(int $id)

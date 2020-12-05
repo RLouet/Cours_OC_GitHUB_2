@@ -34,7 +34,7 @@ class Security extends Controller
                 $user = $this->processRegistrationForm();
                 if (empty($user['errors'])) {
                         Flash::addMessage("Vous avez bien été enregistré. Un email de confimation vous a été envoyé afin d'activer votre compte.");
-                        HTTPResponse::redirect('/login');
+                        $this->httpResponse->redirect('/login');
 
                 }
                 foreach ($user['errors'] as $error) {
@@ -45,7 +45,7 @@ class Security extends Controller
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Security/Signup.html.twig', [
+        $this->httpResponse->renderTemplate('Security/Signup.html.twig', [
             'section' => 'security',
             'user' => $user,
             'csrf_token' => $csrf
@@ -68,7 +68,7 @@ class Security extends Controller
         $userManager->activate($token);
 
         Flash::addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
-        HTTPResponse::redirect('/login');
+        $this->httpResponse->redirect('/login');
     }
 
     /**
@@ -87,7 +87,7 @@ class Security extends Controller
         $userManager->changeEmail($token);
 
         Flash::addMessage('Votre nouvelle adresse Email est validée. Vous pouvez vous reconnecter');
-        HTTPResponse::redirect('/login');
+        $this->httpResponse->redirect('/login');
     }
 
     /**
@@ -121,7 +121,7 @@ class Security extends Controller
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Security/login.html.twig', [
+        $this->httpResponse->renderTemplate('Security/login.html.twig', [
             'section' => 'security',
             'email' => $this->httpRequest->postData('email'),
             'remember_me' => $rememberMe,
@@ -160,14 +160,14 @@ class Security extends Controller
                     Flash::addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
                 } else {
                     Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
-                    HTTPResponse::redirect('/login');
+                    $this->httpResponse->redirect('/login');
                 }
             }
         }
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Security/forgot-password.html.twig', [
+        $this->httpResponse->renderTemplate('Security/forgot-password.html.twig', [
             'section' => 'security',
             'csrf_token' => $csrf
         ]);
@@ -191,7 +191,7 @@ class Security extends Controller
 
         if (!$user || $user->getPasswordResetExpiry() < new DateTime()) {
             Flash::addMessage("Votre lien de réinitialisation est invalide . Merci de renouveler votre demande.", Flash::WARNING);
-            HTTPResponse::redirect('/security/forgot-password');
+            $this->httpResponse->redirect('/security/forgot-password');
         }
 
         if ($this->httpRequest->postExists('reset-btn')) {
@@ -200,7 +200,7 @@ class Security extends Controller
 
                 if (empty($formUser['errors'])) {
                     Flash::addMessage('Votre mot de passe a bien été modifié.');
-                    HTTPResponse::redirect('/login');
+                    $this->httpResponse->redirect('/login');
                 }
                 foreach ($formUser['errors'] as $error) {
                     Flash::addMessage($error, Flash::WARNING);
@@ -210,7 +210,7 @@ class Security extends Controller
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Security/reset-password.html.twig', [
+        $this->httpResponse->renderTemplate('Security/reset-password.html.twig', [
             'section' => 'security',
             'user' => $formUser,
             'csrf_token' => $csrf
@@ -227,7 +227,7 @@ class Security extends Controller
     {
         Auth::logout();
 
-        HTTPResponse::redirect('/security/show-logout-message');
+        $this->httpResponse->redirect('/security/show-logout-message');
     }
 
     /**
@@ -238,7 +238,7 @@ class Security extends Controller
     {
         Flash::addMessage('Vous êtes déconnectés. A bientôt !');
 
-        HTTPResponse::redirect('');
+        $this->httpResponse->redirect('');
     }
 
 

@@ -5,11 +5,9 @@ namespace Blog\Controllers\Admin;
 
 
 use Core\Controller;
-use Core\HTTPResponse;
 
-class Admin extends Controller
+class Users extends Controller
 {
-
     /**
      * Before filter
      */
@@ -29,12 +27,14 @@ class Admin extends Controller
      */
     public function indexAction()
     {
-        $postManager = $this->managers->getManagerOf('BlogPost');
-        $posts = $postManager->getList();
+        $userManager = $this->managers->getManagerOf('User');
+        $users = $userManager->getList();
 
-        $this->httpResponse->renderTemplate('Backend/index.html.twig', [
-            'section' => 'accueil',
-            'posts' => $posts,
+        //var_dump($posts);
+
+        $this->httpResponse->renderTemplate('Backend/users-index.html.twig', [
+            'section' => 'users',
+            'users' => $users,
         ]);
     }
 }

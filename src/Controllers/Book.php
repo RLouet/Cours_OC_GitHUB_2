@@ -26,12 +26,21 @@ class Book extends Controller
 
          //var_dump($homeData);
 
-        HTTPResponse::renderTemplate('Frontend/blog.html.twig', [
+        $this->httpResponse->renderTemplate('Frontend/blog.html.twig', [
             'section' => 'book',
             'posts' => $posts,
         ]);
     }
 
+    /**
+     * Show single post
+     *
+     * @return void
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function viewAction()
     {
         $flash = [
@@ -42,7 +51,7 @@ class Book extends Controller
         $postManager = $this->managers->getManagerOf('BlogPost');
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
 
-        HTTPResponse::renderTemplate('Frontend/post-view.html.twig', [
+        $this->httpResponse->renderTemplate('Frontend/post-view.html.twig', [
             'section' => 'book',
             'blog_post' => $blogPost,
             'flash' => $flash
