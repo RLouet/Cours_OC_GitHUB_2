@@ -20,6 +20,7 @@ class User extends Entity
     protected ?string $activationHash = null;
     protected bool $enabled = false;
     protected ?string $newEmail = null;
+    protected bool $banished = false;
 
     const INVALID_USERNAME = 1;
     const INVALID_LASTNAME = 2;
@@ -206,6 +207,17 @@ class User extends Entity
     {
         $this->newEmail = null;
         $this->activationHash = null;
+        return $this;
+    }
+
+    public function getBanished(): bool
+    {
+        return $this->banished;
+    }
+
+    public function setBanished(bool $banished): self
+    {
+        $this->banished = $banished;
         return $this;
     }
 

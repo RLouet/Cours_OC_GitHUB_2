@@ -17,7 +17,9 @@ class Users extends Controller
     }
 
     /**
-     * Show the index page
+     * Show the users index page
+     *
+     * @param string|null $role
      *
      * @return void
      *
@@ -25,16 +27,42 @@ class Users extends Controller
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function indexAction()
+    public function indexAction(?string $role = null)
     {
         $userManager = $this->managers->getManagerOf('User');
-        $users = $userManager->getList();
 
-        //var_dump($posts);
+        $usersCount = $userManager->count();
+        $users = $userManager->getList($role);
 
         $this->httpResponse->renderTemplate('Backend/users-index.html.twig', [
             'section' => 'users',
             'users' => $users,
+            'role' => $role,
+            'users_count' => $usersCount
         ]);
+    }
+
+    /**
+     * Show the registered users index page
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function usersAction()
+    {
+        $this->indexAction("ROLE_USER");
+    }
+
+    /**
+     * Show the  admins users index page
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function adminsAction()
+    {
+        $this->indexAction("ROLE_ADMIN");
     }
 }

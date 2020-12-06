@@ -108,11 +108,15 @@ class Security extends Controller
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
                 if ($user && $user->getEnabled()) {
+                    if ($user->getBanished()) {
+                        Flash::addMessage('Vous avez été bani de ce site !', Flash::ERROR);
+
+                        $this->httpResponse->redirect('');
+                    }
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
                         Auth::login($user, $rememberMe);
 
-                        Flash::addMessage('Vous êtes connectés en tant que ' . $user->getUsername());
-                        HTTPResponse::redirect(Auth::GetRequestedPage());
+                        $this->httpResponse->redirect(Auth::GetRequestedPage());
                     }
                 }
                 Flash::addMessage('Mauvaise combinaison email / mot de passe ou compte non activé.', Flash::WARNING);

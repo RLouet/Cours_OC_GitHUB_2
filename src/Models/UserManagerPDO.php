@@ -11,11 +11,19 @@ use \DateTime;
 
 class UserManagerPDO extends UserManager
 {
-    public function getList(): array
+    public function getList(?string $role = null): array
     {
         $sql = 'SELECT * FROM user';
 
+        if ($role) {
+            $sql .= ' WHERE role = :role';
+        }
+
         $stmt = $this->dao->prepare($sql);
+
+        if ($role) {
+            $stmt->bindValue(':role', $role, PDO::PARAM_STR);
+        }
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Entities\Blog');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
@@ -32,6 +40,24 @@ class UserManagerPDO extends UserManager
         }
 
         return $userList;
+    }
+
+    public function count(?array $roles = null): array
+    {
+        $sql = 'SELECT ';
+        if (!$roles) {
+            $roles = ['ROLE_USER', 'ROLE_ADMIN'];
+        }
+        foreach ($roles as $role) {
+            $sql .= '(SELECT COUNT(*) FROM user WHERE role="' . $role . '") AS "' . $role . '", ' ;
+        }
+        $sql .= '(SELECT COUNT(*) FROM user) AS "all"';
+        //var_dump($sql);
+        $stmt = $this->dao->query($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
     }
 
     public function findById(int $id)
@@ -106,7 +132,7 @@ class UserManagerPDO extends UserManager
         return $stmt->execute();
     }
 
-    public function findByEmail(string $email)
+    public function findByEmail(string $email): ?User
     {
         $sql = 'SELECT * FROM user WHERE email =:email';
 
@@ -115,7 +141,7 @@ class UserManagerPDO extends UserManager
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->closeCursor();
-        return $result ? new User($result) : false;
+        return $result ? new User($result) : null;
     }
 
     public function mailExists(string $email, ?int $ignoreId = null) {
