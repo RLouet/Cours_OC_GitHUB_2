@@ -11,6 +11,7 @@ use Blog\Services\FilesService;
 use Core\Auth;
 use Core\Config;
 use Core\Controller;
+use Core\Flash;
 use Core\HTTPResponse;
 
 class Ajax extends Controller
@@ -419,12 +420,11 @@ class Ajax extends Controller
             $handle['success'] = false;
             $handle['old_error'] = true;
         }
-        if (!$this->httpRequest->postData('new_password') === $this->httpRequest->postData('conf_password')) {
+        if ($this->httpRequest->postData('new_password') !== $this->httpRequest->postData('conf_password')) {
             $handle['success'] = false;
             $handle['conf_error'] = true;
         }
         $user->setPlainPassword($this->httpRequest->postData('new_password'));
-        //$user->setEmail('zd.fr');
         if (!empty($user->getErrors())) {
             $handle['success'] = false;
             foreach ($user->getErrors() as $key => $error) {
@@ -450,5 +450,70 @@ class Ajax extends Controller
         }
         $handle['success'] = false;
         echo json_encode($handle);
+    }
+
+    /**
+     * up user
+     */
+    public function upUserAction()
+    {
+        $this->switchRole('ROLE_ADMIN');
+    }
+
+    /**
+     * down user
+     */
+    public function downUserAction()
+    {
+        $this->switchRole('ROLE_USER');
+    }
+
+    /**
+     * Switch user role
+     */
+    private function switchRole(string $role) {
+        $this->requiredLogin('admin');
+
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Une erreur s\'est produite.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $userManager = $this->managers->getManagerOf('user');
+
+        $user =  $userManager->findById($this->httpRequest->postData('id'));
+
+        if ($user == Auth::getUser()) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Vous ne pouvez pas changer votre role.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        if ($handle['success']) {
+            $user->setRole($role);
+            if ($user->isValid()) {
+                $user = $userManager->save($user);
+                if ($user) {
+                    Flash::addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
+                    echo json_encode($handle);
+                    exit();
+                }
+                $handle['errors'][] = 'Error lors de l\'enregistrement.';
+            } else {
+                $handle['errors'][] = 'L\'utilisateur est invalide.';
+            }
+        }
+
+        $handle['success'] = false;
+        echo json_encode($handle);
+
     }
 }

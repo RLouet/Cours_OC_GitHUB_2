@@ -34,11 +34,14 @@ class Users extends Controller
         $usersCount = $userManager->count();
         $users = $userManager->getList($role);
 
+        $csrf = $this->generateCsrfToken();
+
         $this->httpResponse->renderTemplate('Backend/users-index.html.twig', [
             'section' => 'users',
             'users' => $users,
             'role' => $role,
-            'users_count' => $usersCount
+            'users_count' => $usersCount,
+            'csrf_token' => $csrf
         ]);
     }
 

@@ -71,10 +71,11 @@ class UserManagerPDO extends UserManager
         $result = $stmt->fetch();
         $stmt->closeCursor();
 
-        $user = new User($result);
-
-        if ($user->isValid()){
-            return $user;
+        if ($result) {
+            $user = new User($result);
+            if ($user->isValid()){
+                return $user;
+            }
         }
         return false;
     }
@@ -176,7 +177,7 @@ class UserManagerPDO extends UserManager
 
     protected function modify(User $user)
     {
-        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, activation_hash = :activation_hash, new_email = :new_email WHERE id=:id';
+        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role, activation_hash = :activation_hash, new_email = :new_email WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
@@ -185,6 +186,7 @@ class UserManagerPDO extends UserManager
         $stmt->bindValue(':firstname', $user->getFirstname(), PDO::PARAM_STR);
         $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
+        $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
         $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
         $stmt->bindValue(':new_email', $user->getNewEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
