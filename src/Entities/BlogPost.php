@@ -14,9 +14,9 @@ class BlogPost extends Entity
     protected int $userId;
     protected User $user;
 
-    protected string $title,
-        $chapo,
-        $content;
+    protected string $title;
+    protected string $chapo;
+    protected string $content;
 
     protected ObjectCollection $images;
 
@@ -57,6 +57,7 @@ class BlogPost extends Entity
     public function setUser(User $user): BlogPost
     {
         $this->user = $user;
+        $this->userId = $user->getId();
         return $this;
     }
 

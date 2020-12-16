@@ -135,4 +135,20 @@ class MailService
 
         return $this->send($destination, $subject, $text, $html,$replyTo );
     }
+
+    public function sendRoleChangeEmail(User $user, string $message)
+    {
+
+        $text = $this->httpResponse->getMailTemplate('Emails/change-role.txt.twig', [
+            'user' => $user,
+            'message' => $message
+        ]);
+
+        $html = $this->httpResponse->getMailTemplate('Emails/change-role.html.twig', [
+            'user' => $user,
+            'message' => $message
+        ]);
+
+        return $this->send($user->getEmail(), 'Modification de votre role', $text, $html);
+    }
 }

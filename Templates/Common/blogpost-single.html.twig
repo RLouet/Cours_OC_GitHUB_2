@@ -32,7 +32,7 @@
                     <div class="carousel-inner" role="listbox">
                         {% for image in blog_post.entity.images %}
                         <div class="carousel-item {% if loop.first %}active{% endif %}">
-                            <img class="d-block img-fluid rounded" src="{{ path }}/uploads/blog/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}">
+                            <img class="d-block img-fluid rounded" src="{{ path }}/uploads/blog/{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}">
                             <div class="carousel-caption mb-3 d-none d-md-block">
                                 <p><span>{{ image.name }}</span></p>
                             </div>

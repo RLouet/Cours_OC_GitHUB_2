@@ -32,7 +32,7 @@
             <div class="row justify-content-around align-items-center images-list">
                 {% for image in blog_post.entity.images %}
                     <div class="col-md-6 col-lg-4 col-xl-3  mt-3 post-image-item old-post-image-{{ image.id }}">
-                        <div><img src="{{ path }}/uploads/blog/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}" class="img-fluid post-image-preview"></div>
+                        <div><img src="{{ path }}/uploads/blog/{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}" class="img-fluid post-image-preview"></div>
                         <input type="hidden" name="old_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>
                         <div><input type="text" name="old_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field" required></div>
                         <input type="file" name="old_post_image[{{ loop.index0 }}]" id="postImageInput{{ image.id }}" class="form-control post-image-input" accept="image/*">

@@ -59,7 +59,7 @@ class Posts extends Controller
 
     public function newAction()
     {
-        $blogPost['entity'] = new BlogPost(['user_id' => 1]);
+        $blogPost['entity'] = new BlogPost(['user' => Auth::getUser()]);
 
         if ($this->httpRequest->postExists('post-add')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
@@ -93,8 +93,12 @@ class Posts extends Controller
         if (!$blogPost['entity']) {
             throw new \Exception("Le post n'existe pas", 404);
         }
-        if ($blogPost['entity']->getUser() != Auth::getUser()) {
-            throw new \Exception("Vous n'êtes pas autorisé à éditer ce post.", 401);
+        if (($blogPost['entity']->getUser()->getRole() == 'ROLE_ADMIN' && !$blogPost['entity']->getUser()->getBanished() ) && ($blogPost['entity']->getUser()->getId() != Auth::getUser()->getId())) {
+            //var_dump($blogPost['entity']->getUser(), Auth::getUser());
+            //throw new \Exception("Vous n'êtes pas autorisé à éditer ce post.", 401);
+            Flash::addMessage("Vous n'êtes pas autorisé à éditer ce post.", Flash::ERROR);
+
+            $this->httpResponse->redirect('/admin/posts');
         }
 
         if ($this->httpRequest->postExists('post-edit')) {
@@ -157,7 +161,7 @@ class Posts extends Controller
                     foreach ($this->httpRequest->postData('images_to_delete') as $imageToDelete) {
                         $imageDeleteRules = [
                             'target' => 'blog',
-                            'folder' => '/' . $blogPost->id(),
+                            'folder' => '/' . $blogPost->getUser()->getId(). '/' . $blogPost->getId(),
                         ];
                         $imageToDelete = $blogPost->getImages()->getById($imageToDelete);
                         if ($imageToDelete) {
@@ -168,7 +172,7 @@ class Posts extends Controller
                             $blogPost->removeImage($imageToDelete);
 
                             if ($uploader->deleteFile($imageDeleteRules, $imageToDelete->getUrl())) {
-                                $imageManager->delete($imageToDelete->id());
+                                $imageManager->delete($imageToDelete->getId());
                             } else {
                                 $blogPost->addImage($imageToDelete);
                                 if ($isPostHero) {
@@ -188,7 +192,7 @@ class Posts extends Controller
 
                     $imageUploadRules = [
                         'target' => 'blog',
-                        'folder' => '/' . $blogPost->getId(),
+                        'folder' => '/' . $blogPost->getUser()->getId(). '/' . $blogPost->getId(),
                         'maxSize' => 4,
                         'type' => 'image',
                         'minRes' => [500, 350],

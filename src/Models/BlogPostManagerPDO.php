@@ -27,6 +27,8 @@ class BlogPostManagerPDO extends BlogPostManager
 
         $blogPostsList = [];
 
+        //var_dump($result);
+
         foreach ($result as $resultitem) {
             $resultitem['edit_date'] = new DateTime($resultitem['edit_date']);
             $post = new BlogPost($resultitem);
@@ -50,6 +52,45 @@ class BlogPostManagerPDO extends BlogPostManager
         return $blogPostsList;
         //return array(['test']);
     }
+
+    /*
+    public function getByUser(User $user): array
+    {
+        //$sql = 'SELECT id, user_id as userId, title, edit_date as editDate, hero_id as heroId, chapo, content FROM blog_post';
+        $sql = 'SELECT *, bp.id as id, pi.name AS hero_name, pi.url AS hero_url FROM blog_post bp LEFT JOIN post_image pi ON pi.id = bp.hero_id AND pi.blog_post_id = bp.id WHERE bp.user_id = :user_id';
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':user_id', (int) $user->getId(), PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Blog\Entities\BlogPost');
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $stmt->closeCursor();
+
+        $blogPostsList = [];
+
+        foreach ($result as $resultItem) {
+            $resultItem['edit_date'] = new DateTime($resultItem['edit_date']);
+            $post = new BlogPost($resultItem);
+            $post->setUser($user);
+            if ($resultItem['hero_id']) {
+                $hero = new PostImage([
+                    'id' => $resultItem['hero_id'],
+                    'name' => $resultItem['hero_name'],
+                    'url' => $resultItem['hero_url'],
+                    'blog_post_id' => $resultItem['id']
+                ]);
+                $post->setHero($hero);
+            }
+            $blogPostsList[] = $post;
+        }
+
+        //var_dump($blogPostsList);
+
+        return $blogPostsList;
+        //return array(['test']);
+    }
+    */
 
     public function getUnique(int $id)
     {

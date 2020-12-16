@@ -21,8 +21,15 @@
                     <div class="modal-body row form-on-dark">
                         <div class="col-12">
                             <p>Êtes-vous sûr de vouloir <span class="action"></span> <span class="confirm-item-username badge badge-warning"></span> (#<span class="id"></span>) ?</p>
+                            <p class="confirm-notice text-warning"></p>
                         </div>
                         <div class="fields-container col-12">
+                            <div class="form-group delete-messages-switch hidden">
+                                <label for="deleteMessagesSwitch" class="bootstrap-switch-label">Effacer les messages</label>
+                                <input id="deleteMessagesSwitch" type="checkbox" name="delete_messages" class="bootstrap-switch" data-on-color="warning" data-animate="true" />
+                            </div>
+                            <label for="MessageField" class="form-control-label">Message (optionnel)</label>
+                            <textarea rows="5" name="message_field" id="MessageField" class="form-control"></textarea>
                         </div>
                         <input class="id-field" type="hidden" name="id" value=""/>
                         <input class="token-field" type="hidden" name="token" value="{{ csrf_token }}"/>
@@ -95,7 +102,7 @@
                                     {{ user.id }}
                                 </th>
                                 <td>
-                                {% if current_user == user %}
+                                {% if current_user.id == user.id %}
                                         <span class="fa-btn text-success"><span class="fa fa-black-tie fa-4x mx-1"></span></span>
                                 {% else %}
                                     {% if user.role == "ROLE_ADMIN" %}
@@ -117,7 +124,7 @@
                                 <td>
                                     {{ user.email }}
                                 </td>
-                                <td>
+                                <td class="state-cell">
                                 {% if user.banished %}
                                 Banni
                                 {% elseif user.enabled %}
@@ -127,13 +134,16 @@
                                 {% endif %}
                                 </td>
                                 <td>
-                                {% if current_user != user %}
+                                {% if current_user.id != user.id %}
                                     {% if user.banished %}
-                                    <button role="button" class="fa-btn text-danger" href="#" title="Débannir" data-toggle="modal" data-target="#confirmModal" data-action="débannir"><span class="fa fa-lock"></span></button>
-                                    {% elseif user.enabled %}
-                                    <button role="button" class="fa-btn text-success" href="#" title="Bannir" data-toggle="modal" data-target="#confirmModal" data-action="bannir"><span class="fa fa-unlock"></span></button>
+                                    <button role="button" class="fa-btn banish-btn" href="#" title="Débannir" data-toggle="modal" data-target="#confirmModal" data-action="débannir"><span class="fa fa-lock"></span></button>
                                     {% else %}
-                                    <button role="button" class="fa-btn text-gray-dark" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-user-times"></span></button>
+                                    <button role="button" class="fa-btn banish-btn" href="#" title="Bannir" data-toggle="modal" data-target="#confirmModal" data-action="bannir"><span class="fa fa-unlock"></span></button>
+                                    {% endif %}
+                                    {% if user.enabled %}
+                                        <button role="button" class="fa-btn text-danger" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-trash"></span></button>
+                                    {% else %}
+                                        <button role="button" class="fa-btn text-gray-dark" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-user-times"></span></button>
                                     {% endif %}
                                 {% endif %}
                                 </td>

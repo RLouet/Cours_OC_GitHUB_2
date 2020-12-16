@@ -5,6 +5,7 @@ namespace Blog\Entities;
 
 
 use Core\Entity;
+use Core\ObjectCollection;
 use \DateTime;
 
 class User extends Entity
@@ -21,6 +22,7 @@ class User extends Entity
     protected bool $enabled = false;
     protected ?string $newEmail = null;
     protected bool $banished = false;
+    protected ObjectCollection $blogPosts;
 
     const INVALID_USERNAME = 1;
     const INVALID_LASTNAME = 2;
@@ -29,6 +31,12 @@ class User extends Entity
     const INVALID_PASSWORD = 5;
     const INVALID_ROLE = 6;
     const INVALID_NEW_EMAIL = 7;
+
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+        $this->blogPosts = new ObjectCollection();
+    }
 
     public function isValid(): bool
     {
@@ -238,4 +246,21 @@ class User extends Entity
         return false;
     }
 
+    public function addPost(BlogPost $post)
+    {
+        if (!$this->blogPosts->contains($post)) {
+            $this->blogPosts->attach($post);
+        }
+    }
+    public function removePost(BlogPost $post)
+    {
+        if ($this->blogPosts->contains($post)) {
+            $this->blogPosts->detach($post);
+        }
+    }
+
+    public function getPosts(): ObjectCollection
+    {
+        return $this->blogPosts;
+    }
 }

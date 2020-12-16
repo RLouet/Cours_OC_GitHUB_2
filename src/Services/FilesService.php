@@ -108,7 +108,7 @@ class FilesService
     {
         $target = $rules['target'];
         $folder = $rules['folder'];
-        if (!is_dir("uploads/" . $target . $folder)) mkdir("uploads/" . $target . $folder);
+        if (!is_dir("uploads/" . $target . $folder)) mkdir("uploads/" . $target . $folder, 0777, true);
         $destination = "uploads/" . $target . $folder . "/" . $name;
         if (isset($rules['old'])) {
             if (!$this->deleteFile($rules, $rules['old'])){

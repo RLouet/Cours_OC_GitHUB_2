@@ -1,0 +1,4 @@
+<h1>Cher utilisateur,</h1>
+<p>Votre role sur le blog vient d'être modifié. Vous êtes à présent {% if user.role == "ROLE_ADMIN" %}administrateur{% elseif user.role == "ROLE_USER" %}membre{% endif %}.</p>
+{% if message %}<h2 style="font-size: 1.1em;margin-bottom: 0;">Message :</h2><p style="margin-top: .2em;">{{ message|nl2br }}</p>{% endif %}
+<p>Vous pouvez vous connecter en cliquant <a href="{{ path }}/login">ici</a>.</p>

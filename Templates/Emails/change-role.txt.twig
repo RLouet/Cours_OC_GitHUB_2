@@ -1,0 +1,11 @@
+Cher utilisateur,
+
+Votre role sur le blog vient d'être modifié. Vous êtes à présent {% if user.role == "ROLE_ADMIN" %}administrateur{% elseif user.role == "ROLE_USER" %}membre{% endif %}.
+{% if message %}
+
+Message :
+{{ message }}
+{% endif %}
+
+Vous pouvez vous connecter en vous rendant à l'adresse suivante :
+{{ path }}/login
