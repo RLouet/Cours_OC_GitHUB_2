@@ -49,7 +49,8 @@ class Error
 
             error_log($message);
 
-            HTTPResponse::renderTemplate("Errors/$code.html.twig");
+            $httpResponse = new HTTPResponse();
+            $httpResponse->renderTemplate("Errors/$code.html.twig");
         }
     }
 

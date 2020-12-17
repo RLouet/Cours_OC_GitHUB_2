@@ -3,6 +3,7 @@
 
 namespace Blog\Models;
 
+use Blog\Entities\BlogPost;
 use Blog\Entities\User;
 use Core\Token;
 use \PDO;
@@ -11,9 +12,53 @@ use \DateTime;
 
 class UserManagerPDO extends UserManager
 {
-    public function getList(): array
+    public function getList(?string $role = null): array
     {
-        return [];
+        $sql = 'SELECT * FROM user';
+
+        if ($role) {
+            $sql .= ' WHERE role = :role';
+        }
+
+        $stmt = $this->dao->prepare($sql);
+
+        if ($role) {
+            $stmt->bindValue(':role', $role, PDO::PARAM_STR);
+        }
+        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Entities\Blog');
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $stmt->closeCursor();
+        //var_dump($blogData);
+
+
+        $userList = [];
+
+        foreach ($result as $resultItem) {
+            $user = new User($resultItem);
+            $userList[] = $user;
+        }
+
+        return $userList;
+    }
+
+    public function count(?array $roles = null): array
+    {
+        $sql = 'SELECT ';
+        if (!$roles) {
+            $roles = ['ROLE_USER', 'ROLE_ADMIN'];
+        }
+        foreach ($roles as $role) {
+            $sql .= '(SELECT COUNT(*) FROM user WHERE role="' . $role . '") AS "' . $role . '", ' ;
+        }
+        $sql .= '(SELECT COUNT(*) FROM user) AS "all"';
+        //var_dump($sql);
+        $stmt = $this->dao->query($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
+
+        return $result;
     }
 
     public function findById(int $id)
@@ -27,13 +72,48 @@ class UserManagerPDO extends UserManager
         $result = $stmt->fetch();
         $stmt->closeCursor();
 
-        $user = new User($result);
+        if ($result) {
+            $user = new User($result);
+            if ($user->isValid()){
+                return $user;
+            }
+        }
+        return null;
+    }
 
-        if ($user->isValid()){
-            return $user;
+    /*
+    public function getWithPosts(int $id)
+    {
+        $sql = 'SELECT *, user.id as user_id, bp.id as post_id FROM user LEFT JOIN blog_post bp on user.id = bp.user_id WHERE user.id =:id';
+
+        $stmt = $this->dao->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $stmt->closeCursor();
+
+        if ($result) {
+            $i = 0;
+            $user = new User();
+            foreach ($result as $resultItem) {
+                if ($i == 0) {
+                    $user->hydrate($resultItem);
+                    $user->setId($resultItem['user_id']);
+                }
+                $resultItem['edit_date'] = new DateTime($resultItem['edit_date']);
+                $blogPost = new BlogPost($resultItem);
+                $blogPost->setId($resultItem['post_id']);
+                $user->addPost($blogPost);
+                $i++;
+            }
+            if ($user->isValid()){
+                return $user;
+            }
         }
         return false;
     }
+    */
 
     public function findByPasswordToken(string $token)
     {
@@ -88,7 +168,7 @@ class UserManagerPDO extends UserManager
         return $stmt->execute();
     }
 
-    public function findByEmail(string $email)
+    public function findByEmail(string $email): ?User
     {
         $sql = 'SELECT * FROM user WHERE email =:email';
 
@@ -97,7 +177,7 @@ class UserManagerPDO extends UserManager
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->closeCursor();
-        return $result ? new User($result) : false;
+        return $result ? new User($result) : null;
     }
 
     public function mailExists(string $email, ?int $ignoreId = null) {
@@ -132,7 +212,7 @@ class UserManagerPDO extends UserManager
 
     protected function modify(User $user)
     {
-        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, activation_hash = :activation_hash, new_email = :new_email WHERE id=:id';
+        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role, banished=:banished, activation_hash = :activation_hash, new_email = :new_email WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
@@ -141,6 +221,8 @@ class UserManagerPDO extends UserManager
         $stmt->bindValue(':firstname', $user->getFirstname(), PDO::PARAM_STR);
         $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
+        $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
+        $stmt->bindValue(':banished', $user->getBanished(), PDO::PARAM_BOOL);
         $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
         $stmt->bindValue(':new_email', $user->getNewEmail(), PDO::PARAM_STR);
         $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);

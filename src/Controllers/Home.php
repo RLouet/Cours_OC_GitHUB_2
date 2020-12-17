@@ -37,14 +37,14 @@ class Home extends Controller
                     $mailer = new MailService();
                     if ($mailer->sendContactEmail($contactMessage)) {
                         Flash::addMessage('Merci, votre message a bien été envoyé.');
-                        HTTPResponse::redirect('/#');
+                        $this->httpResponse->redirect('/#');
                     }
                 }
                 Flash::addMessage('Des champs du formulaire sont invalides. Merci de les corriger et de recommencer.', Flash::WARNING);
             }
         }
         $csrf = $this->generateCsrfToken();
-        HTTPResponse::renderTemplate('Frontend/index.html.twig', [
+        $this->httpResponse->renderTemplate('Frontend/index.html.twig', [
             'section' => 'home',
             'contact_message' => $contactMessage,
             'posted_data' => $postedData,

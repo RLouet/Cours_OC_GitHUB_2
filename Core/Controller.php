@@ -25,12 +25,19 @@ abstract class Controller
      * http request
      * @var HTTPRequest
      */
-    protected $httpRequest = null;
+    protected HTTPRequest $httpRequest;
+
+    /**
+     * http response
+     * @var HTTPResponse
+     */
+    protected HTTPResponse $httpResponse;
 
 
     public function __construct(array $routeParams, HTTPRequest $request)
     {
        $this->httpRequest = $request;
+       $this->httpResponse = new HTTPResponse();
 
         $this->route_params = $routeParams;
 
@@ -93,7 +100,7 @@ abstract class Controller
     public function requiredLogin(string $role = 'user'): void
     {
         if (!Auth::getUser() || !Auth::getUser()->isGranted($role)) {
-            Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::INFO);
+            Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::WARNING);
             Auth::rememberRequestedPage();
             HTTPResponse::redirect('/login');
         }

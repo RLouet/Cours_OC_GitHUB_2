@@ -9,11 +9,13 @@ use Core\Manager;
 
 abstract class UserManager extends Manager
 {
-    abstract public function getList();
+    abstract public function getList(?string $role = null);
+
+    abstract public function count(?array $roles = null);
 
     abstract public function findById(int $id);
 
-    abstract public function findByEmail(string $email);
+    abstract public function findByEmail(string $email): ?User;
 
     abstract public function findByPasswordToken(string $token);
 

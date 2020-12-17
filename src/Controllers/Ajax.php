@@ -4,13 +4,16 @@
 namespace Blog\Controllers;
 
 
+use Blog\Entities\BlogPost;
 use Blog\Entities\Skill;
 use Blog\Entities\SocialNetwork;
 use Blog\Entities\User;
 use Blog\Services\FilesService;
+use Blog\Services\MailService;
 use Core\Auth;
 use Core\Config;
 use Core\Controller;
+use Core\Flash;
 use Core\HTTPResponse;
 
 class Ajax extends Controller
@@ -360,29 +363,18 @@ class Ajax extends Controller
 
         //var_dump($oldPost->getUser() != $user, $oldPost->getUser(), $user);
 
-        if (!$oldPost || $oldPost->getUser() != $user) {
+        if (!$oldPost || ($oldPost->getUser()->getId() != $user->getId() && $oldPost->getuser()->isGranted('admin') && !$oldPost->getUser()->getBanished())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
             echo json_encode($handle);
             exit();
         }
 
-        $deleteRules = [
-            "target" => "blog",
-            "folder" => "",
-        ];
-        $deleter = new FilesService();
-        $dir = "uploads/blog/" . $oldPost->getId();
-        if (!$deleter->deleteDirectory($dir)) {
+        $postDelete = $this->postDeleter($oldPost);
+        //var_dump($postDelete);
+        if ($postDelete !== 'success') {
             $handle['success'] = false;
-            $handle['errors'][] = 'Error lors de la suppression des fichiers du post.';
-            echo json_encode($handle);
-            exit();
-        }
-
-        if (!$manager->delete($oldPost->getId())) {
-            $handle['success'] = false;
-            $handle['errors'][] = 'Error lors de la suppression du post.';
+            $handle['errors'][] = $postDelete;
             echo json_encode($handle);
             exit();
         }
@@ -419,12 +411,11 @@ class Ajax extends Controller
             $handle['success'] = false;
             $handle['old_error'] = true;
         }
-        if (!$this->httpRequest->postData('new_password') === $this->httpRequest->postData('conf_password')) {
+        if ($this->httpRequest->postData('new_password') !== $this->httpRequest->postData('conf_password')) {
             $handle['success'] = false;
             $handle['conf_error'] = true;
         }
         $user->setPlainPassword($this->httpRequest->postData('new_password'));
-        //$user->setEmail('zd.fr');
         if (!empty($user->getErrors())) {
             $handle['success'] = false;
             foreach ($user->getErrors() as $key => $error) {
@@ -450,5 +441,257 @@ class Ajax extends Controller
         }
         $handle['success'] = false;
         echo json_encode($handle);
+    }
+
+    /**
+     * up user
+     */
+    public function upUserAction()
+    {
+        $this->switchRole('ROLE_ADMIN');
+    }
+
+    /**
+     * down user
+     */
+    public function downUserAction()
+    {
+        $this->switchRole('ROLE_USER');
+    }
+
+    /**
+     * Switch user role
+     */
+    private function switchRole(string $role) {
+        $this->requiredLogin('admin');
+
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Une erreur s\'est produite.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $userManager = $this->managers->getManagerOf('user');
+
+        $user =  $userManager->findById($this->httpRequest->postData('id'));
+
+        if ($user->getId() == Auth::getUser()->getId()) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Vous ne pouvez pas changer votre role.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        if ($handle['success']) {
+            $user->setRole($role);
+            if ($user->isValid()) {
+                $mailer = new MailService();
+                if (!$mailer->sendRoleChangeEmail($user, $this->httpRequest->postData('message_field'))) {
+                    $handle['success'] = false;
+                    $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+                    echo json_encode($handle);
+                    exit();
+                }
+                if ($userManager->save($user)) {
+                    Flash::addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
+                    echo json_encode($handle);
+                    exit();
+                }
+                $handle['errors'][] = 'Error lors de l\'enregistrement.';
+            } else {
+                $handle['errors'][] = 'L\'utilisateur est invalide.';
+            }
+        }
+
+        $handle['success'] = false;
+        echo json_encode($handle);
+    }
+
+    /**
+     * User banish
+     */
+    public function banishUserAction()
+    {
+        $this->switchBanished(true);
+    }
+
+    /**
+     * User unbanish
+     */
+    public function unbanishUserAction()
+    {
+        $this->switchBanished(false);
+    }
+
+    /**
+     * Switch user banished
+     * @param bool $banished
+     */
+
+    private function switchBanished(bool $banished) {
+        $this->requiredLogin('admin');
+
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Une erreur s\'est produite.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $userManager = $this->managers->getManagerOf('user');
+
+        $user =  $userManager->findById($this->httpRequest->postData('id'));
+
+        if ($user->getId() == Auth::getUser()->getId()) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Vous ne pouvez pas changer votre état.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        if ($handle['success']) {
+            $user->setBanished($banished);
+            if ($user->isValid()) {
+                $mailer = new MailService();
+
+                if (!$mailer->sendStatusChangeEmail($user, $this->httpRequest->postData('message_field'))) {
+                    $handle['success'] = false;
+                    $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+                    echo json_encode($handle);
+                    exit();
+                }
+
+                if ($this->httpRequest->postData('delete_messages')) {
+                    $postDelete = $this->postDeleter($user);
+                    //var_dump($postDelete);
+                    if ($postDelete !== 'success') {
+                        $handle['success'] = false;
+                        $handle['errors'][] = $postDelete;
+                        echo json_encode($handle);
+                        exit();
+                    }
+                }
+
+                if ($userManager->save($user)) {
+                    //Flash::addMessage('L\'état de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
+                    echo json_encode($handle);
+                    exit();
+                }
+                $handle['errors'][] = 'Error lors de l\'enregistrement.';
+            } else {
+                $handle['errors'][] = 'L\'utilisateur est invalide.';
+            }
+        }
+
+        $handle['success'] = false;
+        echo json_encode($handle);
+    }
+
+    /**
+     * User delete
+     */
+    public function deleteUserAction()
+    {
+        $this->requiredLogin('admin');
+
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Une erreur s\'est produite.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        $userManager = $this->managers->getManagerOf('user');
+
+        $user =  $userManager->findById($this->httpRequest->postData('id'));
+        //$user =  $userManager->getWithPosts($this->httpRequest->postData('id'));
+
+        if ($user->getId() == Auth::getUser()->getId()) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Vous ne pouvez pas vous supprimer.';
+            echo json_encode($handle);
+            exit();
+        }
+
+        if ($handle['success']) {
+
+            $mailer = new MailService();
+            if (!$mailer->sendUserDeleteEmail($user, $this->httpRequest->postData('message_field'))) {
+                $handle['success'] = false;
+                $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+                echo json_encode($handle);
+                exit();
+            }
+
+            $deleter = new FilesService();
+            if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
+                $handle['success'] = false;
+                $handle['errors'][] = "Erreur lors de la suppression des images";
+                echo json_encode(handle);
+                exit();
+            }
+            if ($userManager->delete($user->getId())) {
+                Flash::addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
+                echo json_encode($handle);
+                exit();
+            }
+            $handle['errors'][] = 'Error lors de la suppression.';
+        }
+        $handle['success'] = false;
+        echo json_encode($handle);
+    }
+
+    private function postDeleter($toDelete)
+    {
+        $classes = [
+            'User' => 'Blog\Entities\User',
+            'BlogPost' => 'Blog\Entities\BlogPost'
+        ];
+        $type = get_class($toDelete);
+        //var_dump($type);
+        if ($type !== $classes['User'] && $type !== $classes['BlogPost']) {
+            return 'Error lors de la suppression.';
+        }
+
+        $deleter = new FilesService();
+        if ($type === $classes['User']) {
+            $dir = "uploads/blog/" . $toDelete->getId();
+        }
+        if ($type === $classes['BlogPost']) {
+            $dir = "uploads/blog/" . $toDelete->getUser()->getId() . '/' . $toDelete->getId();
+        }
+        if (!$deleter->deleteDirectory($dir)) {
+            return 'Error lors de la suppression des images.';
+        }
+
+        $manager = $this->managers->getManagerOf('BlogPost');
+        if ($type === $classes['User']) {
+            if (!$manager->deleteByUser($toDelete->getId())) {
+                return 'Error lors de la suppression des posts.';
+            }
+        }
+        if ($type === $classes['BlogPost']) {
+            if (!$manager->delete($toDelete->getId())) {
+                return 'Error lors de la suppression du post.';
+            }
+        }
+        return 'success';
+
     }
 }

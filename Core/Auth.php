@@ -69,7 +69,12 @@ class Auth
     {
         $userManager = new UserManagerPDO(PDOFactory::getPDOConnexion());
        if (isset($_SESSION['user_id'])) {
-           return $userManager->findById($_SESSION['user_id']);
+           $user = $userManager->findById($_SESSION['user_id']);
+           if ($user->getBanished()) {
+               static::logout();
+               return null;
+           }
+           return $user;
        }
        return static::loginRemembered($userManager);
     }
@@ -84,9 +89,12 @@ class Auth
             $rememberedLogin = static::findByToken($cookie);
             if ($rememberedLogin && !static::hasExpired($rememberedLogin)) {
                 $user = $userManager->findById($rememberedLogin['user_id']);
-                static::login($user, false);
-                return $user;
+                if ($user && !$user->getBanished()) {
+                    static::login($user, false);
+                    return $user;
+                }
             }
+            static::forgetLogin();
         }
         return null;
     }
@@ -105,7 +113,8 @@ class Auth
         $stmt->bindValue(':expires_at', date('Y-m-d H:i:s', $expiryTimestamp), PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            HTTPResponse::setCookie('remember_me', $token, $expiryTimestamp, '/');
+            $httpResponse = new HTTPResponse();
+            $httpResponse->setCookie('remember_me', $token, $expiryTimestamp, '/');
             return true;
         }
         return false;
@@ -123,7 +132,8 @@ class Auth
 
             $stmt->execute();
 
-            HTTPResponse::setCookie('remember_me', '', time() - 36000);
+            $httpResponse = new HTTPResponse();
+            $httpResponse->setCookie('remember_me', '', time() - 36000);
         }
     }
 

@@ -53,7 +53,7 @@ class Config extends Controller
 
         $csrf = $this->generateCsrfToken();
 
-        HTTPResponse::renderTemplate('Backend/config.html.twig', [
+        $this->httpResponse->renderTemplate('Backend/config.html.twig', [
             'section' => 'config',
             'blogForm' => $blogForm,
             'csrf_token' => $csrf

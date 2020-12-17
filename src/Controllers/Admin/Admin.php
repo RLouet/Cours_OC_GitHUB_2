@@ -32,7 +32,7 @@ class Admin extends Controller
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts = $postManager->getList();
 
-        HTTPResponse::renderTemplate('Backend/index.html.twig', [
+        $this->httpResponse->renderTemplate('Backend/index.html.twig', [
             'section' => 'accueil',
             'posts' => $posts,
         ]);

@@ -1,0 +1,169 @@
+{%  extends "Backend/back-base.html.twig" %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+
+{% block body %}
+
+    <div class="modal fade default" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="confirmModalLabel"><span class="action text-capitalize"></span> l'utilisateur</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="col-12 modal-error">
+                    <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                </div>
+                <form method="post">
+                    <div class="modal-body row form-on-dark">
+                        <div class="col-12">
+                            <p>Êtes-vous sûr de vouloir <span class="action"></span> <span class="confirm-item-username badge badge-warning"></span> (#<span class="id"></span>) ?</p>
+                            <p class="confirm-notice text-warning"></p>
+                        </div>
+                        <div class="fields-container col-12">
+                            <div class="form-group delete-messages-switch hidden">
+                                <label for="deleteMessagesSwitch" class="bootstrap-switch-label">Effacer les messages</label>
+                                <input id="deleteMessagesSwitch" type="checkbox" name="delete_messages" class="bootstrap-switch" data-on-color="warning" data-animate="true" />
+                            </div>
+                            <label for="MessageField" class="form-control-label">Message (optionnel)</label>
+                            <textarea rows="5" name="message_field" id="MessageField" class="form-control"></textarea>
+                        </div>
+                        <input class="id-field" type="hidden" name="id" value=""/>
+                        <input class="token-field" type="hidden" name="token" value="{{ csrf_token }}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary confirm-btn text-capitalize"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="section padding-top background-grey-2 over-hide">
+        <div class="grey-fade-over"></div>
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center">
+                        <h3>Utilisateurs</h3>
+                        <div class="main-subtitle-bottom mt-3">
+                            Gérez vos utilisateurs.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block ============================================== -->
+    <div class="section background-grey pb-md-4 over-hide z-bigger-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-auto mx-auto">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link{% if not role %} active{% endif %}" href="{% if not role %}#{% else %}{{ path }}/admin/users{% endif %}">Tous ({{ users_count["all"] }})</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if role == "ROLE_USER" %} active{% endif %}" href="{% if role == "ROLE_USER" %}#{% else %}{{ path }}/admin/users/users{% endif %}">Membres ({{ users_count["ROLE_USER"] }})</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if role == "ROLE_ADMIN" %} active{% endif %}" href="{% if role == "ROLE_ADMIN" %}#{% else %}{{ path }}/admin/users/admins{% endif %}">Administrateurs ({{ users_count["ROLE_ADMIN"] }})</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="table-responsive">
+                    <table class=" users-table table table-clear table-hover table-sm rounded align-middle">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Role</th>
+                            <th>Pseudo</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Etat</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr class="user-item-{{ user.id }}{% if user.banished %} table-danger{% elseif not user.enabled %} table-disabled{% endif %}" data-id="{{ user.id }}" data-username="{{ user.username }}">
+                                <th scope="row">
+                                    {{ user.id }}
+                                </th>
+                                <td>
+                                {% if current_user.id == user.id %}
+                                        <span class="fa-btn text-success"><span class="fa fa-black-tie fa-4x mx-1"></span></span>
+                                {% else %}
+                                    {% if user.role == "ROLE_ADMIN" %}
+                                        <button role="button" class="fa-btn text-success" title="Rétrogader" data-toggle="modal" data-target="#confirmModal" data-action="rétrograder"><span class="fa fa-black-tie"></span></button>
+                                    {% else %}
+                                        <button role="button" class="fa-btn text-info" title="Promouvoir" data-toggle="modal" data-target="#confirmModal" data-action="promouvoir"><span class="fa fa-user"></span></button>
+                                    {% endif %}
+                                {% endif %}
+                                </td>
+                                <td>
+                                    {{ user.username }}
+                                </td>
+                                <td>
+                                    {{ user.lastname }}
+                                </td>
+                                <td>
+                                    {{ user.firstname }}
+                                </td>
+                                <td>
+                                    {{ user.email }}
+                                </td>
+                                <td class="state-cell">
+                                {% if user.banished %}
+                                Banni
+                                {% elseif user.enabled %}
+                                Activé
+                                {% else %}
+                                Non activé
+                                {% endif %}
+                                </td>
+                                <td>
+                                {% if current_user.id != user.id %}
+                                    {% if user.banished %}
+                                    <button role="button" class="fa-btn banish-btn" href="#" title="Débannir" data-toggle="modal" data-target="#confirmModal" data-action="débannir"><span class="fa fa-lock"></span></button>
+                                    {% else %}
+                                    <button role="button" class="fa-btn banish-btn" href="#" title="Bannir" data-toggle="modal" data-target="#confirmModal" data-action="bannir"><span class="fa fa-unlock"></span></button>
+                                    {% endif %}
+                                    {% if user.enabled %}
+                                        <button role="button" class="fa-btn text-danger" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-trash"></span></button>
+                                    {% else %}
+                                        <button role="button" class="fa-btn text-gray-dark" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-user-times"></span></button>
+                                    {% endif %}
+                                {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var path = "{{ path }}";
+    </script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-users.js"></script>
+{% endblock %}

@@ -1,0 +1,11 @@
+<h1>Cher utilisateur,</h1>
+
+{% if user.banished %}
+    <p>Avec regret, nous vous informons que vous avez été bannis du blog. Vous ne pouvez plus vous y connecter.</p>
+{% else %}
+    <p>C'est avec grand plaisir que nous vous informons que votre compte sur le blog a été réactivé. Vous pouvez vous connecter à nouveau.</p>
+{% endif %}
+{% if message %}<h2 style="font-size: 1.1em;margin-bottom: 0;">Message :</h2><p style="margin-top: .2em;">{{ message|nl2br }}</p>{% endif %}
+{% if not user.banished %}
+<p>Vous pouvez vous connecter en cliquant <a href="{{ path }}/login">ici</a>.</p>
+{% endif %}

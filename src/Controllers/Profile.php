@@ -34,7 +34,7 @@ class Profile extends Controller
     {
 
         $csrf = $this->generateCsrfToken();
-        HTTPResponse::renderTemplate('Profile/show.html.twig', [
+        $this->httpResponse->renderTemplate('Profile/show.html.twig', [
             'section' => 'security',
             'csrf_token' => $csrf,
         ]);
@@ -59,7 +59,7 @@ class Profile extends Controller
                     if ($user['new_email']) {
                         Flash::addMessage("Pour confirmer le changement de votre adresse Email, merci de suivre les instructions envoyées à l'adresse " . $user['entity']->getNewEmail(), Flash::WARNING);
                     }
-                    HTTPResponse::redirect('/profile/show');
+                    $this->httpResponse->redirect('/profile/show');
 
                 }
                 foreach ($user['errors'] as $error) {
@@ -69,7 +69,7 @@ class Profile extends Controller
         }
 
         $csrf = $this->generateCsrfToken();
-        HTTPResponse::renderTemplate('Profile/edit.html.twig', [
+        $this->httpResponse->renderTemplate('Profile/edit.html.twig', [
             'section' => 'security',
             'user' => $user,
             'csrf_token' => $csrf

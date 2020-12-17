@@ -16,7 +16,7 @@ class HTTPResponse
         header($header);
     }
 
-    public static function redirect(string $location)
+    public function redirect(string $location)
     {
         header('location: http://' . $_SERVER['HTTP_HOST'] . $location, true, 303);
         exit;
@@ -34,9 +34,9 @@ class HTTPResponse
      * @throws Twig\Error\RuntimeError
      * @throws Twig\Error\SyntaxError
      */
-    public static function renderTemplate (string $template, array $args = [], bool $messages = true)
+    public function renderTemplate (string $template, array $args = [], bool $messages = true)
     {
-        echo static::getTemplate($template, $args, $messages);
+        echo $this->getTemplate($template, $args, $messages);
     }
 
     /**
@@ -48,7 +48,7 @@ class HTTPResponse
      * @throws Twig\Error\RuntimeError
      * @throws Twig\Error\SyntaxError
      */
-    public static function getTemplate (string $template, array $args = [], bool $messages = true)
+    public function getTemplate (string $template, array $args = [], bool $messages = true)
     {
         static $twig = null;
 
@@ -62,7 +62,7 @@ class HTTPResponse
             if ($messages) {
                 $twig->addGlobal('flash_messages', Flash::getMessages());
             }
-            $twig->addGlobal('blog', static::getBlog());
+            $twig->addGlobal('blog', $this->getBlog());
         }
         return $twig->render($template, $args);
     }
@@ -75,7 +75,7 @@ class HTTPResponse
      * @throws Twig\Error\RuntimeError
      * @throws Twig\Error\SyntaxError
      */
-    public static function getMailTemplate (string $template, array $args = [])
+    public function getMailTemplate (string $template, array $args = [])
     {
         static $twig2 = null;
 
@@ -86,18 +86,18 @@ class HTTPResponse
             ]);
             $twig2->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
             $twig2->addGlobal('current_user', Auth::getUser());
-            $twig2->addGlobal('blog', static::getBlog());
+            $twig2->addGlobal('blog', $this->getBlog());
         }
         return $twig2->render($template, $args);
     }
 
 
-    public static function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
-    private static function getBlog()
+    private function getBlog()
     {
         $config = Config::getInstance();
         $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
