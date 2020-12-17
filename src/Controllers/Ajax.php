@@ -365,13 +365,14 @@ class Ajax extends Controller
 
         if (!$oldPost || ($oldPost->getUser()->getId() != $user->getId() && $oldPost->getuser()->isGranted('admin') && !$oldPost->getUser()->getBanished())) {
             $handle['success'] = false;
-            $handle['errors'][] = 'Vous ne pouvez pas supprimer le post d\'un administrateur actif.';
+            $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
             echo json_encode($handle);
             exit();
         }
 
         $postDelete = $this->postDeleter($oldPost);
-        if (!$postDelete === 'success') {
+        //var_dump($postDelete);
+        if ($postDelete !== 'success') {
             $handle['success'] = false;
             $handle['errors'][] = $postDelete;
             echo json_encode($handle);
@@ -562,8 +563,27 @@ class Ajax extends Controller
         if ($handle['success']) {
             $user->setBanished($banished);
             if ($user->isValid()) {
-                $user = $userManager->save($user);
-                if ($user) {
+                $mailer = new MailService();
+
+                if (!$mailer->sendStatusChangeEmail($user, $this->httpRequest->postData('message_field'))) {
+                    $handle['success'] = false;
+                    $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+                    echo json_encode($handle);
+                    exit();
+                }
+
+                if ($this->httpRequest->postData('delete_messages')) {
+                    $postDelete = $this->postDeleter($user);
+                    //var_dump($postDelete);
+                    if ($postDelete !== 'success') {
+                        $handle['success'] = false;
+                        $handle['errors'][] = $postDelete;
+                        echo json_encode($handle);
+                        exit();
+                    }
+                }
+
+                if ($userManager->save($user)) {
                     //Flash::addMessage('L\'état de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
                     echo json_encode($handle);
                     exit();
@@ -599,8 +619,8 @@ class Ajax extends Controller
 
         $userManager = $this->managers->getManagerOf('user');
 
-        //$user =  $userManager->findById($this->httpRequest->postData('id'));
-        $user =  $userManager->getWithPosts($this->httpRequest->postData('id'));
+        $user =  $userManager->findById($this->httpRequest->postData('id'));
+        //$user =  $userManager->getWithPosts($this->httpRequest->postData('id'));
 
         if ($user->getId() == Auth::getUser()->getId()) {
             $handle['success'] = false;
@@ -619,16 +639,6 @@ class Ajax extends Controller
                 echo json_encode(handle);
                 exit();
             }
-
-            /*foreach ($user->getPosts() as $userPost) {
-                $postDelete = $this->postDeleter($userPost);
-                if (!$postDelete === 'success') {
-                    $handle['success'] = false;
-                    $handle['errors'][] = $postDelete;
-                    echo json_encode(handle);
-                    exit();
-                }
-            }*/
             if ($userManager->delete($user->getId())) {
                 Flash::addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
                 echo json_encode($handle);
@@ -640,17 +650,39 @@ class Ajax extends Controller
         echo json_encode($handle);
     }
 
-    private function postDeleter(BlogPost $post)
+    private function postDeleter($toDelete)
     {
+        $classes = [
+            'User' => 'Blog\Entities\User',
+            'BlogPost' => 'Blog\Entities\BlogPost'
+        ];
+        $type = get_class($toDelete);
+        //var_dump($type);
+        if ($type !== $classes['User'] && $type !== $classes['BlogPost']) {
+            return 'Error lors de la suppression.';
+        }
+
         $deleter = new FilesService();
-        $dir = "uploads/blog/" . $post->getUser()->getId() . '/' . $post->getId();
+        if ($type === $classes['User']) {
+            $dir = "uploads/blog/" . $toDelete->getId();
+        }
+        if ($type === $classes['BlogPost']) {
+            $dir = "uploads/blog/" . $toDelete->getUser()->getId() . '/' . $toDelete->getId();
+        }
         if (!$deleter->deleteDirectory($dir)) {
-            return 'Error lors de la suppression des images du post.';
+            return 'Error lors de la suppression des images.';
         }
 
         $manager = $this->managers->getManagerOf('BlogPost');
-        if (!$manager->delete($post->getId())) {
-            return 'Error lors de la suppression du post.';
+        if ($type === $classes['User']) {
+            if (!$manager->deleteByUser($toDelete->getId())) {
+                return 'Error lors de la suppression des posts.';
+            }
+        }
+        if ($type === $classes['BlogPost']) {
+            if (!$manager->delete($toDelete->getId())) {
+                return 'Error lors de la suppression du post.';
+            }
         }
         return 'success';
 

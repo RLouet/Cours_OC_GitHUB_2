@@ -100,7 +100,7 @@ abstract class Controller
     public function requiredLogin(string $role = 'user'): void
     {
         if (!Auth::getUser() || !Auth::getUser()->isGranted($role)) {
-            Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::INFO);
+            Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::WARNING);
             Auth::rememberRequestedPage();
             HTTPResponse::redirect('/login');
         }

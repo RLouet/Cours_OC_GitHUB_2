@@ -198,4 +198,15 @@ class BlogPostManagerPDO extends BlogPostManager
 
         return $stmt->execute();
     }
+
+    public function deleteByUser(int $id)
+    {
+        $sql = 'DELETE FROM blog_post WHERE user_id=:id';
+
+        $stmt = $this->dao->prepare($sql);
+
+        $stmt->bindValue(':id', $id);
+
+        return $stmt->execute();
+    }
 }

@@ -46,6 +46,7 @@ $(document).ready(function() {
 		$('.delete-messages-switch', this).addClass('hidden');
 		$('form', this).removeAttr('action');
 		$('form .confirm-notice', this).html('');
+		$('#MessageField', this).val('');
 	});
 
 	$('form', $confirmModal).submit(function (e) {

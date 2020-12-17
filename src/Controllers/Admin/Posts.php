@@ -93,7 +93,7 @@ class Posts extends Controller
         if (!$blogPost['entity']) {
             throw new \Exception("Le post n'existe pas", 404);
         }
-        if (($blogPost['entity']->getUser()->getRole() == 'ROLE_ADMIN' && !$blogPost['entity']->getUser()->getBanished() ) && ($blogPost['entity']->getUser()->getId() != Auth::getUser()->getId())) {
+        if (($blogPost['entity']->getUser()->getRole() == 'ROLE_ADMIN' && !$blogPost['entity']->getUser()->getBanished()) && ($blogPost['entity']->getUser()->getId() != Auth::getUser()->getId())) {
             //var_dump($blogPost['entity']->getUser(), Auth::getUser());
             //throw new \Exception("Vous n'êtes pas autorisé à éditer ce post.", 401);
             Flash::addMessage("Vous n'êtes pas autorisé à éditer ce post.", Flash::ERROR);
@@ -145,9 +145,7 @@ class Posts extends Controller
 
         if ($blogPost->isValid() && empty($blogPost->getErrors())) {
             $blogPostManager =  $this->managers->getManagerOf('blogPost');
-            if ($blogPost->isNew()) {
-                $blogPost =$blogPostManager->save($blogPost);
-            }
+            $blogPost =$blogPostManager->save($blogPost);
 
             /*
              * Process PostImages

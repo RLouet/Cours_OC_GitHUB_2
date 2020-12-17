@@ -151,4 +151,21 @@ class MailService
 
         return $this->send($user->getEmail(), 'Modification de votre role', $text, $html);
     }
+
+    public function sendStatusChangeEmail(User $user, string $message)
+    {
+
+        $text = $this->httpResponse->getMailTemplate('Emails/change-status.txt.twig', [
+            'user' => $user,
+            'message' => $message
+        ]);
+
+        $html = $this->httpResponse->getMailTemplate('Emails/change-status.html.twig', [
+            'user' => $user,
+            'message' => $message
+        ]);
+
+        $subject = $user->getBanished() ? 'Vous avez été banni du blog' : 'Réactivation de votre compte';
+        return $this->send($user->getEmail(), $subject, $text, $html);
+    }
 }

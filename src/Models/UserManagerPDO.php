@@ -78,7 +78,7 @@ class UserManagerPDO extends UserManager
                 return $user;
             }
         }
-        return false;
+        return null;
     }
 
     /*

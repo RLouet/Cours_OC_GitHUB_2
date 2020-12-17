@@ -19,6 +19,8 @@ abstract class BlogPostManager extends Manager
 
     abstract public function delete(int $id);
 
+    abstract public function deleteByUser(int $id);
+
     public function save(BlogPost $blogPost) {
         if ($blogPost->isValid()) {
             return $blogPost->isNew() ? $this->add($blogPost) : $this->modify($blogPost);
