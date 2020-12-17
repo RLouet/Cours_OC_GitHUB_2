@@ -168,4 +168,20 @@ class MailService
         $subject = $user->getBanished() ? 'Vous avez été banni du blog' : 'Réactivation de votre compte';
         return $this->send($user->getEmail(), $subject, $text, $html);
     }
+
+    public function sendUserDeleteEmail(User $user, string $message)
+    {
+
+        $text = $this->httpResponse->getMailTemplate('Emails/delete-user.txt.twig', [
+            'user' => $user,
+            'message' => $message
+        ]);
+
+        $html = $this->httpResponse->getMailTemplate('Emails/delete-user.html.twig', [
+            'user' => $user,
+            'message' => $message
+        ]);
+
+        return $this->send($user->getEmail(), "Votre compte a été supprimé", $text, $html);
+    }
 }

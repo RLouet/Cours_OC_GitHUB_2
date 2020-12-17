@@ -631,8 +631,15 @@ class Ajax extends Controller
 
         if ($handle['success']) {
 
-            $deleter = new FilesService();
+            $mailer = new MailService();
+            if (!$mailer->sendUserDeleteEmail($user, $this->httpRequest->postData('message_field'))) {
+                $handle['success'] = false;
+                $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+                echo json_encode($handle);
+                exit();
+            }
 
+            $deleter = new FilesService();
             if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
                 $handle['success'] = false;
                 $handle['errors'][] = "Erreur lors de la suppression des images";
