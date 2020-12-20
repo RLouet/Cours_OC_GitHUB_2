@@ -18,10 +18,11 @@
     </div>
 </div>
 
-<div class="section py-2 background-dark-2 over-hide z-bigger-2">
+<div class="section py-2 background-dark-1 over-hide z-bigger-2">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                {% if blog_post.entity.images|length > 0 %}
                 <div id="carouselExampleIndicators-1" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators circle-indicators">
                         {% for image in blog_post.entity.images %}
@@ -46,19 +47,50 @@
                         <i class="funky-ui-icon icon-Arrow-OutRight"></i>
                     </a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<div class="section py-5 background-grey over-hide">
+<div class="section py-3 background-dark-1 over-hide">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-12">
                 <div class="section drop-shadow rounded">
                     <div class="blog-box-1 pt-3 blog-home background-white over-hide">
                         <div class="padding-in">
                             <p class="lead">{{ blog_post.entity.content|nl2br }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="section drop-shadow rounded">
+                    <div class="blog-box-1 pt-3 blog-home background-grey-2 over-hide">
+                        <div class="padding-in">
+                            <h3>Commentaires</h3>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    {% if current_user.isGranted('user') %}
+                                    <textarea class="form-control" placeholder="Votre commentaire" rows="3"></textarea>
+                                    <button class="btn btn-primary mt-2">Ajouter</button>
+                                    {% else %}
+                                        <p>Vous devez être connectés pour poster un commentaire.</p>
+                                        <a href="{{ path }}/login" class="btn btn-primary mt-2">Se connecter</a>
+                                        <a href="{{ path }}/registration" class="btn btn-primary mt-2">S'inscrire</a>
+                                    {% endif %}
+                                </div>
+                                {% for comment in comments %}
+                                    <div class="separator-wrap pt-2 col-12">
+                                        <span class="separator"><span class="separator-line"></span></span>
+                                    </div>
+                                    <div class="author-wrap mt-3">
+                                        <p> Par <span class="text-primary">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
+                                    </div>
+                                    <p>{{ comment.content }}</p>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>

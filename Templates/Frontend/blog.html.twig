@@ -34,9 +34,9 @@
                 {% for post in posts %}
                     <div class="grid-box float-inline quarter with-margin drop-shadow rounded post-item-{{ post.id }}">
                         <div class="blog-box-1 blog-home blog-admin background-white over-hide">
-                            <img src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="" class="blog-home-img"/>
+                            <img src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="" class="blog-home-img"/>
                             <div class="padding-in">
-                                <a href="{{ path }}/admin/posts/{{ post.id }}/view"><h5 class="pt-4 mt-3">{{ post.title }}</h5></a>
+                                <a href="{{ path }}/book/{{ post.id }}/view"><h5 class="pt-4 mt-3">{{ post.title }}</h5></a>
                                 <p class="mt-3">{{ post.chapo|nl2br }}</p>
                                 <a href="{{ path }}/book/{{ post.id }}/view" class="btn-link btn-primary pl-0 mt-4">Lire la suite</a>
                                 <div class="separator-wrap pt-4">

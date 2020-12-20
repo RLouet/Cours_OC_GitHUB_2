@@ -50,11 +50,16 @@ class Book extends Controller
 
         $postManager = $this->managers->getManagerOf('BlogPost');
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
+        $commentManager = $this->managers->getManagerOf('comment');
+        $comments = $commentManager->getByPost($blogPost['entity']);
+
+        //var_dump($comments);
 
         $this->httpResponse->renderTemplate('Frontend/post-view.html.twig', [
             'section' => 'book',
             'blog_post' => $blogPost,
-            'flash' => $flash
+            'comments' => $comments,
+            'flash' => $flash,
         ]);
     }
 }

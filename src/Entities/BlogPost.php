@@ -32,9 +32,9 @@ class BlogPost extends Entity
 
     public function __construct(array $data = [])
     {
-        parent::__construct($data);
         $this->images = new ObjectCollection();
         $this->editDate = new DateTime();
+        parent::__construct($data);
     }
 
     public function isValid()
