@@ -50,7 +50,14 @@ class CommentManagerPDO extends CommentManager
 
     public function getByPost(BlogPost $blogPost)
     {
-        $sql = 'SELECT *, comment.id as id, user.id as user_id FROM comment JOIN user ON user.id = comment.user_id WHERE comment.blog_post_id = :id';
+        $sql = '
+SELECT *, comment.id as id, user.id as user_id 
+FROM comment 
+    JOIN user 
+        ON user.id = comment.user_id 
+WHERE comment.blog_post_id = :id 
+ORDER BY comment.date DESC 
+';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':id', (int) $blogPost->getId(), PDO::PARAM_INT);
@@ -139,7 +146,7 @@ class CommentManagerPDO extends CommentManager
         $stmt->bindValue(':postId', $comment->getBlogPost()->getId());
 
         if ($stmt->execute()) {
-            $blogPost->setId($this->dao->lastInsertId());
+            $comment->setId($this->dao->lastInsertId());
             return $comment;
         }
 

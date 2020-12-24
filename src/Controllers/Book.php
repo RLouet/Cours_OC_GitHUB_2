@@ -4,8 +4,11 @@
 namespace Blog\Controllers;
 
 
+use Blog\Entities\Comment;
+use Core\Auth;
 use Core\Config;
 use Core\Controller;
+use Core\Flash;
 use Core\HTTPResponse;
 
 class Book extends Controller
@@ -43,23 +46,47 @@ class Book extends Controller
      */
     public function viewAction()
     {
-        $flash = [
+        /*$flash = [
             'type' => false,
             'messages' => []
-        ];
+        ];*/
 
         $postManager = $this->managers->getManagerOf('BlogPost');
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
         $commentManager = $this->managers->getManagerOf('comment');
         $comments = $commentManager->getByPost($blogPost['entity']);
 
+        $currentComment = "";
+
+        if ($this->httpRequest->postExists('comment-send')) {
+            $currentComment = $this->httpRequest->postData('content');
+            $comment = new Comment($this->httpRequest->postData());
+            $comment->setUser(Auth::getUser())->setBlogPost($blogPost['entity'])->setValidated(false);
+            if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                if ($comment->isValid()) {
+                    if (!$commentManager->save($comment)) {
+                        Flash::addMessage('Erreur lors de l\'enregisrement de votre commentaire.', Flash::ERROR);
+                    } else {
+                        Flash::addMessage('Votre commentaire est enristré. Il apparaîtra bientôt, après sa validation.', Flash::SUCCESS);
+                        $currentComment = "";
+                    }
+                    //$currentComment = "";
+                } else {
+                    Flash::addMessage('Votre commentaire est invalide.', Flash::WARNING);
+                }
+            }
+        }
+
         //var_dump($comments);
 
+        $csrf = $this->generateCsrfToken();
         $this->httpResponse->renderTemplate('Frontend/post-view.html.twig', [
             'section' => 'book',
             'blog_post' => $blogPost,
             'comments' => $comments,
-            'flash' => $flash,
+            'current_comment' => $currentComment,
+            //'flash' => $flash,
+            'csrf_token' => $csrf
         ]);
     }
 }

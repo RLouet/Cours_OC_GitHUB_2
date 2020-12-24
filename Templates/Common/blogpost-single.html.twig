@@ -73,8 +73,11 @@
                             <div class="row">
                                 <div class="col-12 text-center">
                                     {% if current_user.isGranted('user') %}
-                                    <textarea class="form-control" placeholder="Votre commentaire" rows="3"></textarea>
-                                    <button class="btn btn-primary mt-2">Ajouter</button>
+                                        <form method="post">
+                                            <textarea name="content" class="form-control" placeholder="Votre commentaire" rows="3">{{ current_comment }}</textarea>
+                                            <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
+                                            <button type="submit" name="comment-send" class="btn btn-primary mt-2">Ajouter</button>
+                                        </form>
                                     {% else %}
                                         <p>Vous devez être connectés pour poster un commentaire.</p>
                                         <a href="{{ path }}/login" class="btn btn-primary mt-2">Se connecter</a>
@@ -82,13 +85,23 @@
                                     {% endif %}
                                 </div>
                                 {% for comment in comments %}
-                                    <div class="separator-wrap pt-2 col-12">
-                                        <span class="separator"><span class="separator-line"></span></span>
-                                    </div>
-                                    <div class="author-wrap mt-3">
-                                        <p> Par <span class="text-primary">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
-                                    </div>
-                                    <p>{{ comment.content }}</p>
+                                    {% if comment.validated or current_user.isGranted('admin') %}
+                                        <div class="separator-wrap pt-2">
+                                            <span class="separator col-12"><span class="separator-line"></span></span>
+                                        </div>
+                                        <div class="col-12{% if not comment.validated and current_user.isGranted('admin') %} background-dark color-white rounded-3{% endif %}">
+                                            <div class="author-wrap mt-3">
+                                                <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
+                                            </div>
+                                            <p>{{ comment.content }}</p>
+                                            {% if not comment.validated and current_user.isGranted('admin') %}
+                                                <div class="text-center col-12">
+                                                    <button type="button" class="btn btn-primary btn-sm m-2">Valider</button>
+                                                    <button type="button" class="btn btn-warning btn-sm m-2">Refuser</button>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         </div>

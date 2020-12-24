@@ -23,7 +23,7 @@ class Comment extends Entity
 
     public function  isValid()
     {
-        return !(empty($this->blogPost) || empty($this->date) || empty($this->user) || empty($this->content) || empty($this->validated));
+        return !(empty($this->blogPost) || empty($this->user) || empty($this->content) || !is_bool($this->validated));
     }
 
 
@@ -72,7 +72,7 @@ class Comment extends Entity
 
     public function setValidated(bool $validated): Comment
     {
-        if (empty($validated)) {
+        if (!is_bool($validated)) {
             $this->errors[] = self::INVALID_VALIDATED;
             return $this;
         }
