@@ -58,7 +58,7 @@ class Book extends Controller
 
         $currentComment = "";
 
-        if ($this->httpRequest->postExists('comment-send')) {
+        if ($this->httpRequest->postExists('comment-send') && Auth::getUser()->isGranted('user')) {
             $currentComment = $this->httpRequest->postData('content');
             $comment = new Comment($this->httpRequest->postData());
             $comment->setUser(Auth::getUser())->setBlogPost($blogPost['entity'])->setValidated(false);
