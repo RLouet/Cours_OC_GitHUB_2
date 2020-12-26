@@ -94,10 +94,12 @@
                                                 <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
                                             </div>
                                             <p>{{ comment.content }}</p>
-                                            {% if not comment.validated and current_user.isGranted('admin') %}
+                                            {% if current_user.isGranted('admin') %}
                                                 <div class="text-center col-12">
-                                                    <button type="button" class="btn btn-primary btn-sm m-2">Valider</button>
-                                                    <button type="button" class="btn btn-warning btn-sm m-2">Refuser</button>
+                                                    {% if not comment.validated %}
+                                                        <button type="button" class="btn btn-primary btn-sm m-2">Valider</button>
+                                                    {% endif %}
+                                                    <button type="button" class="btn btn-danger btn-sm m-2">Supprimer</button>
                                                 </div>
                                             {% endif %}
                                         </div>

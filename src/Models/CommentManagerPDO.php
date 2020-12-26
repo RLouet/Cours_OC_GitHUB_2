@@ -16,7 +16,15 @@ class CommentManagerPDO extends CommentManager
 {
     public function getUnique(int $id)
     {
-        $sql = 'SELECT *, comment.id as id, user.id as user_id, bp.id as post_id, comment.content as content, bp.content as post_content, comment.user_id as user_id, bp.user_id as post_user FROM comment JOIN user ON user.id = comment.user_id JOIN blog_post bp on comment.blog_post_id = bp.id WHERE comment.id = :id';
+        $sql = '
+SELECT *, 
+       comment.id as id, 
+       user.id as user_id, 
+       bp.id as post_id, 
+       comment.content as content, 
+       bp.content as post_content, 
+       comment.user_id as user_id, 
+       bp.user_id as post_user FROM comment JOIN user ON user.id = comment.user_id JOIN blog_post bp on comment.blog_post_id = bp.id WHERE comment.id = :id';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
@@ -51,7 +59,7 @@ class CommentManagerPDO extends CommentManager
     public function getByPost(BlogPost $blogPost)
     {
         $sql = '
-SELECT *, comment.id as id, user.id as user_id 
+SELECT comment.*, user.id as user_id , user.username
 FROM comment 
     JOIN user 
         ON user.id = comment.user_id 
@@ -71,13 +79,13 @@ ORDER BY comment.date DESC
         foreach ($result as $resultItem) {
             $resultItem['date'] = new DateTime($resultItem['date']);
             $comment = new Comment($resultItem);
-            $comment->setBlogPost($blogPost);
+            //$comment->setBlogPost($blogPost);
 
             $user = new User($resultItem);
             $user->setId($resultItem['user_id']);
 
             $comment->setUser($user);
-            $comment->setBlogPost($blogPost);
+            //$comment->setBlogPost($blogPost);
             $commentsList[] = $comment;
         }
 
@@ -86,7 +94,21 @@ ORDER BY comment.date DESC
 
     public function getUnvalidated()
     {
-        $sql = 'SELECT *, comment.id as id, user.id as user_id, bp.id as post_id, comment.content as content, bp.content as post_content, bp.user_id as post_user, comment.user_id as user_id FROM comment JOIN user ON user.id = comment.user_id JOIN blog_post bp on comment.blog_post_id = bp.id WHERE comment.validated';
+        $sql = '
+SELECT 
+       comment.*, 
+       user.username 
+           as user_username, 
+       bp.id 
+           as post_id,  
+       bp.title 
+           as post_title
+FROM comment 
+    JOIN user 
+        ON user.id = comment.user_id 
+    JOIN blog_post bp 
+        ON comment.blog_post_id = bp.id 
+WHERE comment.validated = 0';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -97,18 +119,16 @@ ORDER BY comment.date DESC
         $commentsList = [];
 
         foreach ($result as $resultItem) {
-            $result['edit_date'] = new DateTime($result['edit_date']);
             $result['date'] = new DateTime($result['date']);
 
             $comment = new Comment($result);
 
-            $blogPost = new BlogPost($result);
+            $blogPost = new BlogPost();
             $blogPost->setId($result['post_id']);
-            $blogPost->setContent($result['post_content']);
-            $blogPost->setUserId($result['post_user']);
+            $blogPost->setTitle($result['post_title']);
 
-            $user = new User($result);
-            $user->setId($result['user_id']);
+            $user = new User();
+            $user->setUsername($result['user_username']);
 
             $comment->setUser($user);
             $comment->setBlogPost($blogPost);
@@ -137,13 +157,14 @@ ORDER BY comment.date DESC
 
     protected function add(Comment $comment)
     {
-        $sql = 'INSERT INTO comment SET user_id=:userId, content=:content, blog_post_id=:postId';
+        $sql = 'INSERT INTO comment SET user_id=:userId, content=:content, blog_post_id=:postId, validated=:validated';
 
         $stmt = $this->dao->prepare($sql);
 
         $stmt->bindValue(':content', $comment->getContent());
         $stmt->bindValue(':userId', $comment->getUser()->getId());
         $stmt->bindValue(':postId', $comment->getBlogPost()->getId());
+        $stmt->bindValue(':validated', $comment->getValidated(), PDO::PARAM_BOOL);
 
         if ($stmt->execute()) {
             $comment->setId($this->dao->lastInsertId());

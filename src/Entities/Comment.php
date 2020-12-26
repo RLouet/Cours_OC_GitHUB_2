@@ -52,7 +52,7 @@ class Comment extends Entity
 
     public function setUser(User $user): Comment
     {
-        if (empty($user) || !$user->isValid()) {
+        if (empty($user)) {
             $this->errors[] = self::INVALID_USER;
             return $this;
         }
@@ -105,6 +105,6 @@ class Comment extends Entity
 
     public function getValidated(): bool
     {
-        return $this->validated;
+        return (bool) $this->validated;
     }
 }

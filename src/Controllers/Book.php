@@ -54,20 +54,23 @@ class Book extends Controller
         $postManager = $this->managers->getManagerOf('BlogPost');
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
         $commentManager = $this->managers->getManagerOf('comment');
-        $comments = $commentManager->getByPost($blogPost['entity']);
 
         $currentComment = "";
 
         if ($this->httpRequest->postExists('comment-send') && Auth::getUser()->isGranted('user')) {
             $currentComment = $this->httpRequest->postData('content');
             $comment = new Comment($this->httpRequest->postData());
-            $comment->setUser(Auth::getUser())->setBlogPost($blogPost['entity'])->setValidated(false);
+            $comment->setUser(Auth::getUser())->setBlogPost($blogPost['entity'])->setValidated(Auth::getUser()->isGranted('admin'));
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 if ($comment->isValid()) {
                     if (!$commentManager->save($comment)) {
                         Flash::addMessage('Erreur lors de l\'enregisrement de votre commentaire.', Flash::ERROR);
                     } else {
-                        Flash::addMessage('Votre commentaire est enristré. Il apparaîtra bientôt, après sa validation.', Flash::SUCCESS);
+                        $message = 'Votre commentaire est enregistré.';
+                        if (!Auth::getUser()->isGranted('admin')) {
+                            $message .= ' Il apparaîtra bientôt, après sa validation.';
+                        }
+                        Flash::addMessage( $message, Flash::SUCCESS);
                         $currentComment = "";
                     }
                     //$currentComment = "";
@@ -77,7 +80,7 @@ class Book extends Controller
             }
         }
 
-        //var_dump($comments);
+        $comments = $commentManager->getByPost($blogPost['entity']);
 
         $csrf = $this->generateCsrfToken();
         $this->httpResponse->renderTemplate('Frontend/post-view.html.twig', [
