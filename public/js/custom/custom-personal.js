@@ -114,7 +114,7 @@
 					//setTypedElements(data) ;
 				},
 				error: function () {
-					alert('error');
+					alert('Typed error');
 				}
 			})
 		}

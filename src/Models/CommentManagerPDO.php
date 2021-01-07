@@ -24,7 +24,13 @@ SELECT *,
        comment.content as content, 
        bp.content as post_content, 
        comment.user_id as user_id, 
-       bp.user_id as post_user FROM comment JOIN user ON user.id = comment.user_id JOIN blog_post bp on comment.blog_post_id = bp.id WHERE comment.id = :id';
+       bp.user_id as post_user 
+FROM comment 
+    JOIN user 
+        ON user.id = comment.user_id 
+    JOIN blog_post bp 
+        ON comment.blog_post_id = bp.id 
+WHERE comment.id = :id';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
@@ -119,16 +125,16 @@ WHERE comment.validated = 0';
         $commentsList = [];
 
         foreach ($result as $resultItem) {
-            $result['date'] = new DateTime($result['date']);
+            $resultItem['date'] = new DateTime($resultItem['date']);
 
-            $comment = new Comment($result);
+            $comment = new Comment($resultItem);
 
             $blogPost = new BlogPost();
-            $blogPost->setId($result['post_id']);
-            $blogPost->setTitle($result['post_title']);
+            $blogPost->setId($resultItem['post_id']);
+            $blogPost->setTitle($resultItem['post_title']);
 
             $user = new User();
-            $user->setUsername($result['user_username']);
+            $user->setUsername($resultItem['user_username']);
 
             $comment->setUser($user);
             $comment->setBlogPost($blogPost);
@@ -146,7 +152,7 @@ WHERE comment.validated = 0';
         $stmt = $this->dao->prepare($sql);
 
         $stmt->bindValue(':content', $comment->getContent());
-        $stmt->bindValue(':validated', $comment->getValidated());
+        $stmt->bindValue(':validated', $comment->getValidated(), PDO::PARAM_BOOL);
         $stmt->bindValue(':id', $comment->getId());
 
         if ($stmt->execute()) {

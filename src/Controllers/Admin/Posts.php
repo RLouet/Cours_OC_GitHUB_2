@@ -61,7 +61,7 @@ class Posts extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 if ($comment->isValid()) {
                     if (!$commentManager->save($comment)) {
-                        Flash::addMessage('Erreur lors de l\'enregisrement de votre commentaire.', Flash::ERROR);
+                        Flash::addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
                     } else {
                         $message = 'Votre commentaire est enregistré.';
                         if (!Auth::getUser()->isGranted('admin')) {
@@ -80,6 +80,7 @@ class Posts extends Controller
         $comments = $commentManager->getByPost($blogPost['entity']);
 
         $csrf = $this->generateCsrfToken();
+
         $this->httpResponse->renderTemplate('Backend/posts-view.html.twig', [
             'section' => 'posts',
             'blog_post' => $blogPost,

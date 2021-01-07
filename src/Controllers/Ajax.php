@@ -657,6 +657,62 @@ class Ajax extends Controller
         echo json_encode($handle);
     }
 
+    /**
+     * Moderate comment
+     */
+    public function moderateCommentAction()
+    {
+        $handle = [
+            'success' => true,
+            'errors' => [],
+        ];
+
+
+        /*$handle['success'] = false;
+        $handle['errors'][] = (empty($_SESSION['csrf_token']) || $_SESSION['csrf_token'] !== $this->httpRequest->postData('token'));
+        echo json_encode($handle);
+        exit();*/
+
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $handle['success'] = false;
+            $handle['errors'][] = 'Une erreur s\'est produite (0).' . $this->httpRequest->postData('token') . '////' . $_SESSION['csrf_token'];
+            echo json_encode($handle);
+            exit();
+        }
+        $commentManager = $this->managers->getManagerOf('Comment');
+        $comment = $commentManager->getUnique($this->httpRequest->postData('id'));
+
+        $this->requiredLogin('user');
+
+
+        if ($this->httpRequest->postData('action') === "valider") {
+            if (Auth::getUser()->isGranted('admin')) {
+                $comment->setValidated(true);
+                if ($commentManager->save($comment)) {
+                    $handle['comment'] = $comment->getId();
+                    echo json_encode($handle);
+                    exit();
+                }
+
+            }
+        }
+
+        if ($this->httpRequest->postData('action') === "supprimer") {
+            if (Auth::getUser()->isGranted('admin') || Auth::getUser()->getId() == $comment->getUser()->getId()) {
+                if ($commentManager->delete($comment->getId())) {
+                    $handle['comment'] = $comment->getId();
+                    echo json_encode($handle);
+                    exit();
+                }
+
+            }
+        }
+
+        $handle['success'] = false;
+        $handle['errors'][] = 'Une erreur s\'est produite (1).';
+        echo json_encode($handle);
+    }
+
     private function postDeleter($toDelete)
     {
         $classes = [

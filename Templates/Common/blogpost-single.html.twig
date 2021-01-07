@@ -1,6 +1,30 @@
-
-<!-- Hero Slider Block
+<!-- Comments modal
 ================================================== -->
+<div class="modal fade default" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-white" id="confirmModalLabel"><spam class="modal-action text-capitalize">Supprimer</spam> le commentaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="col-12 delete-error">
+                <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+            </div>
+            <div class="modal-body row form-on-dark">
+                <div class="col-12">
+                    <p>Êtes-vous sûr de vouloir <spam class="modal-action">Supprimer</spam> le commentaire ?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary confirm-btn modal-action text-capitalize" data-token="{{ csrf_token }}">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="section padding-top padding-bottom-1st over-hide">
     <div class="parallax" style="background-image: url('{{ path }}/uploads/blog/{{ blog_post.entity.id }}/{{ blog_post.entity.hero.url }}')"></div>
@@ -66,7 +90,7 @@
                 </div>
             </div>
             <div class="col-12 mt-3">
-                <div class="section drop-shadow rounded">
+                <div class="section drop-shadow rounded" id="CommentsContainer">
                     <div class="blog-box-1 pt-3 blog-home background-grey-2 over-hide">
                         <div class="padding-in">
                             <h3>Commentaires</h3>
@@ -74,7 +98,7 @@
                                 <div class="col-12 text-center">
                                     {% if current_user.isGranted('user') %}
                                         <form method="post">
-                                            <textarea name="content" class="form-control" placeholder="Votre commentaire" rows="3">{{ current_comment }}</textarea>
+                                            <textarea name="content" class="form-control" placeholder="Votre commentaire" rows="3" required>{{ current_comment }}</textarea>
                                             <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                                             <button type="submit" name="comment-send" class="btn btn-primary mt-2">Ajouter</button>
                                         </form>
@@ -85,23 +109,26 @@
                                     {% endif %}
                                 </div>
                                 {% for comment in comments %}
-                                    {% if comment.validated or current_user.isGranted('admin') %}
-                                        <div class="separator-wrap pt-2">
-                                            <span class="separator col-12"><span class="separator-line"></span></span>
-                                        </div>
-                                        <div class="col-12{% if not comment.validated and current_user.isGranted('admin') %} background-dark color-white rounded-3{% endif %}">
-                                            <div class="author-wrap mt-3">
-                                                <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
+                                    {% if comment.validated or current_user.isGranted('admin') or current_user.id == comment.user.id %}
+                                        <div class="comment-item-{{ comment.id }} col-12">
+                                            <div class="separator-wrap pt-2">
+                                                <span class="separator col-12"><span class="separator-line"></span></span>
                                             </div>
-                                            <p>{{ comment.content }}</p>
-                                            {% if current_user.isGranted('admin') %}
-                                                <div class="text-center col-12">
-                                                    {% if not comment.validated %}
-                                                        <button type="button" class="btn btn-primary btn-sm m-2">Valider</button>
-                                                    {% endif %}
-                                                    <button type="button" class="btn btn-danger btn-sm m-2">Supprimer</button>
+                                            <div class="col-12 pt-1{% if not comment.validated %} background-dark color-white rounded-3{% endif %}">
+                                                {% if not comment.validated %}<div class="text-center waiting-validation"><span class="badge badge-pill badge-warning">En attente de validation</span></div>{% endif %}
+                                                <div class="author-wrap mt-1">
+                                                    <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
                                                 </div>
-                                            {% endif %}
+                                                <p>{{ comment.content|nl2br }}</p>
+                                                {% if current_user.isGranted('admin') or current_user.id == comment.user.id %}
+                                                    <div class="text-center col-12">
+                                                        {% if not comment.validated and current_user.isGranted('admin') %}
+                                                            <button type="button" class="btn btn-primary btn-sm m-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }} data-action="valider">Valider</button>
+                                                        {% endif %}
+                                                        <button type="button" class="btn btn-danger btn-sm m-2" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }}>Supprimer</button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     {% endif %}
                                 {% endfor %}

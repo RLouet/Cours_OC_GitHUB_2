@@ -31,7 +31,7 @@ class Comment extends Entity
 
     public function setBlogPost(BlogPost $blogPost): Comment
     {
-        if (empty($blogPost) || !$blogPost->isValid()) {
+        if (empty($blogPost)) {
             $this->errors[] = self::INVALID_BLOGPOST;
             return $this;
         }
@@ -62,7 +62,7 @@ class Comment extends Entity
 
     public function setContent(string $content): Comment
     {
-        if (empty($content) || !preg_match('/^.{5,255}$/i', $content)) {
+        if (empty($content) || !preg_match('/^.{5,255}$/im', $content)) {
             $this->errors[] = self::INVALID_CONTENT;
             return $this;
         }
