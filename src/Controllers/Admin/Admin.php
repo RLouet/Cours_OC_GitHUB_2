@@ -34,10 +34,13 @@ class Admin extends Controller
         $commentManager = $this->managers->getManagerOf('Comment');
         $comments = $commentManager->getUnvalidated();
 
+        $csrf = $this->generateCsrfToken();
+
         $this->httpResponse->renderTemplate('Backend/index.html.twig', [
             'section' => 'accueil',
             'posts' => $posts,
             'comments' => $comments,
+            'csrf_token' => $csrf
         ]);
     }
 }
