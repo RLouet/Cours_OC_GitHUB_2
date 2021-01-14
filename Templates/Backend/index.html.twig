@@ -1,6 +1,6 @@
 {%  extends "Backend/back-base.html.twig" %}
 
-{% block title %}Config{% endblock %}
+{% block title %}Commentaires{% endblock %}
 
 
 {% block body %}
@@ -31,8 +31,10 @@
         </div>
     </div>
 
+
+    {#
     <!-- Post delete modal
-================================================== -->
+    ================================================== -->
     <div class="modal fade default" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -57,6 +59,7 @@
             </div>
         </div>
     </div>
+    #}
 
 
     <div class="section padding-top over-hide">
@@ -102,6 +105,9 @@
                             </div>
                     {% endfor %}
 
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <button type="button" class="btn btn-primary btn-sm">Voir plus</button>
                 </div>
             </div>
         </div>
@@ -154,6 +160,5 @@
     <script>
         var path = "{{ path }}";
     </script>
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-posts.js"></script>
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-post-view.js"></script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-comments.js"></script>
 {% endblock %}

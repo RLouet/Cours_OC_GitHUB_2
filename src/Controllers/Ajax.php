@@ -750,4 +750,15 @@ class Ajax extends Controller
         return 'success';
 
     }
+
+    /**
+     * Load more comments
+     */
+    public function loadUnvalidatedComments() {
+
+        $commentManager = $this->managers->getManagerOf('Comment');
+        $comments = $commentManager->getUnvalidated($this->httpRequest->postData('offset'));
+
+        echo json_encode($comments);
+    }
 }

@@ -98,7 +98,7 @@ ORDER BY comment.date DESC
         return $commentsList;
     }
 
-    public function getUnvalidated()
+    public function getUnvalidated(int $offset = 0)
     {
         $sql = '
 SELECT 
@@ -114,10 +114,13 @@ FROM comment
         ON user.id = comment.user_id 
     JOIN blog_post bp 
         ON comment.blog_post_id = bp.id 
-WHERE comment.validated = 0';
+WHERE comment.validated = 0
+LIMIT 12
+OFFSET 0';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->bindValue(':offset', $offset);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $stmt->closeCursor();

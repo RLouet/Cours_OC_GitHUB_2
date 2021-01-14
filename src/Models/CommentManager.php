@@ -14,7 +14,7 @@ abstract class CommentManager extends Manager
 
     abstract public function getByPost(BlogPost $blogPost);
 
-    abstract public function getUnvalidated();
+    abstract public function getUnvalidated(int $offset = 0);
 
     abstract protected function add(Comment $comment);
 
