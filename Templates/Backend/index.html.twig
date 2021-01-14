@@ -1,15 +1,73 @@
 {%  extends "Backend/back-base.html.twig" %}
 
-{% block title %}Config{% endblock %}
+{% block title %}Commentaires{% endblock %}
 
 
 {% block body %}
-    <div class="section padding-top background-grey-2 over-hide">
-        <div class="grey-fade-over"></div>
+    <!-- Comments modal
+================================================== -->
+    <div class="modal fade default" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="confirmModalLabel"><spam class="modal-action text-capitalize">Supprimer</spam> le commentaire</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="col-12 delete-error">
+                    <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                </div>
+                <div class="modal-body row form-on-dark">
+                    <div class="col-12">
+                        <p>Êtes-vous sûr de vouloir <spam class="modal-action">Supprimer</spam> le commentaire ?</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary confirm-btn modal-action text-capitalize" data-token="{{ csrf_token }}">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {#
+    <!-- Post delete modal
+    ================================================== -->
+    <div class="modal fade default" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="deleteModalLabel">Supprimer le post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="col-12 delete-error">
+                    <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
+                </div>
+                <div class="modal-body row form-on-dark">
+                    <div class="col-12">
+                        <p>Êtes-vous sûr de vouloir supprimer le post <span class="delete-item-name badge badge-warning"></span> ?</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary delete-btn" data-token="{{ csrf_token }}">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    #}
+
+
+    <div class="section padding-top over-hide">
+        <div class="dark-fade-over"></div>
         <div class="container parallax-fade-top">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="main-title text-center">
+                    <div class="main-title text-center on-dark">
                         <h3>Administration</h3>
                         <div class="main-subtitle-bottom mt-3">
                             Gérez votre Blog.
@@ -21,35 +79,41 @@
         </div>
     </div>
 
-    <form class="configform">
         <!-- Block ============================================== -->
-        <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2">
+        <div class="section pt-4 background-dark-1 pb-2 over-hide z-bigger-2">
             <h4 class="text-center dark-1-title">Commentaires à modérer</h4>
-            <div class="container form-on-dark pt-3">
-                <div class="row justify-content-around">
-                    <div class="col-md-4">
-                        Commentaire 1
-                    </div>
-                    <div class="col-md-4">
-                        Commentaire 2
-                    </div>
-                    <div class="col-md-4">
-                        Commentaire 3
-                    </div>
-                    <div class="col-md-4">
-                        Commentaire 4
-                    </div>
-                    <div class="col-md-4">
-                        Commentaire 5
-                    </div>
-                    <div class="col-md-4">
-                        Commentaire 6
-                    </div>
+            <div class="container-fluid form-on-dark pt-3">
+                <div class="row justify-content-around align-items-center">
+                    {% for comment in comments %}
+                            <div class="comment-item-{{ comment.id }} col-md-4 my-2">
+                                <div class="col-12 background-white rounded-3 p-2 blog-box-1">
+                                    <a href="{{ path }}/admin/posts/{{ comment.blogPost.id }}/view" class="btn-primary"><h5>{{ comment.blogPost.title }} (#{{ comment.blogPost.id }})</h5></a>
+                                    <a href="{{ path }}/admin/posts/{{ comment.blogPost.id }}/view" class="btn-link btn-primary pl-0 mt-4">Voir le post</a>
+                                    <div class="separator-wrap pt-3">
+                                        <span class="separator"><span class="separator-line"></span></span>
+                                    </div>
+                                    <p></p>
+                                    <div class="author-wrap mt-1">
+                                        <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
+                                    </div>
+                                    <p>{{ comment.content|nl2br }}</p>
+                                    <div class="text-center col-12">
+                                        <button type="button" class="btn btn-primary btn-sm mx-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }} data-action="valider">Valider</button>
+                                        <button type="button" class="btn btn-danger btn-sm mx-2" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }}>Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                    {% endfor %}
 
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <button type="button" class="btn btn-primary btn-sm">Voir plus</button>
                 </div>
             </div>
         </div>
 
+
+    {#
         <!-- Block ============================================== -->
         <div class="section pt-4 background-grey pb-4 over-hide z-bigger-2">
             <h4 class="text-center">Vos derniers posts</h4>
@@ -62,10 +126,10 @@
                             <div class="blog-box-1 blog-home blog-admin background-white over-hide">
                                 <img src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="" class="blog-home-img"/>
                                 <div class="padding-in">
-                                    <a href="{{ path }}/admin/posts/{{ post.id }}/view"><h5 class="pt-4 mt-3">{{ post.title }}</h5></a>
+                                    <a href="{{ path }}/admin/posts/{{ post.id }}/view"><h5 class="mt-3">{{ post.title }}</h5></a>
                                     <p class="mt-3">{{ post.chapo|nl2br }}</p>
                                     <a href="{{ path }}/admin/posts/{{ post.id }}/view" class="btn-link btn-primary pl-0 mt-4">Lire la suite</a>
-                                    <div class="separator-wrap pt-4">
+                                    <div class="separator-wrap pt-3">
                                         <span class="separator"><span class="separator-line"></span></span>
                                     </div>
                                     <div class="author-wrap mt-3">
@@ -86,7 +150,15 @@
             </div>
         </div>
 
-    </form>
+    #}
 
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var path = "{{ path }}";
+    </script>
+    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-comments.js"></script>
 {% endblock %}

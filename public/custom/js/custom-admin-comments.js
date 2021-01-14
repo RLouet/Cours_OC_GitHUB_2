@@ -1,12 +1,5 @@
 $(document).ready(function() {
 
-    // Activate Carousel
-
-    $('.carousel').carousel({
-        interval: 5000
-    });
-
-
     // Confirm Modal
 
     let $confirmModal = $('#confirmModal');
@@ -47,15 +40,11 @@ $(document).ready(function() {
                     $('.delete-error .form-error', $confirmModal).removeClass('hidden');
                 } else {
                     let $itemBox = $('.comment-item-' + data.comment);
+                    $itemBox.remove();
                     if (action == "supprimer") {
-                        $itemBox.remove();
                         showFlashMessage('success', 'Le commentaire a bien été supprimé.')
                     }
                     if (action == "valider") {
-                        $("div", $itemBox).removeClass('background-dark');
-                        $("div", $itemBox).removeClass('color-white rounded-3');
-                        $(".waiting-validation",$itemBox).remove();
-                        $(".validate-btn",$itemBox).remove();
                         showFlashMessage('success', 'Le commentaire a bien été validé.')
                     }
                     $confirmModal.modal('hide');
@@ -71,5 +60,7 @@ $(document).ready(function() {
     $confirmModal.on('hide.bs.modal', function(event) {
         $('.form-error', $(this)).addClass('hidden');
     });
+
+
 
 });

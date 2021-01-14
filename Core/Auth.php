@@ -70,7 +70,7 @@ class Auth
         $userManager = new UserManagerPDO(PDOFactory::getPDOConnexion());
        if (isset($_SESSION['user_id'])) {
            $user = $userManager->findById($_SESSION['user_id']);
-           if ($user->getBanished()) {
+           if ($user && $user->getBanished()) {
                static::logout();
                return null;
            }
