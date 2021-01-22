@@ -13,10 +13,12 @@ trait CsrfTokenManager
         return $token;
     }
 
-    public function isCsrfTokenValid(?string $token): bool
+    public function isCsrfTokenValid(?string $token, bool $flash = true): bool
     {
         if (empty($_SESSION['csrf_token']) || $_SESSION['csrf_token'] !== $token) {
-            Flash::addMessage('Erreur lors de la vérification du formulaire.', Flash::WARNING);
+            if ($flash) {
+                Flash::addMessage('Erreur lors de la vérification du formulaire.', Flash::WARNING);
+            }
             return false;
         }
 

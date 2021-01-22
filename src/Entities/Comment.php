@@ -6,11 +6,12 @@ namespace Blog\Entities;
 
 use Core\Entity;
 use \DateTime;
+use JsonSerializable;
 
-class Comment extends Entity
+class Comment extends Entity implements JsonSerializable
 {
     protected BlogPost $blogPost;
-    protected \DateTime $date;
+    protected DateTime $date;
     protected User $user;
     protected string $content;
     protected bool $validated = false;
@@ -26,6 +27,17 @@ class Comment extends Entity
         return !(empty($this->blogPost) || empty($this->user) || empty($this->content) || !is_bool($this->validated));
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'username' => $this->getUser()->getUsername(),
+            'date' => $this->getDate()->format('d/m/Y à H:i:s'),
+            'content' => nl2br($this->getContent()),
+            'postId' => $this->getBlogPost()->getId(),
+            'postTitle' => $this->getBlogPost()->getTitle()
+        ];
+    }
 
     // SETTERS //
 

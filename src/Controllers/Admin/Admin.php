@@ -29,8 +29,8 @@ class Admin extends Controller
      */
     public function indexAction()
     {
-        $postManager = $this->managers->getManagerOf('BlogPost');
-        $posts = $postManager->getList();
+        /*$postManager = $this->managers->getManagerOf('BlogPost');
+        $posts = $postManager->getList();*/
         $commentManager = $this->managers->getManagerOf('Comment');
         $comments = $commentManager->getUnvalidated();
 
@@ -38,7 +38,7 @@ class Admin extends Controller
 
         $this->httpResponse->renderTemplate('Backend/index.html.twig', [
             'section' => 'accueil',
-            'posts' => $posts,
+            //'posts' => $posts,
             'comments' => $comments,
             'csrf_token' => $csrf
         ]);

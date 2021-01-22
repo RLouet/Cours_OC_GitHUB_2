@@ -13,4 +13,5 @@
     <define var="mailer_password" value="mdp" />
     <define var="mailer_from_mail" value="contact@romsworld.net" />
     <define var="mailer_from_name" value="Romain LOUET" />
+    <define var="pagination" value="12" />
 </definitions>

@@ -41,7 +41,7 @@ $(document).ready(function() {
 					for (var k in data.errors) {
 						errorMessage += '<li>' + data.errors[k] + '</li>';
 					}
-					errorMessage += '</li';
+					errorMessage += '</ul>';
 					$('.delete-error .form-error span', $deleteModal).html(errorMessage);
 					$('.delete-error .form-error', $deleteModal).removeClass('hidden');
 				} else {

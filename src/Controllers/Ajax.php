@@ -301,8 +301,6 @@ class Ajax extends Controller
 
         $handle['entity'] = $skill;
 
-         //var_dump($skill);
-
         echo json_encode($handle);
     }
 
@@ -470,9 +468,9 @@ class Ajax extends Controller
             'errors' => [],
         ];
 
-        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
-            $handle['errors'][] = 'Une erreur s\'est produite.';
+            $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             echo json_encode($handle);
             exit();
         }
@@ -542,9 +540,9 @@ class Ajax extends Controller
             'errors' => [],
         ];
 
-        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
-            $handle['errors'][] = 'Une erreur s\'est produite.';
+            $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             echo json_encode($handle);
             exit();
         }
@@ -610,9 +608,9 @@ class Ajax extends Controller
             'errors' => [],
         ];
 
-        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
-            $handle['errors'][] = 'Une erreur s\'est produite.';
+            $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             echo json_encode($handle);
             exit();
         }
@@ -673,9 +671,9 @@ class Ajax extends Controller
         echo json_encode($handle);
         exit();*/
 
-        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
-            $handle['errors'][] = 'Une erreur s\'est produite (0).' . $this->httpRequest->postData('token') . '////' . $_SESSION['csrf_token'];
+            $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             echo json_encode($handle);
             exit();
         }
@@ -752,7 +750,7 @@ class Ajax extends Controller
     }
 
     /**
-     * Load more comments
+     * Load more unvalidated comments
      */
     public function loadUnvalidatedComments() {
 

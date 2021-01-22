@@ -42,7 +42,7 @@ $(document).ready(function() {
                     for (var k in data.errors) {
                         errorMessage += '<li>' + data.errors[k] + '</li>';
                     }
-                    errorMessage += '</li';
+                    errorMessage += '</ul>';
                     $('.delete-error .form-error span', $confirmModal).html(errorMessage);
                     $('.delete-error .form-error', $confirmModal).removeClass('hidden');
                 } else {

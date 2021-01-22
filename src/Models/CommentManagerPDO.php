@@ -14,6 +14,7 @@ use \DateTime;
 
 class CommentManagerPDO extends CommentManager
 {
+
     public function getUnique(int $id)
     {
         $sql = '
@@ -115,12 +116,14 @@ FROM comment
     JOIN blog_post bp 
         ON comment.blog_post_id = bp.id 
 WHERE comment.validated = 0
-LIMIT 12
-OFFSET 0';
+ORDER BY comment.date ASC
+LIMIT :limit 
+OFFSET :offset';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->bindValue(':offset', $offset);
+        $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int) $this->config->get('pagination'), PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $stmt->closeCursor();
