@@ -72,4 +72,60 @@ $(document).ready(function() {
         $('.form-error', $(this)).addClass('hidden');
     });
 
+
+    // --------------- Pagination ---------------
+    $('#ViewMore').click(function () {
+        let offset = $('.comment-item').length;
+        let postId = $(this).data('post');
+        let user = $(this).data('user');
+        //alert(offset);
+        $.ajax({
+            url: window.location.origin + '/ajax/loadPostComments',
+            method: "POST",
+            data: {
+                'offset': offset,
+                'post_id': postId,
+            },
+            dataType: "json",
+            success: function (data) {
+                for (let k in data) {
+                    let comment = data[k];
+                    //alert(comment.id)
+                    let notValidatedClass = "";
+                    let notValidatedBadge = "";
+                    let commentManagementButtons = "";
+                    if (!comment.validated) {
+                        notValidatedClass = " background-dark color-white rounded-3";
+                        notValidatedBadge = '<div class="text-center waiting-validation"><span class="badge badge-pill badge-warning">En attente de validation</span></div>\n';
+                    }
+                    if (user === 'admin' || user === comment.userId) {
+                        commentManagementButtons = '<div class="text-center col-12">\n';
+                        if (user === 'admin' && !comment.validated) {
+                            commentManagementButtons += '<button type="button" class="btn btn-primary btn-sm m-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id=' + comment.id + ' data-action="valider">Valider</button>\n';
+                        }
+                        commentManagementButtons += '<button type="button" class="btn btn-danger btn-sm m-2" data-toggle="modal" data-target="#confirmModal" data-id=' + comment.id + '>Supprimer</button>\n' +
+                            '</div>';
+                    }
+                    let item = $('<div class="comment-item-' + comment.id + ' comment-item">\n' +
+                        '                                                <div class="separator-wrap pt-2">\n' +
+                        '                                                    <span class="separator col-12"><span class="separator-line"></span></span>\n' +
+                        '                                                </div>\n' +
+                        '                                                <div class="col-12 pt-1' + notValidatedClass + '">\n' +
+                        notValidatedBadge +
+                        '                                                    <div class="author-wrap mt-1">\n' +
+                        '                                                        <p> Par <span class="font-weight-bold">' + comment.username + '</span>, le <mark>' + comment.date + '</mark></p>\n' +
+                        '                                                    </div>\n' +
+                        '                                                    <p>' + comment.content + '</p>\n' +
+                        commentManagementButtons +
+                        '                                                </div>\n' +
+                        '                                            </div>');
+                    $('.comment-list').append(item);
+                }
+            },
+            error: function (e) {
+                showFlashMessage('danger', 'Une erreur s\'est produite.');
+            }
+        })
+    });
+
 });

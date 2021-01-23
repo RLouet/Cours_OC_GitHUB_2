@@ -61,8 +61,7 @@ $(document).ready(function() {
         $('.form-error', $(this)).addClass('hidden');
     });
 
-
-
+    // --------------- Pagination ---------------
     $('#ViewMore').click(function () {
         let offset = $('.comment-item').length;
         //alert(offset);

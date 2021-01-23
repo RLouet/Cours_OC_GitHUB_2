@@ -77,7 +77,7 @@ class Posts extends Controller
             }
         }
 
-        $comments = $commentManager->getByPost($blogPost['entity']);
+        $comments = $commentManager->getByPost(Auth::getUser(), $blogPost['entity']->getId());
 
         $csrf = $this->generateCsrfToken();
 

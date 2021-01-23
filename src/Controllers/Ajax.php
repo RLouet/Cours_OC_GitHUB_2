@@ -759,4 +759,15 @@ class Ajax extends Controller
 
         echo json_encode($comments);
     }
+
+    /**
+     * Load more post comments
+     */
+    public function loadPostComments() {
+
+        $commentManager = $this->managers->getManagerOf('Comment');
+        $comments = $commentManager->getByPost(Auth::getUser(), $this->httpRequest->postData('post_id'), $this->httpRequest->postData('offset'));
+
+        echo json_encode($comments);
+    }
 }

@@ -37,7 +37,7 @@ class Admin extends Controller
         $csrf = $this->generateCsrfToken();
 
         $this->httpResponse->renderTemplate('Backend/index.html.twig', [
-            'section' => 'accueil',
+            'section' => 'comments',
             //'posts' => $posts,
             'comments' => $comments,
             'csrf_token' => $csrf

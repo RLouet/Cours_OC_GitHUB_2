@@ -31,11 +31,13 @@ class Comment extends Entity implements JsonSerializable
     {
         return [
             'id' => $this->getId(),
-            'username' => $this->getUser()->getUsername(),
             'date' => $this->getDate()->format('d/m/Y à H:i:s'),
             'content' => nl2br($this->getContent()),
-            'postId' => $this->getBlogPost()->getId(),
-            'postTitle' => $this->getBlogPost()->getTitle()
+            'validated' => $this->getValidated(),
+            'username' => $this->getUser()->getUsername(),
+            'userId' => $this->getUser()->getId(),
+            'postId' => isset($this->blogPost)?$this->getBlogPost()->getId():null,
+            'postTitle' => isset($this->blogPost)?$this->getBlogPost()->getTitle():null
         ];
     }
 
