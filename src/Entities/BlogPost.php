@@ -6,10 +6,10 @@ namespace Blog\Entities;
 
 use Core\Entity;
 use Core\ObjectCollection;
-use SplObjectStorage;
+use JsonSerializable;
 use DateTime;
 
-class BlogPost extends Entity
+class BlogPost extends Entity implements JsonSerializable
 {
     protected int $userId;
     protected User $user;
@@ -29,6 +29,22 @@ class BlogPost extends Entity
     const INVALID_CONTENT = 4;
     const INVALID_EDIT_DATE = 5;
     const INVALID_HERO = 6;
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'date' => $this->getEditDate()->format('d/m/Y à H:i:s'),
+            'title' => $this->getTitle(),
+            'heroUrl' => $this->getHero()?$this->getHero()->getUrl():null,
+            'heroName' => $this->getHero()?$this->getHero()->getName():null,
+            'chapo' => nl2br($this->getChapo()),
+            'username' => $this->getUser()->getUsername(),
+            'userId' => $this->getUser()->getId(),
+            'userBanished' => $this->getUser()->getBanished(),
+            'userAdmin' => $this->getUser()->isGranted('admin')
+        ];
+    }
 
     public function __construct(array $data = [])
     {

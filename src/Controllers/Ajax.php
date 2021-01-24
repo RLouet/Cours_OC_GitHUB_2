@@ -770,4 +770,22 @@ class Ajax extends Controller
 
         echo json_encode($comments);
     }
+
+    /**
+     * Load more posts
+     */
+    public function loadPosts() {
+        $config = Config::getInstance();
+
+        $posts['end'] = false;
+
+        $postManager = $this->managers->getManagerOf('BlogPost');
+        $posts['posts'] = $postManager->getList($this->httpRequest->postData('offset'));
+
+        if (count($posts['posts']) < $config->get('pagination')) {
+            $posts['end'] = true;
+        }
+
+        echo json_encode($posts);
+    }
 }
