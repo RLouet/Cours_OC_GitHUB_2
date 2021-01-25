@@ -88,8 +88,11 @@ $(document).ready(function() {
             },
             dataType: "json",
             success: function (data) {
-                for (let k in data) {
-                    let comment = data[k];
+                if (data.end) {
+                    $('#ViewMore').parent().remove();
+                }
+                for (let k in data.comments) {
+                    let comment = data.comments[k];
                     //alert(comment.id)
                     let notValidatedClass = "";
                     let notValidatedBadge = "";

@@ -73,8 +73,11 @@ $(document).ready(function() {
             },
             dataType: "json",
             success: function (data) {
-                for (let k in data) {
-                    let comment = data[k];
+                if (data.end) {
+                    $('#ViewMore').parent().remove();
+                }
+                for (let k in data.comments) {
+                    let comment = data.comments[k];
                     //alert(comment.id)
                     let item = $('<div class="comment-item-' + comment.id + ' col-md-4 my-2 comment-item">\n' +
                         '                                <div class="col-12 background-white rounded-3 p-2 blog-box-1">\n' +

@@ -753,9 +753,15 @@ class Ajax extends Controller
      * Load more unvalidated comments
      */
     public function loadUnvalidatedComments() {
+        $config = Config::getInstance();
+        $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
-        $comments = $commentManager->getUnvalidated($this->httpRequest->postData('offset'));
+        $comments['comments'] = $commentManager->getUnvalidated($this->httpRequest->postData('offset'));
+
+        if (count($comments['comments']) < $config->get('pagination')) {
+            $comments['end'] = true;
+        }
 
         echo json_encode($comments);
     }
@@ -764,9 +770,15 @@ class Ajax extends Controller
      * Load more post comments
      */
     public function loadPostComments() {
+        $config = Config::getInstance();
+        $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
-        $comments = $commentManager->getByPost(Auth::getUser(), $this->httpRequest->postData('post_id'), $this->httpRequest->postData('offset'));
+        $comments['comments'] = $commentManager->getByPost(Auth::getUser(), $this->httpRequest->postData('post_id'), $this->httpRequest->postData('offset'));
+
+        if (count($comments['comments']) < $config->get('pagination')) {
+            $comments['end'] = true;
+        }
 
         echo json_encode($comments);
     }

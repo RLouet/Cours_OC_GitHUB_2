@@ -63,6 +63,7 @@ class HTTPResponse
                 $twig->addGlobal('flash_messages', Flash::getMessages());
             }
             $twig->addGlobal('blog', $this->getBlog());
+            $twig->addGlobal('config_pagination', Config::getInstance()->get('pagination'));
         }
         return $twig->render($template, $args);
     }

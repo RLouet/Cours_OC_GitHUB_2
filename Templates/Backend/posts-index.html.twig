@@ -62,18 +62,11 @@
                         <div class="grid-box float-inline quarter with-margin drop-shadow rounded post-item-{{ post.id }}">
 
                             <div class="blog-box-1 blog-home blog-admin background-white over-hide">
-
-                                {#
-                                <img src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="" class="blog-home-img"/>
-                                #}
                                     <a href="{{ path }}/admin/posts/{{ post.id }}/view">
                                         <div class="portfolio-box-1">
                                             <img  src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="{{ post.hero.name }}"  class="blog-home-img"/>
                                             <div class="portfolio-mask-2 rounded"></div>
                                             <h5 class="on-center text-center">Lire la suite ...</h5>
-                                            {#
-                                            <p class="on-center text-center">design, motion</p>
-                                            #}
                                         </div>
                                     </a>
                                 <div class="padding-in">

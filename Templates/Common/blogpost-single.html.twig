@@ -134,9 +134,11 @@
                                         {% endif %}
                                     {% endfor %}
                                 </div>
+                                {% if comments|length >= config_pagination %}
                                 <div class="col-12 text-center mt-4">
                                     <button type="button" class="btn btn-primary btn-sm" id="ViewMore" data-post="{{ blog_post.entity.id }}" {% if current_user %}data-user="{% if current_user.isGranted('admin') %}admin{% else %}{{ current_user.id }}{% endif %}"{% endif %}>Voir plus</button>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
