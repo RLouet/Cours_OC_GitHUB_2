@@ -14,6 +14,7 @@ use \DateTime;
 
 class CommentManagerPDO extends CommentManager
 {
+
     public function getUnique(int $id)
     {
         $sql = '
@@ -62,20 +63,38 @@ WHERE comment.id = :id';
         return $comment;
     }
 
-    public function getByPost(BlogPost $blogPost)
+    public function getByPost(?User $user, int $blogPost, int $offset = 0)
     {
         $sql = '
-SELECT comment.*, user.id as user_id , user.username
-FROM comment 
-    JOIN user 
-        ON user.id = comment.user_id 
-WHERE comment.blog_post_id = :id 
-ORDER BY comment.date DESC 
-';
+SELECT comment.*,
+       user.id as user_id ,
+       user.username
+FROM comment
+    JOIN user
+        ON user.id = comment.user_id
+WHERE comment.blog_post_id = :id';
+        if (!$user || !$user->isGranted('admin')) {
+            $sql .='
+            AND (comment.validated = 1';
+
+            if ($user){
+            $sql .=' OR comment.user_id = :user_id';
+            }
+            $sql .= ')';
+        }
+        $sql .='
+ORDER BY comment.date DESC
+LIMIT :limit
+OFFSET :offset';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $blogPost->getId(), PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->bindValue(':id', (int) $blogPost, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int) $this->config->get('pagination'), PDO::PARAM_INT);
+        if ($user && !$user->isGranted('admin')) {
+            $stmt->bindValue(':user_id', (int) $user->getId(), PDO::PARAM_INT);
+        }
         $stmt->execute();
         $result = $stmt->fetchAll();
         $stmt->closeCursor();
@@ -115,12 +134,14 @@ FROM comment
     JOIN blog_post bp 
         ON comment.blog_post_id = bp.id 
 WHERE comment.validated = 0
-LIMIT 12
-OFFSET 0';
+ORDER BY comment.date ASC
+LIMIT :limit 
+OFFSET :offset';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->bindValue(':offset', $offset);
+        $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int) $this->config->get('pagination'), PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $stmt->closeCursor();

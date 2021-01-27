@@ -8,10 +8,10 @@ use DOMDocument;
 
 class Config
 {
-    private static $instance = null;
-    private $vars = [];
+    private static ?Config $instance = null;
+    private array $vars = [];
 
-    public function __construct()
+    private function __construct()
     {
         $xml = new DOMDocument;
         $xml->load(__DIR__.'/../config/config.xml');
@@ -33,7 +33,7 @@ class Config
         return self::$instance;
     }
 
-    public function get($var)
+    public function get(string $var)
     {
         if (isset($this->vars[$var]))
         {

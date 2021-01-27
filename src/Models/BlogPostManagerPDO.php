@@ -13,14 +13,30 @@ use \DateTime;
 
 class BlogPostManagerPDO extends BlogPostManager
 {
-    public function getList(): array
+    public function getList(int $offset = 0): array
     {
         //$sql = 'SELECT id, user_id as userId, title, edit_date as editDate, hero_id as heroId, chapo, content FROM blog_post';
-        $sql = 'SELECT *, bp.id as id, user.id as user_id, pi.name AS hero_name, pi.url AS hero_url FROM blog_post bp LEFT JOIN post_image pi ON pi.id = bp.hero_id AND pi.blog_post_id = bp.id JOIN user ON user.id = bp.user_id ORDER BY bp.edit_date DESC';
+        $sql = '
+SELECT *,
+       bp.id as id, 
+       user.id as user_id, 
+       pi.name AS hero_name, 
+       pi.url AS hero_url 
+FROM blog_post bp 
+    LEFT JOIN post_image pi 
+        ON pi.id = bp.hero_id 
+               AND pi.blog_post_id = bp.id 
+    JOIN user 
+        ON user.id = bp.user_id 
+ORDER BY bp.edit_date DESC
+LIMIT :limit 
+OFFSET :offset';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Blog\Entities\BlogPost');
+        $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int) $this->config->get('pagination'), PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $stmt->closeCursor();

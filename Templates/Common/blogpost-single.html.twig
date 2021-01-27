@@ -32,7 +32,7 @@
     <div class="container z-bigger">
         <div class="row justify-content-center">
             <div class="col-md-7 parallax-fade-top">
-                <div class="main-title on-dark text-center mb-0">
+                <div class="main-title on-dark text-center mb-5">
                     <h2>{{ blog_post.entity.title }}</h2>
                     <div class="main-subtitle-bottom mt-4">{{ blog_post.entity.editDate|date('d/m/Y - H:i') }}</div>
                 </div>
@@ -91,7 +91,7 @@
             </div>
             <div class="col-12 mt-3">
                 <div class="section drop-shadow rounded" id="CommentsContainer">
-                    <div class="blog-box-1 pt-3 blog-home background-grey-2 over-hide">
+                    <div class="blog-box-1 pt-3 blog-home background-grey-2 over-hide pb-3">
                         <div class="padding-in">
                             <h3>Commentaires</h3>
                             <div class="row">
@@ -108,30 +108,37 @@
                                         <a href="{{ path }}/registration" class="btn btn-primary mt-2">S'inscrire</a>
                                     {% endif %}
                                 </div>
-                                {% for comment in comments %}
-                                    {% if comment.validated or current_user.isGranted('admin') or current_user.id == comment.user.id %}
-                                        <div class="comment-item-{{ comment.id }} col-12">
-                                            <div class="separator-wrap pt-2">
-                                                <span class="separator col-12"><span class="separator-line"></span></span>
-                                            </div>
-                                            <div class="col-12 pt-1{% if not comment.validated %} background-dark color-white rounded-3{% endif %}">
-                                                {% if not comment.validated %}<div class="text-center waiting-validation"><span class="badge badge-pill badge-warning">En attente de validation</span></div>{% endif %}
-                                                <div class="author-wrap mt-1">
-                                                    <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
+                                <div class="col-12 comment-list">
+                                    {% for comment in comments %}
+                                        {% if comment.validated or current_user.isGranted('admin') or current_user.id == comment.user.id %}
+                                            <div class="comment-item-{{ comment.id }} comment-item">
+                                                <div class="separator-wrap pt-2">
+                                                    <span class="separator col-12"><span class="separator-line"></span></span>
                                                 </div>
-                                                <p>{{ comment.content|nl2br }}</p>
-                                                {% if current_user.isGranted('admin') or current_user.id == comment.user.id %}
-                                                    <div class="text-center col-12">
-                                                        {% if not comment.validated and current_user.isGranted('admin') %}
-                                                            <button type="button" class="btn btn-primary btn-sm m-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }} data-action="valider">Valider</button>
-                                                        {% endif %}
-                                                        <button type="button" class="btn btn-danger btn-sm m-2" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }}>Supprimer</button>
+                                                <div class="col-12 pt-1{% if not comment.validated %} background-dark color-white rounded-3{% endif %}">
+                                                    {% if not comment.validated %}<div class="text-center waiting-validation"><span class="badge badge-pill badge-warning">En attente de validation</span></div>{% endif %}
+                                                    <div class="author-wrap mt-1">
+                                                        <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
                                                     </div>
-                                                {% endif %}
+                                                    <p>{{ comment.content|nl2br }}</p>
+                                                    {% if current_user.isGranted('admin') or current_user.id == comment.user.id %}
+                                                        <div class="text-center col-12">
+                                                            {% if not comment.validated and current_user.isGranted('admin') %}
+                                                                <button type="button" class="btn btn-primary btn-sm m-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }} data-action="valider">Valider</button>
+                                                            {% endif %}
+                                                            <button type="button" class="btn btn-danger btn-sm m-2" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }}>Supprimer</button>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% if comments|length >= config_pagination %}
+                                <div class="col-12 text-center mt-4">
+                                    <button type="button" class="btn btn-primary btn-sm" id="ViewMore" data-post="{{ blog_post.entity.id }}" {% if current_user %}data-user="{% if current_user.isGranted('admin') %}admin{% else %}{{ current_user.id }}{% endif %}"{% endif %}>Voir plus</button>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

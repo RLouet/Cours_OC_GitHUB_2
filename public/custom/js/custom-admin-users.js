@@ -67,7 +67,7 @@ $(document).ready(function() {
 					for (var k in data.errors) {
 						errorMessage += '<li>' + data.errors[k] + '</li>';
 					}
-					errorMessage += '</li';
+					errorMessage += '</ul>';
 					$('.modal-error .form-error span', $confirmModal).html(errorMessage);
 					$('.modal-error .form-error', $confirmModal).removeClass('hidden');
 				} else {

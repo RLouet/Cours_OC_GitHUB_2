@@ -11,7 +11,7 @@ abstract class BlogPostManager extends Manager
 {
     abstract public function getUnique(int $id);
 
-    abstract public function getList();
+    abstract public function getList(int $offset = 0);
 
     abstract protected function add(BlogPost $blogPost);
 

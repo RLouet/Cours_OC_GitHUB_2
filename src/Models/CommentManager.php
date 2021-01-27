@@ -6,13 +6,14 @@ namespace Blog\Models;
 
 use Blog\Entities\BlogPost;
 use Blog\Entities\Comment;
+use Blog\Entities\User;
 use Core\Manager;
 
 abstract class CommentManager extends Manager
 {
     abstract public function getUnique(int $id);
 
-    abstract public function getByPost(BlogPost $blogPost);
+    abstract public function getByPost(?User $user, int $blogPost, int $offset = 0);
 
     abstract public function getUnvalidated(int $offset = 0);
 
