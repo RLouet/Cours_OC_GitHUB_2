@@ -5,6 +5,7 @@ namespace Blog\Controllers;
 
 
 use Blog\Entities\User;
+use Blog\Services\FilesService;
 use Blog\Services\MailService;
 use Core\Auth;
 use Core\Controller;
@@ -123,5 +124,55 @@ class Profile extends Controller
         }
         $handle['errors'][] = "Vos informations sont invalides.";
         return $handle;
+    }
+
+    /**
+     * Delete profile
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function deleteProfileAction()
+    {
+        if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+            $this->httpResponse->redirect('/profile/show');
+        }
+
+        $user = Auth::getUser();
+
+        $mailer = new MailService();
+        if (!$mailer->sendUserDeleteEmail($user, '')) {
+            Flash::addMessage('Une erreur s\'est produite lors de l\'envoie du mail de confirmation. Merci de rééssayer.', Flash::ERROR);
+            $this->httpResponse->redirect('/profile/show');
+        }
+
+        $deleter = new FilesService();
+        if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
+            Flash::addMessage('Une erreur s\'est produite lors de la suppression de vos images. Merci de rééssayer.', Flash::ERROR);
+            $this->httpResponse->redirect('/profile/show');
+        }
+
+
+        $userManager = $this->managers->getManagerOf('user');
+        if ($userManager->delete($user->getId())) {
+            Auth::logout();
+            $this->httpResponse->redirect('/security/showDeletedMessage');
+        }
+
+
+        Flash::addMessage('Une erreur s\'est produite lors de la suppression de votre profile. Merci de rééssayer.', Flash::ERROR);
+        $this->httpResponse->redirect('/profile/show');
+    }
+
+    /**
+     * Show a message when user delete hir profile.
+     * Necessary to add a flash message because the session is destroyed at the end of the logout method.
+     */
+    public function showDeletedMessageAction()
+    {
+        Flash::addMessage('Votre profile a bien été supprime.', 'danger');
+
+        $this->httpResponse->redirect('');
     }
 }

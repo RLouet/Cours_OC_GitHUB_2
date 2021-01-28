@@ -245,6 +245,17 @@ class Security extends Controller
         $this->httpResponse->redirect('');
     }
 
+    /**
+     * Show a message when user delete his profile.
+     * Necessary to add a flash message because the session is destroyed at the end of the logout method.
+     */
+    public function showDeletedMessageAction()
+    {
+        Flash::addMessage('Votre profil a bien été supprimé.', Flash::INFO);
+
+        $this->httpResponse->redirect('');
+    }
+
 
     /**
      * process the registration form
