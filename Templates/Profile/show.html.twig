@@ -13,7 +13,7 @@
                         <span aria-hidden="true"></span>
                     </button>
                 </div>
-                <form action="{{ path }}/ajax/changePassword" method="post" enctype="multipart/form-data">
+                <form action="{{ path }}/ajax/changePassword" method="post">
                     <div class="modal-body row form-on-dark">
                         <div class="col-12 pw-general-error">
                             <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
@@ -39,6 +39,32 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <input type="submit" name="change_password" class="btn btn-primary valid-btn" value="Valider">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade default" id="deleteProfileModal" tabindex="-1" role="dialog" aria-labelledby="deleteProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-white" id="deleteProfileModalLabel">Supprimer votre profil</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form method="post" action="{{ path }}/profile/deleteProfile">
+                    <div class="modal-body row form-on-dark">
+                        <div class="col-12">
+                            <p>Êtes-vous sûr de vouloir supprimer votre profil ?</p>
+                            <p class="confirm-notice text-warning">Toutes vos contributions à ce blog seront supprimées.</p>
+                        </div>
+                        <input class="token-field" type="hidden" name="token" value="{{ csrf_token }}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary confirm-btn">Valider</button>
                     </div>
                 </form>
             </div>
@@ -83,9 +109,10 @@
                         <dt class="col-4 text-right">Email</dt>
                         <dl class="col-8 text-left">{{ current_user.email }}</dl>
                         <dt class="col-4 text-right">Mot de passe</dt>
-                        <dl class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round">Changer de mot de passe</button></dl>
+                        <dl class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round" title="Modifier votre mot de passe">Changer de mot de passe</button></dl>
                     </dl>
-                    <a class="btn btn-primary" href="{{ path }}/profile/edit">Modifier</a>
+                    <a class="btn btn-primary mb-3" href="{{ path }}/profile/edit" title="Modifier votre profil">Modifier</a><br>
+                    <a href="#" title="Supprimer votre profil" data-toggle="modal" data-target="#deleteProfileModal">Supprimer</a>
                 </div>
             </div>
         </div>
