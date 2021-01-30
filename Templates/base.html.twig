@@ -142,6 +142,18 @@
 
 {% include('footer.html.twig') %}
 
+{% if not cookies_accepted %}
+<div class="container-fluid" id="confirmCookiesContainer">
+    <div class="cookie-notice row align-items-center">
+        <div class="cn-text col-md-10">
+            <p>Nous utilisons de cookies afin d'améliorer votre expérience. En continuant sur ce site, vous adhérez à notre <a href="#" title="Politiqe de confidentialité">politique de confidentialite</a>.</p>
+        </div>
+        <div class="cn-btn col-md-2 text-md-right text-center mt-2 mt-md-0">
+            <button class="btn btn-sm btn-primary" id="confirmCookiesBtn">J'accepte</button>
+        </div>
+    </div>
+</div>
+{% endif %}
 <div class="scroll-to-top"><i class="fa fa-angle-up"></i></div>
 
 <!-- JAVASCRIPT
@@ -152,6 +164,8 @@
 <script type="text/javascript" src="{{ path }}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ path }}/js/plugins.js"></script>
 <script type="text/javascript" src="{{ path }}/custom/js/custom-alerts.js"></script>
+<script type="text/javascript" src="{{ path }}/custom/js/custom-cookies-notice.js"></script>
+
 {% block javascripts %}
 <script type="text/javascript" src="{{ path }}/js/custom/custom-personal.js"></script>
 <script type="text/javascript" src="{{ path }}/js/custom/custom-elements.js"></script>
