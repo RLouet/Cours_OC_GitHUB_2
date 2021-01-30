@@ -51,6 +51,7 @@ class HTTPResponse
     public function getTemplate (string $template, array $args = [], bool $messages = true)
     {
         static $twig = null;
+        $httpRequest = new HTTPRequest();
 
         if ($twig === null) {
             $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
@@ -64,6 +65,7 @@ class HTTPResponse
             }
             $twig->addGlobal('blog', $this->getBlog());
             $twig->addGlobal('config_pagination', Config::getInstance()->get('pagination'));
+            $twig->addGlobal('cookies_accepted', $httpRequest->cookieExists('accept_cookies'));
         }
         return $twig->render($template, $args);
     }
