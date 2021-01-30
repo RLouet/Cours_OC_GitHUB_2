@@ -33,6 +33,12 @@ abstract class Controller
      */
     protected HTTPResponse $httpResponse;
 
+    /**
+     * auth
+     * @var Auth
+     */
+    protected Auth $auth;
+
 
     public function __construct(array $routeParams, HTTPRequest $request)
     {
@@ -42,6 +48,7 @@ abstract class Controller
         $this->route_params = $routeParams;
 
         $this->managers = new Managers('PDO', PDOFactory::getPDOConnexion());
+        $this->auth = Auth::getInstance();
     }
 
     /**

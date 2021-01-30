@@ -10,6 +10,23 @@ use \PDO;
 
 class Auth
 {
+    private static ?Auth $instance = null;
+    private HTTPRequest $httpRequest;
+
+    private function __construct()
+    {
+        $this->httpRequest = HTTPRequest::getInstance();
+    }
+
+    public static function getInstance()
+    {
+        if(is_null(self::$instance))
+        {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+
     /**
      * Login the user
      */
@@ -51,7 +68,7 @@ class Auth
      */
     public static function rememberRequestedPage(): void
     {
-        $_SESSION['return_to'] = $_SERVER['REQUEST_URI'];
+        $_SESSION['return_to'] = $this->httpRequest->requestUri();
     }
 
     /**
@@ -65,7 +82,7 @@ class Auth
     /**
      * Get the current user
      */
-    public static function getUser(): ?User
+    public function getUser(): ?User
     {
         $userManager = new UserManagerPDO(PDOFactory::getPDOConnexion());
        if (isset($_SESSION['user_id'])) {
@@ -76,15 +93,15 @@ class Auth
            }
            return $user;
        }
-       return static::loginRemembered($userManager);
+       return $this->loginRemembered($userManager);
     }
 
     /**
      * Login user if login is remembered
      */
-    private static function loginRemembered(Manager $userManager): ?User
+    private function loginRemembered(Manager $userManager): ?User
     {
-        $cookie = HTTPRequest::cookieData('remember_me');
+        $cookie = $this->httpRequest->cookieData('remember_me');
         if ($cookie) {
             $rememberedLogin = static::findByToken($cookie);
             if ($rememberedLogin && !static::hasExpired($rememberedLogin)) {
@@ -122,7 +139,7 @@ class Auth
 
     private static function forgetLogin()
     {
-        $cookie = HTTPRequest::cookieData('remember_me');
+        $cookie = $this->httpRequest->cookieData('remember_me');
         if ($cookie) {
             $token = new Token($cookie);
             $hashedToken = $token->getHash();

@@ -57,17 +57,17 @@ class Book extends Controller
 
         $currentComment = "";
 
-        if ($this->httpRequest->postExists('comment-send') && Auth::getUser()->isGranted('user')) {
+        if ($this->httpRequest->postExists('comment-send') && $this->auth->getUser()->isGranted('user')) {
             $currentComment = $this->httpRequest->postData('content');
             $comment = new Comment($this->httpRequest->postData());
-            $comment->setUser(Auth::getUser())->setBlogPost($blogPost['entity'])->setValidated(Auth::getUser()->isGranted('admin'));
+            $comment->setUser($this->auth->getUser())->setBlogPost($blogPost['entity'])->setValidated($this->auth->getUser()->isGranted('admin'));
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 if ($comment->isValid()) {
                     if (!$commentManager->save($comment)) {
                         Flash::addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
                     } else {
                         $message = 'Votre commentaire est enregistré.';
-                        if (!Auth::getUser()->isGranted('admin')) {
+                        if (!$this->auth->getUser()->isGranted('admin')) {
                             $message .= ' Il apparaîtra bientôt, après sa validation.';
                         }
                         Flash::addMessage( $message, Flash::SUCCESS);
@@ -80,7 +80,7 @@ class Book extends Controller
             }
         }
 
-        $comments = $commentManager->getByPost(Auth::getUser(), $blogPost['entity']->getId());
+        $comments = $commentManager->getByPost($this->auth->getUser(), $blogPost['entity']->getId());
 
         $csrf = $this->generateCsrfToken();
 
