@@ -10,6 +10,13 @@ use Twig\TwigFunction;
 
 class HTTPResponse
 {
+    private $config;
+
+
+    public function __construct()
+    {
+        $this->config = Config::getInstance();
+    }
 
     public function addHeader(string $header)
     {
@@ -64,7 +71,7 @@ class HTTPResponse
                 $twig->addGlobal('flash_messages', Flash::getMessages());
             }
             $twig->addGlobal('blog', $this->getBlog());
-            $twig->addGlobal('config_pagination', Config::getInstance()->get('pagination'));
+            $twig->addGlobal('app_config', $this->config);
             $twig->addGlobal('cookies_accepted', $httpRequest->cookieExists('accept_cookies'));
         }
         return $twig->render($template, $args);
@@ -95,15 +102,17 @@ class HTTPResponse
     }
 
 
-    public function setCookie($name, $value = '', $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    public function setCookie(string $name, string $value = '', int $expire = 0, string $path = null, string $domain = null, bool $secure = false, bool $httpOnly = true)
     {
+        if ($this->config->get('secure_cookies') == 'true') {
+            $secure = true;
+        }
         setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
     private function getBlog()
     {
-        $config = Config::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
         $blogManager = new BlogManagerPDO(PDOFactory::getPDOConnexion());
         return $blogManager->getData($blogId);
     }

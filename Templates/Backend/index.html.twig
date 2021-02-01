@@ -105,9 +105,11 @@
                     {% endfor %}
 
                 </div>
+                {% if comments|length >= app_config.get('pagination') %}
                 <div class="row justify-content-center mt-3">
                     <button type="button" class="btn btn-primary btn-sm" id="ViewMore">Voir plus</button>
                 </div>
+                {% endif %}
             </div>
         </div>
 
@@ -157,7 +159,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var path = "{{ path }}";
+        const path = "{{ path }}";
     </script>
     <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-comments.js"></script>
 {% endblock %}

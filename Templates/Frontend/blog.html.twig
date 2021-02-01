@@ -58,9 +58,11 @@
 
             </div>
 
+            {% if posts|length >= app_config.get('pagination') %}
             <div class="row mt-4">
                 <button type="button" class="btn btn-primary btn-sm mx-auto" id="ViewMore" data-user="{{ current_user.id }}">Voir plus</button>
             </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
