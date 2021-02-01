@@ -110,6 +110,8 @@
                     <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                     <div class="clear mb-4"></div>
                     <input class="btn btn-primary" type="submit" name="contact-send" value="Envoyer" />
+                    <div class="clear"></div>
+                    <p class="color-white p-0 m-0 list-inline-item"><small>En envoyant ce formulaire, vous acceptez nos </small> <a href="{{ path }}/legal/cgu" class="btn-link btn-primary list-inline-item p-0 m-0 ml-1"><small>conditions générales d'utilisation</small></a></p>
                 </div>
             </div>
         </form>

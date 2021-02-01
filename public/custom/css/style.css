@@ -420,3 +420,18 @@ table.align-middle td, table.align-middle th {
 .users-table button.fa-btn:hover>span {
 text-shadow: 0 0 2px rgba(0, 0, 0, 1);
 }
+
+/* ---------- Cookies Notice -------------- */
+.cookie-notice {
+    border-top: 2px solid #f0ad4e;
+    background: rgba(0,0,0,0.9);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 10000;
+    padding: 1.5em;
+}
+.cookie-notice p{
+    margin: 0;
+}
