@@ -68,6 +68,11 @@ class HTTPRequest
         return $this->server['REQUEST_URI'];
     }
 
+    public function getHost()
+    {
+        return $this->server['HTTP_HOST'];
+    }
+
     public function postData(string $key = null)
     {
         if ($key) {

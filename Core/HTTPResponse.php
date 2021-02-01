@@ -10,12 +10,13 @@ use Twig\TwigFunction;
 
 class HTTPResponse
 {
-    private $config;
-
+    private Config $config;
+    private HTTPRequest $httpRequest;
 
     public function __construct()
     {
         $this->config = Config::getInstance();
+        $this->httpRequest = HTTPRequest::getInstance();
     }
 
     public function addHeader(string $header)
@@ -57,23 +58,21 @@ class HTTPResponse
      */
     public function getTemplate (string $template, array $args = [], bool $messages = true)
     {
-        $httpRequest = new HTTPRequest();
         static $twig = null;
-        $httpRequest = new HTTPRequest();
 
         if ($twig === null) {
             $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
             $twig = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
-            $twig->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
+            $twig->addGlobal('path', 'http://' . $this->httpRequest->getHost());
             $twig->addGlobal('current_user', Auth::getUser());
             if ($messages) {
                 $twig->addGlobal('flash_messages', Flash::getMessages());
             }
             $twig->addGlobal('blog', $this->getBlog());
             $twig->addGlobal('app_config', $this->config);
-            $twig->addGlobal('cookies_accepted', $httpRequest->cookieExists('accept_cookies'));
+            $twig->addGlobal('cookies_accepted', $this->httpRequest->cookieExists('accept_cookies'));
         }
         return $twig->render($template, $args);
     }
