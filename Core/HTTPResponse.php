@@ -57,6 +57,7 @@ class HTTPResponse
      */
     public function getTemplate (string $template, array $args = [], bool $messages = true)
     {
+        $httpRequest = new HTTPRequest();
         static $twig = null;
         $httpRequest = new HTTPRequest();
 

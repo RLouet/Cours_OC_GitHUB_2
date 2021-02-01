@@ -3,6 +3,10 @@
 /**
  * Composer Autoloader
  */
+
+use Core\Router;
+use Core\HTTPRequest;
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 /**
@@ -24,8 +28,8 @@ date_default_timezone_set("Europe/Paris");
 /**
  * Routing
  */
-$router = new \Core\Router();
-$request = new \Core\HTTPRequest();
+$router = new Router();
+$request = HTTPRequest::getInstance();
 
 $router->dispatch($request);
 
