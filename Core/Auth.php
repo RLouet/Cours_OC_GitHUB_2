@@ -30,20 +30,20 @@ class Auth
     /**
      * Login the user
      */
-    public static function login(User $user, $remembeMe): void
+    public function login(User $user, $remembeMe): void
     {
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user->getId();
 
         if ($remembeMe) {
-            static::rememberLogin($user);
+            $this->rememberLogin($user);
         }
     }
 
     /**
      * Logout the user
      */
-    public static function logout(): void
+    public function logout(): void
     {
         // Détruit toutes les variables de session
         $_SESSION = array();
@@ -60,13 +60,13 @@ class Auth
         // Détruit la session.
         session_destroy();
 
-        static::forgetLogin();
+        $this->forgetLogin();
     }
 
     /**
      * Remember the requested page
      */
-    public static function rememberRequestedPage(): void
+    public function rememberRequestedPage(): void
     {
         $_SESSION['return_to'] = $this->httpRequest->requestUri();
     }
@@ -74,7 +74,7 @@ class Auth
     /**
      * Get the requested page
      */
-    public static function GetRequestedPage(): string
+    public function GetRequestedPage(): string
     {
        return $_SESSION['return_to'] ?? '';
     }
@@ -88,7 +88,7 @@ class Auth
        if (isset($_SESSION['user_id'])) {
            $user = $userManager->findById($_SESSION['user_id']);
            if ($user && $user->getBanished()) {
-               static::logout();
+               $this->logout();
                return null;
            }
            return $user;
@@ -103,20 +103,20 @@ class Auth
     {
         $cookie = $this->httpRequest->cookieData('remember_me');
         if ($cookie) {
-            $rememberedLogin = static::findByToken($cookie);
-            if ($rememberedLogin && !static::hasExpired($rememberedLogin)) {
+            $rememberedLogin = $this->findByToken($cookie);
+            if ($rememberedLogin && !$this->hasExpired($rememberedLogin)) {
                 $user = $userManager->findById($rememberedLogin['user_id']);
                 if ($user && !$user->getBanished()) {
-                    static::login($user, false);
+                    $this->login($user, false);
                     return $user;
                 }
             }
-            static::forgetLogin();
+            $this->forgetLogin();
         }
         return null;
     }
 
-    private static function rememberLogin(User $user): bool
+    private function rememberLogin(User $user): bool
     {
         $token = new Token();
         $hashedToken = $token->getHash();
@@ -137,7 +137,7 @@ class Auth
         return false;
     }
 
-    private static function forgetLogin()
+    private function forgetLogin()
     {
         $cookie = $this->httpRequest->cookieData('remember_me');
         if ($cookie) {
@@ -154,7 +154,7 @@ class Auth
         }
     }
 
-    private static function findByToken($token)
+    private function findByToken($token)
     {
         $token = new Token($token);
         $hashedToken = $token->getHash();
@@ -168,7 +168,7 @@ class Auth
         return $stmt->fetch();
     }
 
-    private static function hasExpired(array $token)
+    private function hasExpired(array $token)
     {
         return strtotime($token['expires_at']) < time();
     }

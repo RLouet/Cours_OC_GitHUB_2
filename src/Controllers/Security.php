@@ -114,9 +114,9 @@ class Security extends Controller
                         $this->httpResponse->redirect('');
                     }
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
-                        Auth::login($user, $rememberMe);
+                        $this->auth->login($user, $rememberMe);
 
-                        $this->httpResponse->redirect(Auth::GetRequestedPage());
+                        $this->httpResponse->redirect($this->auth->GetRequestedPage());
                     }
                 }
                 Flash::addMessage('Mauvaise combinaison email / mot de passe ou compte non activé.', Flash::WARNING);
@@ -158,7 +158,7 @@ class Security extends Controller
                         $mailer = new MailService();
                         if ($mailer->sendPasswordResetEmail($user, $token->getValue())) {
                             Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
-                            HTTPResponse::redirect('/login');
+                            $this->httpResponse->redirect('/login');
                         }
                     }
                     Flash::addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
@@ -229,7 +229,7 @@ class Security extends Controller
      */
     public function logoutAction()
     {
-        Auth::logout();
+        $this->auth->logout();
 
         $this->httpResponse->redirect('/security/show-logout-message');
     }

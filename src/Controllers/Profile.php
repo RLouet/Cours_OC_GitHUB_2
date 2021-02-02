@@ -50,7 +50,7 @@ class Profile extends Controller
      */
     public function editAction()
     {
-        $user['entity'] = Auth::getUser()->resetNewEmail();
+        $user['entity'] = $this->auth->getUser()->resetNewEmail();
 
         if ($this->httpRequest->postExists('edit-profile-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
@@ -139,7 +139,7 @@ class Profile extends Controller
             $this->httpResponse->redirect('/profile/show');
         }
 
-        $user = Auth::getUser();
+        $user = $this->auth->getUser();
 
         $mailer = new MailService();
         if (!$mailer->sendUserDeleteEmail($user, '')) {
@@ -156,7 +156,7 @@ class Profile extends Controller
 
         $userManager = $this->managers->getManagerOf('user');
         if ($userManager->delete($user->getId())) {
-            Auth::logout();
+            $this->auth->logout();
             $this->httpResponse->redirect('/security/showDeletedMessage');
         }
 

@@ -348,7 +348,7 @@ class Ajax extends Controller
     {
         $this->requiredLogin('admin');
 
-        $user = Auth::getUser();
+        $user = $this->auth->getUser();
 
         $handle = [
             'success' => true,
@@ -388,7 +388,7 @@ class Ajax extends Controller
     {
         $this->requiredLogin('user');
 
-        $user = Auth::getUser();
+        $user = $this->auth->getUser();
 
         $handle = [
             'success' => true,
@@ -479,7 +479,7 @@ class Ajax extends Controller
 
         $user =  $userManager->findById($this->httpRequest->postData('id'));
 
-        if ($user->getId() == Auth::getUser()->getId()) {
+        if ($user->getId() == $this->auth->getUser()->getId()) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas changer votre role.';
             echo json_encode($handle);
@@ -551,7 +551,7 @@ class Ajax extends Controller
 
         $user =  $userManager->findById($this->httpRequest->postData('id'));
 
-        if ($user->getId() == Auth::getUser()->getId()) {
+        if ($user->getId() == $this->auth->getUser()->getId()) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas changer votre état.';
             echo json_encode($handle);
@@ -620,7 +620,7 @@ class Ajax extends Controller
         $user =  $userManager->findById($this->httpRequest->postData('id'));
         //$user =  $userManager->getWithPosts($this->httpRequest->postData('id'));
 
-        if ($user->getId() == Auth::getUser()->getId()) {
+        if ($user->getId() == $this->auth->getUser()->getId()) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas vous supprimer.';
             echo json_encode($handle);
@@ -684,7 +684,7 @@ class Ajax extends Controller
 
 
         if ($this->httpRequest->postData('action') === "valider") {
-            if (Auth::getUser()->isGranted('admin')) {
+            if ($this->auth->getUser()->isGranted('admin')) {
                 $comment->setValidated(true);
                 if ($commentManager->save($comment)) {
                     $handle['comment'] = $comment->getId();
@@ -696,7 +696,7 @@ class Ajax extends Controller
         }
 
         if ($this->httpRequest->postData('action') === "supprimer") {
-            if (Auth::getUser()->isGranted('admin') || Auth::getUser()->getId() == $comment->getUser()->getId()) {
+            if ($this->auth->getUser()->isGranted('admin') || $this->auth->getUser()->getId() == $comment->getUser()->getId()) {
                 if ($commentManager->delete($comment->getId())) {
                     $handle['comment'] = $comment->getId();
                     echo json_encode($handle);
@@ -774,7 +774,7 @@ class Ajax extends Controller
         $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
-        $comments['comments'] = $commentManager->getByPost(Auth::getUser(), $this->httpRequest->postData('post_id'), $this->httpRequest->postData('offset'));
+        $comments['comments'] = $commentManager->getByPost($this->auth->getUser(), $this->httpRequest->postData('post_id'), $this->httpRequest->postData('offset'));
 
         if (count($comments['comments']) < $config->get('pagination')) {
             $comments['end'] = true;

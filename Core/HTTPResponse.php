@@ -12,11 +12,13 @@ class HTTPResponse
 {
     private Config $config;
     private HTTPRequest $httpRequest;
+    private Auth $auth;
 
     public function __construct()
     {
         $this->config = Config::getInstance();
         $this->httpRequest = HTTPRequest::getInstance();
+        $this->auth = Auth::getInstance();
     }
 
     public function addHeader(string $header)
@@ -66,7 +68,7 @@ class HTTPResponse
                 //'cache' => '../cache'
             ]);
             $twig->addGlobal('path', 'http://' . $this->httpRequest->getHost());
-            $twig->addGlobal('current_user', Auth::getUser());
+            $twig->addGlobal('current_user', $this->auth->getUser());
             if ($messages) {
                 $twig->addGlobal('flash_messages', Flash::getMessages());
             }
@@ -95,7 +97,7 @@ class HTTPResponse
                 //'cache' => '../cache'
             ]);
             $twig2->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
-            $twig2->addGlobal('current_user', Auth::getUser());
+            $twig2->addGlobal('current_user', $this->auth->getUser());
             $twig2->addGlobal('blog', $this->getBlog());
         }
         return $twig2->render($template, $args);

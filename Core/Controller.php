@@ -39,7 +39,6 @@ abstract class Controller
      */
     protected Auth $auth;
 
-
     public function __construct(array $routeParams, HTTPRequest $request)
     {
        $this->httpRequest = $request;
@@ -106,10 +105,10 @@ abstract class Controller
      */
     public function requiredLogin(string $role = 'user'): void
     {
-        if (!Auth::getUser() || !Auth::getUser()->isGranted($role)) {
+        if (!$this->auth->getUser() || !$this->auth->getUser()->isGranted($role)) {
             Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::WARNING);
-            Auth::rememberRequestedPage();
-            HTTPResponse::redirect('/login');
+            $this->auth->rememberRequestedPage();
+            $this->httpResponse->redirect('/login');
         }
     }
 }
