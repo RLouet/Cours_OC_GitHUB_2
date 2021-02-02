@@ -100,7 +100,7 @@ class HTTPResponse
             $twig2 = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
-            $twig2->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
+            $twig2->addGlobal('path', 'http://' . $this->httpRequest->getHost());
             $twig2->addGlobal('current_user', $this->auth->getUser());
             $twig2->addGlobal('blog', $this->getBlog());
         }
