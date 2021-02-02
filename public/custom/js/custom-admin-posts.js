@@ -34,14 +34,14 @@ $(document).ready(function() {
 					let $itemBox = $(".post-item-" + data.deleted);
 					$itemBox.remove();
 					$deleteModal.modal("hide");
-					showFlashMessage("success", "Le post a bien été supprimé.")
+					showFlashMessage("success", "Le post a bien été supprimé.");
 				}
 			},
 			error(e) {
 				$(".delete-error .form-error span", $deleteModal).html("Erreur Ajax");
 				$(".delete-error .form-error", $deleteModal).removeClass("hidden");
 			}
-		})
+		});
 	});
 
 	$deleteModal.on("hide.bs.modal", function(event) {
@@ -107,7 +107,7 @@ $(document).ready(function() {
 					$(".post-list").append(item);
 				}
 			},
-			error: function (e) {
+			error(e) {
 				showFlashMessage("danger", "Une erreur s'est produite.");
 			}
 		})
