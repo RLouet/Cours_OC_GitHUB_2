@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 		if (newPassword !== confPassword) {
 			$("input.form-control", $(this)).val("");
-			$(".pw-conf .form-error", $form).removeClass('hidden');
+			$(".pw-conf .form-error", $form).removeClass("hidden");
 			return;
 		}
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
 					}
 					$("input.form-control", $(this)).val("");
 				} else {
-					$('#passwordModal').modal("hide");
+					$("#passwordModal").modal("hide");
 
 					showFlashMessage("success", "Votre mot de passe a bien été modifié");
 				}
