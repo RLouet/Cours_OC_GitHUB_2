@@ -10,7 +10,7 @@ $(document).ready(function() {
 				"offset": offset,
 			},
 			dataType: "json",
-			success: function (data) {
+			success(data) {
 				if (data.end) {
 					$("#ViewMore").parent().remove();
 				}
@@ -49,9 +49,9 @@ $(document).ready(function() {
 					$(".post-list").append(item);
 				}
 			},
-			error: function (e) {
+			error(e) {
 				showFlashMessage("danger", "Une erreur s'est produite.");
 			}
-		})
+		});
 	});
-})
+});
