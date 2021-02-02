@@ -20,7 +20,7 @@ $(document).ready(function() {
 				$("form .confirm-notice", this).html("L'utilisateur pourra à nouveau se connecter et publier sur le blog.");
 				break;
 			case "supprimer":
-				$("form", this).attr('action', 'delete');
+				$("form", this).attr("action", "delete");
 				$("form .confirm-notice", this).html("L'utitilisateur ainsi que ses posts et commentaires seront supprimés du blog.");
 				break;
 			case "promouvoir":
@@ -82,14 +82,14 @@ $(document).ready(function() {
 							$banishBtn.attr("title", "Débannir").data("action", "débannir");
 							$("span.fa", $banishBtn).removeClass("fa-unlock").addClass("fa-lock");
 							$(".state-cell", $userRow).html("Banni");
-							showFlashMessage("success", "L'utilisateur a bien été banni.")
+							showFlashMessage("success", "L'utilisateur a bien été banni.");
 						}
 						if (formAction === "unbanish") {
 							$userRow.removeClass("table-danger");
 							$banishBtn.attr("title", "bannir").data("action", "bannir");
 							$("span.fa", $banishBtn).removeClass("fa-lock").addClass("fa-unlock");
 							$(".state-cell", $userRow).html("Activé");
-							showFlashMessage("success", "L'utilisateur a bien été débanni.")
+							showFlashMessage("success", "L'utilisateur a bien été débanni.");
 
 						}
 						$confirmModal.modal("hide");
@@ -100,10 +100,10 @@ $(document).ready(function() {
 				$(".modal-error .form-error span", $confirmModal).html("Erreur Ajax");
 				$(".modal-error .form-error", $confirmModal).removeClass("hidden");
 			}
-		})
+		});
 	});
 
 	$("[name='delete_messages']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-off").html("NON");
 	$(".bootstrap-switch-handle-on").html("OUI");
-})
+});
