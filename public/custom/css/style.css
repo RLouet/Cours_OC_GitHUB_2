@@ -145,7 +145,7 @@ input:focus,
 
 .contactform label {
     font-weight: bold;
-    font-size: 1.0rem;
+    font-size: 1rem;
 }
 
 .contact-infos h5 {
@@ -158,12 +158,15 @@ input:focus,
     content: none;
     display: none;
 }
+
 .hero-social.img-social li a {
     bottom: 0;
 }
+
 .hero-social.img-social li a:hover {
     bottom: 5px;
 }
+
 .hero-social.img-social li img {
     display: inline-block;
     padding: 0;
@@ -325,8 +328,9 @@ ul.sitemap li {
     color: #171717;
     padding: 0;
 }
+
 .dropdown-item:hover {
-    background: #dddddd;
+    background: #ddd;
 }
 
 .badge {
@@ -341,6 +345,7 @@ ul.sitemap li {
     font-weight: bold;
     font-size: 1.0rem;
 }
+
 .edit-profile-form .form-control {
     font-size: 1.2em;
     padding-top: 0;
@@ -349,94 +354,123 @@ ul.sitemap li {
 .background-dark dl {
     color: #6dc234;
 }
+
 .background-dark dt {
     color: #c6ff84;
 }
 
-
 /**   Users management table   **/
 .table-clear {
-    background-color: #dddddd;
+    background-color: #ddd;
     border-top: none;
 }
+
 .table-clear thead th {
     border-top: none;
 }
-.table-danger, .table-danger>td, .table-danger>th {
+
+.table-danger,
+.table-danger > td,
+.table-danger > th {
     background-color: rgba(200, 0, 0, 0.07);
 }
-.table-hover .table-danger:hover>td, .table-hover .table-danger:hover>th {
+
+.table-hover .table-danger:hover > td,
+.table-hover .table-danger:hover > th {
     background-color: rgba(200, 0, 0, 0.15);
 }
-.table-disabled, .table-disabled>td, .table-disabled>th {
+
+.table-disabled,
+.table-disabled > td,
+.table-disabled > th {
     background-color: rgba(115, 115, 115, 0.25);
 }
-.table-hover .table-disabled:hover>td, .table-hover .table-disabled:hover>th {
+
+.table-hover .table-disabled:hover > td,
+.table-hover .table-disabled:hover > th {
     background-color: rgba(115, 115, 115, 0.5);
 }
-table.align-middle td, table.align-middle th {
+
+table.align-middle td,
+table.align-middle th {
     vertical-align: middle;
 }
+
 .nav-tabs .nav-link {
     color: #333;
     border: 1px solid #888;
 }
+
 .nav-link:hover {
     background-color: rgba(255,255,255,0.4);
 }
+
 .nav-link.active {
-    background-color: #454545!important;
+    background-color: #454545 !important;
     font-weight: bold;
 }
+
 .users-table button.fa-btn {
     background-color: #454545;
     width: 2em;
 }
-.users-table button.fa-btn>span {
+
+.users-table button.fa-btn > span {
     text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.4);
     transition: text-shadow .2s;
 }
-.users-table button.fa-btn>span.fa-lock::before {
+
+.users-table button.fa-btn > span.fa-lock::before {
     color: #d9534f;
     transition: color .5s;
 }
-.users-table button.fa-btn>span.fa-unlock::before {
+
+.users-table button.fa-btn > span.fa-unlock::before {
     color: #5cb85c;
     transition: color .5s;
 }
-.users-table button.fa-btn>span.fa-user-times::before {
+
+.users-table button.fa-btn > span.fa-user-times::before {
     color: #000;
     transition: color .5s;
 }
-.users-table button.fa-btn>span.fa-black-tie::before {
+
+.users-table button.fa-btn > span.fa-black-tie::before {
     color:  #5cb85c;
     transition: color .5s;
 }
-.users-table button.fa-btn>span.fa-user::before {
+
+.users-table button.fa-btn > span.fa-user::before {
     color: #5bc0de;
     transition: color .5s;
 }
-.users-table button.fa-btn:hover>span.fa-lock::before {
+
+.users-table button.fa-btn:hover > span.fa-lock::before {
     content: "\f09c";
     color: #5cb85c;
 }
-.users-table button.fa-btn:hover>span.fa-unlock::before {
+
+.users-table button.fa-btn:hover > span.fa-unlock::before {
     content: "\f023";
     color: #d9534f;
 }
-.users-table button.fa-btn:hover>span.fa-user-times::before {
+
+.users-table button.fa-btn:hover > span.fa-user-times::before {
     content: "\f1f8";
     color: #ddd;
 }
-.users-table button.fa-btn:hover>span.fa-black-tie::before {
+
+.users-table button.fa-btn:hover > span.fa-black-tie::before {
     content: "\f007";
     color: #5bc0de;
 }
-.users-table button.fa-btn:hover>span.fa-user::before {
+
+.users-table button.fa-btn:hover > span.fa-user::before {
     content: "\f27e";
     color:  #5cb85c;
 }
-.users-table button.fa-btn:hover>span {
+
+.users-table button.fa-btn:hover > span {
     text-shadow: 0 0 2px rgba(0, 0, 0, 1);
 }
 
