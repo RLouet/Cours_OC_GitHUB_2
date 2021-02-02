@@ -85,8 +85,8 @@ class Auth
     public function getUser(): ?User
     {
         $userManager = new UserManagerPDO(PDOFactory::getPDOConnexion());
-       if (isset($_SESSION['user_id'])) {
-           $user = $userManager->findById($_SESSION['user_id']);
+       if ($this->httpRequest->sessionData('user_id')) {
+           $user = $userManager->findById($this->httpRequest->sessionData('user_id'));
            if ($user && $user->getBanished()) {
                $this->logout();
                return null;

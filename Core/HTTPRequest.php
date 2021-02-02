@@ -35,12 +35,12 @@ class HTTPRequest
 
     public function sessionData(string $key)
     {
-        return isset($this->session[$key]) ? $this->session['key'] : null;
+        return isset($this->session[$key]) ? $this->session[$key] : null;
     }
 
     public function cookieData(string $key)
     {
-        return isset($this->cookies[$key]) ? $this->cookies['key'] : null;
+        return isset($this->cookies[$key]) ? $this->cookies[$key] : null;
     }
 
     public function cookieExists(string $key): bool
@@ -48,12 +48,12 @@ class HTTPRequest
         return isset($this->cookies[$key]);
     }
 
-    public function getData($key)
+    public function getData(string $key)
     {
         return isset($this->get[$key]) ? $this->get[$key] : null;
     }
 
-    public function getExists($key)
+    public function getExists(string $key)
     {
         return isset($this->get[$key]);
     }
@@ -76,33 +76,33 @@ class HTTPRequest
     public function postData(string $key = null)
     {
         if ($key) {
-            return isset($_POST[$key]) ? $_POST[$key] : null;
+            return isset($this->post[$key]) ? $this->post[$key] : null;
         }
-        return $_POST;
+        return $this->post;
     }
 
-    public function postExists($key)
+    public function postExists(string $key)
     {
-        return isset($_POST[$key]);
+        return isset($this->post[$key]);
     }
 
     public function requestQueryString()
     {
-        return $_SERVER['QUERY_STRING'];
+        return $this->server['QUERY_STRING'];
     }
 
-    public function filesData($key)
+    public function filesData(string $key)
     {
-        return isset($_FILES[$key]) ? $_FILES[$key] : null;
+        return isset($this->files[$key]) ? $this->files[$key] : null;
     }
 
-    public function filesExists($key)
+    public function filesExists(string $key)
     {
-        return isset($_FILES[$key]);
+        return isset($this->files[$key]);
     }
 
     public function isAjax()
     {
-        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+        return isset($this->server['HTTP_X_REQUESTED_WITH']) && $this->server['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
     }
 }

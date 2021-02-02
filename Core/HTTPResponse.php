@@ -28,7 +28,7 @@ class HTTPResponse
 
     public function redirect(string $location)
     {
-        header('location: http://' . $_SERVER['HTTP_HOST'] . $location, true, 303);
+        header('location: http://' . $this->httpRequest->getHost() . $location, true, 303);
         exit;
     }
 
