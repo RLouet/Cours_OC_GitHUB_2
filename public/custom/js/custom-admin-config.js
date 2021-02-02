@@ -280,6 +280,5 @@ $(document).ready(function() {
 		} else {
 			$("#blogCvPreview").attr("href", "#").html("erreur").removeClass("hidden");
 		}
-	})
-
+	});
 });
