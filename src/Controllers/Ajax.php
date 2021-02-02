@@ -497,7 +497,7 @@ class Ajax extends Controller
                     exit();
                 }
                 if ($userManager->save($user)) {
-                    Flash::addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
+                    $this->flash->addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
                     echo json_encode($handle);
                     exit();
                 }
@@ -582,7 +582,6 @@ class Ajax extends Controller
                 }
 
                 if ($userManager->save($user)) {
-                    //Flash::addMessage('L\'état de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
                     echo json_encode($handle);
                     exit();
                 }
@@ -645,7 +644,7 @@ class Ajax extends Controller
                 exit();
             }
             if ($userManager->delete($user->getId())) {
-                Flash::addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
+                $this->flash->addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
                 echo json_encode($handle);
                 exit();
             }

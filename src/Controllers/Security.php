@@ -33,12 +33,12 @@ class Security extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $user = $this->processRegistrationForm();
                 if (empty($user['errors'])) {
-                        Flash::addMessage("Vous avez bien été enregistré. Un email de confimation vous a été envoyé afin d'activer votre compte.");
-                        $this->httpResponse->redirect('/login');
+                    $this->flash->addMessage("Vous avez bien été enregistré. Un email de confimation vous a été envoyé afin d'activer votre compte.");
+                    $this->httpResponse->redirect('/login');
 
                 }
                 foreach ($user['errors'] as $error) {
-                    Flash::addMessage($error, Flash::WARNING);
+                    $this->flash->addMessage($error, Flash::WARNING);
                 }
             }
         }
@@ -67,7 +67,7 @@ class Security extends Controller
 
         $userManager->activate($token);
 
-        Flash::addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
+        $this->flash->addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
         $this->httpResponse->redirect('/login');
     }
 
@@ -86,7 +86,7 @@ class Security extends Controller
 
         $userManager->changeEmail($token);
 
-        Flash::addMessage('Votre nouvelle adresse Email est validée. Vous pouvez vous reconnecter');
+        $this->flash->addMessage('Votre nouvelle adresse Email est validée. Vous pouvez vous reconnecter');
         $this->httpResponse->redirect('/login');
     }
 
@@ -109,7 +109,7 @@ class Security extends Controller
 
                 if ($user && $user->getEnabled()) {
                     if ($user->getBanished()) {
-                        Flash::addMessage('Vous avez été bani de ce site !', Flash::ERROR);
+                        $this->flash->addMessage('Vous avez été bani de ce site !', Flash::ERROR);
 
                         $this->httpResponse->redirect('');
                     }
@@ -119,7 +119,7 @@ class Security extends Controller
                         $this->httpResponse->redirect($this->auth->GetRequestedPage());
                     }
                 }
-                Flash::addMessage('Mauvaise combinaison email / mot de passe ou compte non activé.', Flash::WARNING);
+                $this->flash->addMessage('Mauvaise combinaison email / mot de passe ou compte non activé.', Flash::WARNING);
             }
         }
 
@@ -157,13 +157,13 @@ class Security extends Controller
                     if ($userManager->startPasswordReset($user)) {
                         $mailer = new MailService();
                         if ($mailer->sendPasswordResetEmail($user, $token->getValue())) {
-                            Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                            $this->flash->addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
                             $this->httpResponse->redirect('/login');
                         }
                     }
-                    Flash::addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
+                    $this->flash->addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
                 } else {
-                    Flash::addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                    $this->flash->addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
                     $this->httpResponse->redirect('/login');
                 }
             }
@@ -194,7 +194,7 @@ class Security extends Controller
         $user = $userManager->findByPasswordToken($token);
 
         if (!$user || $user->getPasswordResetExpiry() < new DateTime()) {
-            Flash::addMessage("Votre lien de réinitialisation est invalide . Merci de renouveler votre demande.", Flash::WARNING);
+            $this->flash->addMessage("Votre lien de réinitialisation est invalide . Merci de renouveler votre demande.", Flash::WARNING);
             $this->httpResponse->redirect('/security/forgot-password');
         }
 
@@ -203,11 +203,11 @@ class Security extends Controller
                 $formUser = $this->processResetPasswordForm($user);
 
                 if (empty($formUser['errors'])) {
-                    Flash::addMessage('Votre mot de passe a bien été modifié.');
+                    $this->flash->addMessage('Votre mot de passe a bien été modifié.');
                     $this->httpResponse->redirect('/login');
                 }
                 foreach ($formUser['errors'] as $error) {
-                    Flash::addMessage($error, Flash::WARNING);
+                    $this->flash->addMessage($error, Flash::WARNING);
                 }
             }
         }
@@ -240,7 +240,7 @@ class Security extends Controller
      */
     public function showLogoutMessageAction()
     {
-        Flash::addMessage('Vous êtes déconnectés. A bientôt !');
+        $this->flash->addMessage('Vous êtes déconnectés. A bientôt !');
 
         $this->httpResponse->redirect('');
     }
@@ -251,7 +251,7 @@ class Security extends Controller
      */
     public function showDeletedMessageAction()
     {
-        Flash::addMessage('Votre profil a bien été supprimé.', Flash::INFO);
+        $this->flash->addMessage('Votre profil a bien été supprimé.', Flash::INFO);
 
         $this->httpResponse->redirect('');
     }

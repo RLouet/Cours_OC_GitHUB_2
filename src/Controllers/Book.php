@@ -64,18 +64,18 @@ class Book extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 if ($comment->isValid()) {
                     if (!$commentManager->save($comment)) {
-                        Flash::addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
+                        $this->flash->addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
                     } else {
                         $message = 'Votre commentaire est enregistré.';
                         if (!$this->auth->getUser()->isGranted('admin')) {
                             $message .= ' Il apparaîtra bientôt, après sa validation.';
                         }
-                        Flash::addMessage( $message, Flash::SUCCESS);
+                        $this->flash->addMessage( $message, Flash::SUCCESS);
                         $currentComment = "";
                     }
                     //$currentComment = "";
                 } else {
-                    Flash::addMessage('Votre commentaire est invalide.', Flash::WARNING);
+                    $this->flash->addMessage('Votre commentaire est invalide.', Flash::WARNING);
                 }
             }
         }

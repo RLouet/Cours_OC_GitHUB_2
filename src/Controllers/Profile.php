@@ -56,15 +56,15 @@ class Profile extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $user = $this->processEditProfileForm($user['entity']);
                 if (empty($user['errors'])) {
-                    Flash::addMessage("Votre profile a bien été modifié.");
+                    $this->flash->addMessage("Votre profile a bien été modifié.");
                     if ($user['new_email']) {
-                        Flash::addMessage("Pour confirmer le changement de votre adresse Email, merci de suivre les instructions envoyées à l'adresse " . $user['entity']->getNewEmail(), Flash::WARNING);
+                        $this->flash->addMessage("Pour confirmer le changement de votre adresse Email, merci de suivre les instructions envoyées à l'adresse " . $user['entity']->getNewEmail(), Flash::WARNING);
                     }
                     $this->httpResponse->redirect('/profile/show');
 
                 }
                 foreach ($user['errors'] as $error) {
-                    Flash::addMessage($error, Flash::WARNING);
+                    $this->flash->addMessage($error, Flash::WARNING);
                 }
             }
         }
@@ -143,13 +143,13 @@ class Profile extends Controller
 
         $mailer = new MailService();
         if (!$mailer->sendUserDeleteEmail($user, '')) {
-            Flash::addMessage('Une erreur s\'est produite lors de l\'envoie du mail de confirmation. Merci de rééssayer.', Flash::ERROR);
+            $this->flash->addMessage('Une erreur s\'est produite lors de l\'envoie du mail de confirmation. Merci de rééssayer.', Flash::ERROR);
             $this->httpResponse->redirect('/profile/show');
         }
 
         $deleter = new FilesService();
         if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
-            Flash::addMessage('Une erreur s\'est produite lors de la suppression de vos images. Merci de rééssayer.', Flash::ERROR);
+            $this->flash->addMessage('Une erreur s\'est produite lors de la suppression de vos images. Merci de rééssayer.', Flash::ERROR);
             $this->httpResponse->redirect('/profile/show');
         }
 
@@ -161,7 +161,7 @@ class Profile extends Controller
         }
 
 
-        Flash::addMessage('Une erreur s\'est produite lors de la suppression de votre profile. Merci de rééssayer.', Flash::ERROR);
+        $this->flash->addMessage('Une erreur s\'est produite lors de la suppression de votre profile. Merci de rééssayer.', Flash::ERROR);
         $this->httpResponse->redirect('/profile/show');
     }
 
@@ -171,7 +171,7 @@ class Profile extends Controller
      */
     public function showDeletedMessageAction()
     {
-        Flash::addMessage('Votre profile a bien été supprime.', 'danger');
+        $this->flash->addMessage('Votre profile a bien été supprime.', 'danger');
 
         $this->httpResponse->redirect('');
     }

@@ -54,30 +54,30 @@ class Posts extends Controller
 
         $currentComment = "";
 
-        if ($this->httpRequest->postExists('comment-send') && Auth::getUser()->isGranted('user')) {
+        if ($this->httpRequest->postExists('comment-send') && $this->auth->getUser()->isGranted('user')) {
             $currentComment = $this->httpRequest->postData('content');
             $comment = new Comment($this->httpRequest->postData());
-            $comment->setUser(Auth::getUser())->setBlogPost($blogPost['entity'])->setValidated(Auth::getUser()->isGranted('admin'));
+            $comment->setUser($this->auth->getUser())->setBlogPost($blogPost['entity'])->setValidated($this->auth->getUser()->isGranted('admin'));
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 if ($comment->isValid()) {
                     if (!$commentManager->save($comment)) {
-                        Flash::addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
+                        $this->flash->addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
                     } else {
                         $message = 'Votre commentaire est enregistré.';
-                        if (!Auth::getUser()->isGranted('admin')) {
+                        if (!$this->auth->getUser()->isGranted('admin')) {
                             $message .= ' Il apparaîtra bientôt, après sa validation.';
                         }
-                        Flash::addMessage( $message, Flash::SUCCESS);
+                        $this->flash->addMessage( $message, Flash::SUCCESS);
                         $currentComment = "";
                     }
                     //$currentComment = "";
                 } else {
-                    Flash::addMessage('Votre commentaire est invalide.', Flash::WARNING);
+                    $this->flash->addMessage('Votre commentaire est invalide.', Flash::WARNING);
                 }
             }
         }
 
-        $comments = $commentManager->getByPost(Auth::getUser(), $blogPost['entity']->getId());
+        $comments = $commentManager->getByPost($this->auth->getUser(), $blogPost['entity']->getId());
 
         $csrf = $this->generateCsrfToken();
 
@@ -92,18 +92,18 @@ class Posts extends Controller
 
     public function newAction()
     {
-        $blogPost['entity'] = new BlogPost(['user' => Auth::getUser()]);
+        $blogPost['entity'] = new BlogPost(['user' => $this->auth->getUser()]);
 
         if ($this->httpRequest->postExists('post-add')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogPost = $this->processForm($blogPost['entity']);
                 if (empty($blogPost['errors'])) {
-                    Flash::addMessage('Le post a bien été enregistrés');
+                    $this->flash->addMessage('Le post a bien été enregistrés');
 
                     $this->httpResponse->redirect('/admin/posts');
                 }
                 foreach ($blogPost['errors'] as $error) {
-                    Flash::addMessage($error, Flash::WARNING);
+                    $this->flash->addMessage($error, Flash::WARNING);
                 }
             }
         }
@@ -126,10 +126,8 @@ class Posts extends Controller
         if (!$blogPost['entity']) {
             throw new \Exception("Le post n'existe pas", 404);
         }
-        if (($blogPost['entity']->getUser()->getRole() == 'ROLE_ADMIN' && !$blogPost['entity']->getUser()->getBanished()) && ($blogPost['entity']->getUser()->getId() != Auth::getUser()->getId())) {
-            //var_dump($blogPost['entity']->getUser(), Auth::getUser());
-            //throw new \Exception("Vous n'êtes pas autorisé à éditer ce post.", 401);
-            Flash::addMessage("Vous n'êtes pas autorisé à éditer ce post.", Flash::ERROR);
+        if (($blogPost['entity']->getUser()->getRole() == 'ROLE_ADMIN' && !$blogPost['entity']->getUser()->getBanished()) && ($blogPost['entity']->getUser()->getId() != $this->auth->getUser()->getId())) {
+            $this->flash->addMessage("Vous n'êtes pas autorisé à éditer ce post.", Flash::ERROR);
 
             $this->httpResponse->redirect('/admin/posts');
         }
@@ -138,12 +136,12 @@ class Posts extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogPost = $this->processForm($blogPost['entity']);
                 if (empty($blogPost['errors'])) {
-                    Flash::addMessage('Le post a bien été modifié.');
+                    $this->flash->addMessage('Le post a bien été modifié.');
 
                     $this->httpResponse->redirect('/admin/posts');
                 }
                 foreach ($blogPost['errors'] as $error) {
-                    Flash::addMessage($error, Flash::WARNING);
+                    $this->flash->addMessage($error, Flash::WARNING);
                 }
 
             }

@@ -73,11 +73,11 @@
 }
 
 .hero-bottom-wrap {
-     position: absolute;
-     width: 200%;
-     bottom: -13px;
-     left: -50%;
- }
+    position: absolute;
+    width: 200%;
+    bottom: -13px;
+    left: -50%;
+}
 @media (max-width: 1500px){
     .hero-bottom-wrap {
         bottom: -0px;
@@ -318,9 +318,9 @@ ul.sitemap li {
 }
 
 .edit-profile-form label {
-     font-weight: bold;
-     font-size: 1.0rem;
- }
+    font-weight: bold;
+    font-size: 1.0rem;
+}
 .edit-profile-form .form-control {
     font-size: 1.2em;
     padding-top: 0;
@@ -346,14 +346,14 @@ ul.sitemap li {
     background-color: rgba(200, 0, 0, 0.07);
 }
 .table-hover .table-danger:hover>td, .table-hover .table-danger:hover>th {
-     background-color: rgba(200, 0, 0, 0.15);
- }
+    background-color: rgba(200, 0, 0, 0.15);
+}
 .table-disabled, .table-disabled>td, .table-disabled>th {
     background-color: rgba(115, 115, 115, 0.25);
 }
 .table-hover .table-disabled:hover>td, .table-hover .table-disabled:hover>th {
-     background-color: rgba(115, 115, 115, 0.5);
- }
+    background-color: rgba(115, 115, 115, 0.5);
+}
 table.align-middle td, table.align-middle th {
     vertical-align: middle;
 }
@@ -417,7 +417,7 @@ table.align-middle td, table.align-middle th {
     color:  #5cb85c;
 }
 .users-table button.fa-btn:hover>span {
-text-shadow: 0 0 2px rgba(0, 0, 0, 1);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1);
 }
 
 /* ---------- Cookies Notice -------------- */

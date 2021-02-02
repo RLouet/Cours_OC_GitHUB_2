@@ -40,12 +40,11 @@ class Home extends Controller
                         $this->httpResponse->redirect('/#');
                     }
                 }
-                Flash::addMessage('Des champs du formulaire sont invalides. Merci de les corriger et de recommencer.', Flash::WARNING);
+                $this->flash->addMessage('Des champs du formulaire sont invalides. Merci de les corriger et de recommencer.', Flash::WARNING);
             }
         }
         $csrf = $this->generateCsrfToken();
-        $response = new HTTPResponse();
-        $response->renderTemplate('Frontend/index.html.twig', [
+        $this->httpResponse->renderTemplate('Frontend/index.html.twig', [
             'section' => 'home',
             'contact_message' => $contactMessage,
             'posted_data' => $postedData,

@@ -42,10 +42,10 @@ class Config extends Controller
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogForm = $this->processForm($blogForm['entity']);
                 if (empty($blogForm['errors'])) {
-                    Flash::addMessage('Les paramètres du blog ont bien été enregistrés');
+                    $this->flash->addMessage('Les paramètres du blog ont bien été enregistrés');
                 } else {
                     foreach ($blogForm['errors'] as $error) {
-                        Flash::addMessage($error, Flash::WARNING);
+                        $this->flash->addMessage($error, Flash::WARNING);
                     }
                 }
             }
