@@ -10,13 +10,16 @@
 
 .configform label {
     font-weight: bold;
-    font-size: 1.0rem;
+    font-size: 1rem;
 }
 
 .form-on-dark label {
     color: #c6ff84;
 }
-.form-control:active, input:focus, .form-control:focus {
+
+.form-control:active,
+input:focus,
+.form-control:focus {
     border-color: #6dc234;
 }
 
@@ -37,7 +40,7 @@
     background-color: rgba(109, 194, 52, 0.18);
 }
 
-.configform .shop-box-1 .form-control[type="file"]{
+.configform .shop-box-1 .form-control[type="file"] {
     font-size: 1em;
 }
 
@@ -51,11 +54,6 @@
     max-height: 60px;
 }
 
-#menu-wrap.cbp-af-header.cbp-af-header-shrink .navbar-brand img {
-    position: absolute;
-    top: 0;
-    max-height: 60px;
-}
 #menu-wrap .navbar-brand img {
     position: absolute;
     top: -30px;
@@ -68,7 +66,7 @@
     transition: all 0.3s ease-out;
 }
 
-.hero-text h2.typed{
+.hero-text h2.typed {
     color: #00b6f1;
 }
 
@@ -78,18 +76,20 @@
     bottom: -13px;
     left: -50%;
 }
-@media (max-width: 1500px){
+
+@media (max-width: 1500px) {
     .hero-bottom-wrap {
-        bottom: -0px;
+        bottom: 0;
     }
 }
+
 .hero-bottom-wrap h2 {
-    font-size: 36px;
     font-size: 13vw;
 }
 
 @media (max-width: 991px) {
-    #menu-wrap .navbar-brand img, #menu-wrap.cbp-af-header.cbp-af-header-shrink .navbar-brand img {
+    #menu-wrap .navbar-brand img,
+    #menu-wrap.cbp-af-header.cbp-af-header-shrink .navbar-brand img {
         max-height: 50px;
         top: 0;
         z-index: 50;
@@ -97,7 +97,6 @@
 }
 
 @media (max-width: 991px) {
-
     .bg-faded {
         background: none;
     }
@@ -155,7 +154,7 @@
 
 /* social
 -------------- Hero ----------------- */
-.hero-social.img-social li a:before {
+.hero-social.img-social li a::before {
     content: none;
     display: none;
 }
@@ -172,13 +171,20 @@
     width: auto;
 }
 
-#socialLogoInput, #blogLogoInput, #blogCvInput, .post-image-input {
+#socialLogoInput,
+#blogLogoInput,
+#blogCvInput,
+.post-image-input {
     display: none;
 }
-label[for=socialLogoInput], label[for=blogLogoInput], label[for=blogCvInput] {
+
+label[for=socialLogoInput],
+label[for=blogLogoInput],
+label[for=blogCvInput] {
     width: 100%;
     color: white;
 }
+
 label[for=blogLogoInput] {
     margin-bottom: 0;
 }
@@ -186,17 +192,19 @@ label[for=blogLogoInput] {
 .social-icon-input-area img {
     width: 100%;
 }
+
 .blog-logo-input-area img {
     background-color: white;
     max-height: 150px;
     padding: 5px;
-    border-radius: .15rem .15rem 0 0;
+    border-radius: 0.15rem 0.15rem 0 0;
 }
 
 #socialModal .form-control {
     font-size: 1.2em;
     padding-top: 0;
 }
+
 #socialModal label {
     font-size: 1em;
     padding-top: 0;
@@ -233,18 +241,23 @@ label[for=blogLogoInput] {
     width: 96%;
 }
 
-button.fa-btn, label.fa-btn {
+button.fa-btn,
+label.fa-btn {
     background: none;
     border: none;
     font-size: 2em;
     color: #6dc234;
     font-weight: bold;
 }
-button.fa-btn:hover, label.fa-btn:hover {
+
+button.fa-btn:hover,
+label.fa-btn:hover {
     cursor: pointer;
     color: #c6ff84;
 }
-button.fa-btn:focus, label.fa-btn:focus {
+
+button.fa-btn:focus,
+label.fa-btn:focus {
     border: none;
     outline: none;
 }
@@ -252,13 +265,15 @@ button.fa-btn:focus, label.fa-btn:focus {
 .text-light-green {
     color: #c6ff84;
 }
+
 .bigger-1 {
     font-size: 1.5em;
 }
+
 .skill-value {
-    border : 1px dashed #aaaaaa;
-    padding: .5em;
-    margin : .3em;
+    border: 1px dashed #aaa;
+    padding: 0.5em;
+    margin: 0.3em;
 }
 
 .sn-logo {
@@ -269,11 +284,13 @@ button.fa-btn:focus, label.fa-btn:focus {
 .footer-social-icons a img {
     height: 50px;
 }
+
 .footer-social-icons a {
     position: relative;
     bottom: 0;
     transition: all 0.2s ease-out;
 }
+
 .footer-social-icons a:hover {
     bottom: 5px;
 }
@@ -281,19 +298,22 @@ button.fa-btn:focus, label.fa-btn:focus {
 ul.sitemap {
     list-style-type: none;
 }
+
 ul.sitemap li {
     margin-bottom: 0;
 }
+
 .blog-box-1.blog-admin {
     padding-bottom: 1rem;
 }
+
 .blog-box-1 img.blog-home-img {
     height: 15rem;
     object-fit: cover;
 }
 
 .background-grey {
-    background-color: #aaaaaa;
+    background-color: #aaa;
 }
 
 .section-title {
