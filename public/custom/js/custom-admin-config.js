@@ -98,7 +98,9 @@ $(document).ready(function() {
 				if (!data.success){
 					let errorMessage = "<ul>";
 					for (let k in data.errors) {
-						errorMessage += "<li>" + data.errors[k] + "</li>";
+						if (Object.prototype.hasOwnProperty.call(data.errors, k)) {
+							errorMessage += "<li>" + data.errors[k] + "</li>";
+						}
 					}
 					errorMessage += "</ul>";
 					$(".sk-general-error .form-error span", $form).html(errorMessage);
@@ -112,7 +114,7 @@ $(document).ready(function() {
 				} else {
 					let $skillBox = $(".skill-item-" + data.entity.id );
 					let action = "modifié";
-					$('#skillModal').modal("hide");
+					$("#skillModal").modal("hide");
 					if (!$skillBox.length) {
 						action = "ajouté";
 						$(".skills-list").append("<div class='col-auto mt-3 skill-item-" + data.entity.id + "'>\n" +
@@ -125,7 +127,7 @@ $(document).ready(function() {
 					}
 					$(".skill-value", $skillBox).html(data.entity.value);
 					$(".btn-delete", $skillBox).data("name", data.entity.value);
-					showFlashMessage("success", "Le skill a bien été " + action + ".")
+					showFlashMessage("success", "Le skill a bien été " + action + ".");
 				}
 			},
 			error(e) {
@@ -133,7 +135,7 @@ $(document).ready(function() {
 				$(".sk-general-error .form-error span", $form).html("Erreur Ajax");
 				$(".sk-general-error .form-error", $form).removeClass("hidden");
 			}
-		})
+		});
 	});
 
 	$("#socialModal").on("show.bs.modal", function(event) {
@@ -197,11 +199,13 @@ $(document).ready(function() {
 					$(".sn-general-error .form-error", $form).removeClass("hidden");
 
 					for (let fe in data.form_errors) {
-						if (data.form_errors[fe] === 2) {
-							$(".sn-name .form-error", $form).removeClass("hidden");
-						}
-						if (data.form_errors[fe] === 4) {
-							$(".sn-url .form-error", $form).removeClass("hidden");
+						if (Object.prototype.hasOwnProperty.call(data.form_errors, fe)) {
+							if (data.form_errors[fe] === 2) {
+								$(".sn-name .form-error", $form).removeClass("hidden");
+							}
+							if (data.form_errors[fe] === 4) {
+								$(".sn-url .form-error", $form).removeClass("hidden");
+							}
 						}
 					}
 				} else {
@@ -241,15 +245,15 @@ $(document).ready(function() {
 					$(".sn-name", $socialBox).html(data.entity.name);
 					$(".btn-delete", $socialBox).data("name", data.entity.name);
 					$(".sn-url", $socialBox).html(data.entity.url);
-					showFlashMessage("success", "Le réseau social a bien été " + action + ".")
+					showFlashMessage("success", "Le réseau social a bien été " + action + ".");
 				}
 			},
-			error: function (e) {
+			error(e) {
 				//alert('ajax');
 				$(".sn-general-error .form-error span", $form).html("Erreur Ajax");
 				$(".sn-general-error .form-error", $form).removeClass("hidden");
 			}
-		})
+		});
 	});
 
 	$("#socialLogoInput").change(function(e) {
