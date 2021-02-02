@@ -192,7 +192,9 @@ $(document).ready(function() {
 				if (!data.success){
 					let errorMessage = "<ul>";
 					for (let k in data.errors) {
-						errorMessage += "<li>" + data.errors[k] + "</li>";
+						if (Object.prototype.hasOwnProperty.call(data.errors, k)) {
+							errorMessage += "<li>" + data.errors[k] + "</li>";
+						}
 					}
 					errorMessage += "</ul>";
 					$(".sn-general-error .form-error div", $form).html(errorMessage);
