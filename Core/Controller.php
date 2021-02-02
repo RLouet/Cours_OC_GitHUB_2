@@ -39,6 +39,12 @@ abstract class Controller
      */
     protected Auth $auth;
 
+    /**
+     * flash
+     * @var Flash
+     */
+    protected Flash $flash;
+
     public function __construct(array $routeParams, HTTPRequest $request)
     {
        $this->httpRequest = $request;
@@ -48,6 +54,7 @@ abstract class Controller
 
         $this->managers = new Managers('PDO', PDOFactory::getPDOConnexion());
         $this->auth = Auth::getInstance();
+        $this->flash = Flash::getInstance();
     }
 
     /**
@@ -106,7 +113,7 @@ abstract class Controller
     public function requiredLogin(string $role = 'user'): void
     {
         if (!$this->auth->getUser() || !$this->auth->getUser()->isGranted($role)) {
-            Flash::addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::WARNING);
+            $this->flash->addMessage("Vous n'avez pas les droits pour accéder à cette page.", Flash::WARNING);
             $this->auth->rememberRequestedPage();
             $this->httpResponse->redirect('/login');
         }

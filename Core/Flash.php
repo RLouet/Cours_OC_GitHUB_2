@@ -6,27 +6,47 @@ namespace Core;
 
 class Flash
 {
+    private static ?Flash $instance = null;
+
     const SUCCESS = 'success';
     const INFO = 'info';
     const WARNING = 'warning';
     const ERROR = 'danger';
 
-    public static function addMessage(string $message, string $type = 'success'): void
+    private array $session;
+    private HTTPRequest $httpRequest;
+
+    private function __construct()
     {
-        if (!isset($_SESSION['flash_notifications'])) {
-            $_SESSION['flash_notifications'] = [];
+        $this->session = &$_SESSION;
+        $this->httpRequest = HTTPRequest::getInstance();
+    }
+
+    public static function getInstance()
+    {
+        if(is_null(self::$instance))
+        {
+            self::$instance = new self;
         }
-        $_SESSION['flash_notifications'][] = [
+        return self::$instance;
+    }
+
+    public function addMessage(string $message, string $type = 'success'): void
+    {
+        if (!isset($this->session['flash_notifications'])) {
+            $this->session['flash_notifications'] = [];
+        }
+        $this->session['flash_notifications'][] = [
             'message' => $message,
             'type' => $type
         ];
     }
 
-    public static function getMessages(): ?array
+    public function getMessages(): ?array
     {
-        if (isset($_SESSION['flash_notifications'])) {
-            $messages = $_SESSION['flash_notifications'];
-            unset($_SESSION['flash_notifications']);
+        if (isset($this->session['flash_notifications'])) {
+            $messages = $this->session['flash_notifications'];
+            unset($this->session['flash_notifications']);
             return  $messages;
         }
         return null;

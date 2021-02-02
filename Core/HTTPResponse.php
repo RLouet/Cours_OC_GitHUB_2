@@ -13,12 +13,16 @@ class HTTPResponse
     private Config $config;
     private HTTPRequest $httpRequest;
     private Auth $auth;
+    private array $session;
+    private Flash $flash;
 
     public function __construct()
     {
         $this->config = Config::getInstance();
         $this->httpRequest = HTTPRequest::getInstance();
         $this->auth = Auth::getInstance();
+        $this->session = &$_SESSION;
+        $this->flash = Flash::getInstance();
     }
 
     public function addHeader(string $header)
@@ -70,7 +74,7 @@ class HTTPResponse
             $twig->addGlobal('path', 'http://' . $this->httpRequest->getHost());
             $twig->addGlobal('current_user', $this->auth->getUser());
             if ($messages) {
-                $twig->addGlobal('flash_messages', Flash::getMessages());
+                $twig->addGlobal('flash_messages', $this->flash->getMessages());
             }
             $twig->addGlobal('blog', $this->getBlog());
             $twig->addGlobal('app_config', $this->config);
@@ -117,5 +121,10 @@ class HTTPResponse
         $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
         $blogManager = new BlogManagerPDO(PDOFactory::getPDOConnexion());
         return $blogManager->getData($blogId);
+    }
+
+    public function setSession(string $key, $value)
+    {
+        $this->session[$key] = $value;
     }
 }
