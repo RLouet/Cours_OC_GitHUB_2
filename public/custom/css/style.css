@@ -343,7 +343,7 @@ ul.sitemap li {
 
 .edit-profile-form label {
     font-weight: bold;
-    font-size: 1.0rem;
+    font-size: 1rem;
 }
 
 .edit-profile-form .form-control {
@@ -402,7 +402,7 @@ table.align-middle th {
 }
 
 .nav-link:hover {
-    background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .nav-link.active {
@@ -417,32 +417,32 @@ table.align-middle th {
 
 .users-table button.fa-btn > span {
     text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.4);
-    transition: text-shadow .2s;
+    transition: text-shadow 0.2s;
 }
 
 .users-table button.fa-btn > span.fa-lock::before {
     color: #d9534f;
-    transition: color .5s;
+    transition: color 0.5s;
 }
 
 .users-table button.fa-btn > span.fa-unlock::before {
     color: #5cb85c;
-    transition: color .5s;
+    transition: color 0.5s;
 }
 
 .users-table button.fa-btn > span.fa-user-times::before {
     color: #000;
-    transition: color .5s;
+    transition: color 0.5s;
 }
 
 .users-table button.fa-btn > span.fa-black-tie::before {
-    color:  #5cb85c;
-    transition: color .5s;
+    color: #5cb85c;
+    transition: color 0.5s;
 }
 
 .users-table button.fa-btn > span.fa-user::before {
     color: #5bc0de;
-    transition: color .5s;
+    transition: color 0.5s;
 }
 
 .users-table button.fa-btn:hover > span.fa-lock::before {
@@ -477,7 +477,7 @@ table.align-middle th {
 /* ---------- Cookies Notice -------------- */
 .cookie-notice {
     border-top: 2px solid #f0ad4e;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
     color: white;
     position: fixed;
     bottom: 0;
@@ -485,6 +485,7 @@ table.align-middle th {
     z-index: 10000;
     padding: 1.5em;
 }
-.cookie-notice p{
+
+.cookie-notice p {
     margin: 0;
 }
