@@ -10,10 +10,10 @@ use JsonSerializable;
 class SocialNetwork extends Entity implements JsonSerializable
 {
 
-    protected $blogId,
-        $name,
-        $logo,
-        $url;
+    protected int $blogId;
+    protected string $name;
+    protected string $logo;
+    protected string $url;
 
     const INVALID_BLOG_ID = 1;
     const INVALID_NAME = 2;
@@ -83,22 +83,22 @@ class SocialNetwork extends Entity implements JsonSerializable
 
     // GETTERS //
 
-    public function getBlogId()
+    public function getBlogId(): int
     {
         return $this->blogId;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getLogo()
+    public function getLogo(): string
     {
         return $this->logo;
     }
 
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }

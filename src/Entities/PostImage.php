@@ -23,31 +23,34 @@ class PostImage extends Entity
 
     // SETTERS //
 
-    public function setName(string $name)
+    public function setName(string $name): PostImage
     {
         if (empty($name)) {
             $this->errors[] = self::INVALID_NAME;
-        } else {
-            $this->name = $name;
+            return $this;
         }
+        $this->name = $name;
+        return $this;
     }
 
-    public function setUrl(string $url)
+    public function setUrl(string $url): PostImage
     {
         if (empty($url) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\d\'a-zÀ-ÖØ-öø-ÿœŒ -.]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $url)) {
             $this->errors[] = self::INVALID_URL;
-        } else {
-            $this->url = $url;
+            return $this;
         }
+        $this->url = $url;
+        return $this;
     }
 
-    public function setBlogPostId(int $blogPostId)
+    public function setBlogPostId(int $blogPostId): PostImage
     {
         if (empty($blogPostId)) {
             $this->errors[] = self::INVALID_BLOGPOSTID;
-        } else {
-            $this->blogPostId = $blogPostId;
+            return $this;
         }
+        $this->blogPostId = $blogPostId;
+        return $this;
     }
 
 
