@@ -50,31 +50,34 @@ class SocialNetwork extends Entity implements JsonSerializable
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): SocialNetwork
     {
         if (empty($name) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $name)) {
             $this->errors[] = self::INVALID_NAME;
-        } else {
-            $this->name = $name;
+            return $this;
         }
+        $this->name = $name;
+        return $this;
     }
 
-    public function setLogo(string $logo)
+    public function setLogo(string $logo): SocialNetwork
     {
         if (empty($logo)) {
             $this->errors[] = self::INVALID_LOGO;
-        } else {
-            $this->logo = $logo;
+            return $this;
         }
+        $this->logo = $logo;
+        return $this;
     }
 
     public function setUrl(string $url)
     {
         if (empty($url) || !preg_match('/^[-&%_:?\/=.\da-z]{5,50}$/i', $url)) {
             $this->errors[] = self::INVALID_URL;
-        } else {
-            $this->url = $url;
+            return $this;
         }
+        $this->url = $url;
+        return $this;
     }
 
 
