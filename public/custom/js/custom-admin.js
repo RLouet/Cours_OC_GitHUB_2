@@ -190,5 +190,5 @@
 				threshold : 150 
 			};
 		} )(jQuery);
-		
+
   })(jQuery); 
