@@ -12,12 +12,12 @@ class Auth
 {
     private static ?Auth $instance = null;
     private HTTPRequest $httpRequest;
-    private HTTPResponse $httpResponse;
+    private array $session;
 
     private function __construct()
     {
         $this->httpRequest = HTTPRequest::getInstance();
-        $this->httpResponse = new HTTPResponse();
+        $this->session = &$_SESSION;
     }
 
     public static function getInstance()
@@ -35,7 +35,7 @@ class Auth
     public function login(User $user, $remembeMe): void
     {
         session_regenerate_id(true);
-        $this->httpResponse->setSession('user_id', $user->getId());
+        $this->session['user_id'] = $user->getId();
 
         if ($remembeMe) {
             $this->rememberLogin($user);
@@ -48,7 +48,7 @@ class Auth
     public function logout(): void
     {
         // Détruit toutes les variables de session
-        $_SESSION = array();
+        $this->session = array();
 
         // Efface le cookie de session.
         if (ini_get("session.use_cookies")) {
@@ -70,7 +70,7 @@ class Auth
      */
     public function rememberRequestedPage(): void
     {
-        $this->httpResponse->setSession('return_to', $this->httpRequest->requestUri());
+        $this->session['return_to'] = $this->httpRequest->requestUri();
     }
 
     /**
@@ -132,7 +132,8 @@ class Auth
         $stmt->bindValue(':expires_at', date('Y-m-d H:i:s', $expiryTimestamp), PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            $this->httpResponse->setCookie('remember_me', $token, $expiryTimestamp, '/');
+            $httpResponse = new HTTPResponse();
+            $httpResponse->setCookie('remember_me', $token, $expiryTimestamp, '/');
             return true;
         }
         return false;
@@ -149,8 +150,8 @@ class Auth
             $stmt->bindValue(':token_hash', $hashedToken, PDO::PARAM_STR);
 
             $stmt->execute();
-
-            $this->httpResponse->setCookie('remember_me', '', time() - 36000);
+            $httpResponse = new HTTPResponse();
+            $httpResponse->setCookie('remember_me', '', time() - 36000);
         }
     }
 
