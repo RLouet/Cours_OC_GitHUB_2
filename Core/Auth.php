@@ -12,15 +12,17 @@ class Auth
 {
     private static ?Auth $instance = null;
     private HTTPRequest $httpRequest;
+    private HTTPResponse $httpResponse;
 
     private function __construct()
     {
         $this->httpRequest = HTTPRequest::getInstance();
+        $this->httpResponse = new HTTPResponse();
     }
 
     public static function getInstance()
     {
-        if(is_null(self::$instance))
+        if(self::$instance === null)
         {
             self::$instance = new self;
         }
@@ -33,7 +35,7 @@ class Auth
     public function login(User $user, $remembeMe): void
     {
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $user->getId();
+        $this->httpResponse->setSession('user_id', $user->getId());
 
         if ($remembeMe) {
             $this->rememberLogin($user);
@@ -68,7 +70,7 @@ class Auth
      */
     public function rememberRequestedPage(): void
     {
-        $_SESSION['return_to'] = $this->httpRequest->requestUri();
+        $this->httpResponse->setSession('return_to', $this->httpRequest->requestUri());
     }
 
     /**
@@ -76,7 +78,7 @@ class Auth
      */
     public function GetRequestedPage(): string
     {
-       return $_SESSION['return_to'] ?? '';
+        return $this->httpRequest->sessionData('return_to') ?? '';
     }
 
     /**
@@ -130,8 +132,7 @@ class Auth
         $stmt->bindValue(':expires_at', date('Y-m-d H:i:s', $expiryTimestamp), PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            $httpResponse = new HTTPResponse();
-            $httpResponse->setCookie('remember_me', $token, $expiryTimestamp, '/');
+            $this->httpResponse->setCookie('remember_me', $token, $expiryTimestamp, '/');
             return true;
         }
         return false;
@@ -149,8 +150,7 @@ class Auth
 
             $stmt->execute();
 
-            $httpResponse = new HTTPResponse();
-            $httpResponse->setCookie('remember_me', '', time() - 36000);
+            $this->httpResponse->setCookie('remember_me', '', time() - 36000);
         }
     }
 
