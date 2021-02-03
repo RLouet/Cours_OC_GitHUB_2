@@ -18,8 +18,6 @@ use Core\HTTPResponse;
 
 class Ajax extends Controller
 {
-    private HTTPResponse $httpResponse;
-
     /**
      * Before filter
      *
@@ -30,10 +28,6 @@ class Ajax extends Controller
         {
             throw new \Exception('not found', 404);
         }
-    }
-
-    public function returnResult(string $response) {
-
     }
 
     /**
