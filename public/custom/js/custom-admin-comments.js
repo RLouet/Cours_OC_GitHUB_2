@@ -54,7 +54,7 @@ $(document).ready(function() {
                 $(".delete-error .form-error span", $confirmModal).html("Erreur Ajax");
                 $(".delete-error .form-error", $confirmModal).removeClass("hidden");
             }
-        })
+        });
     });
 
     $confirmModal.on("hide.bs.modal", function(event) {
@@ -101,7 +101,7 @@ $(document).ready(function() {
             error(e) {
                 showFlashMessage("danger", "Une erreur s'est produite.");
             }
-        })
+        });
     });
 
 });
