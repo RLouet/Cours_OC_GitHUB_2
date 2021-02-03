@@ -127,4 +127,8 @@ class HTTPResponse
     {
         $this->session[$key] = $value;
     }
+
+    public function ajaxResponse($response) {
+        echo json_encode($response);
+    }
 }
