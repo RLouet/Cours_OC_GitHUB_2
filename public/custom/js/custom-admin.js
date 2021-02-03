@@ -2,7 +2,7 @@
 	//Preloader
 	Royal_Preloader.config({
 		mode           : "progress",
-		background     : "#ffffff",
+		background     : "#aaaaaa",
 		showProgress   : true,
 		showPercentage : false
 	});
@@ -16,7 +16,7 @@
 	function scrollBanner() {
 		$(document).on("scroll", function(){
 			var scrollPos = $(this).scrollTop();
-			$('.parallax-fade-top').css({
+			$(".parallax-fade-top").css({
 				"top": (scrollPos/2) + "px",
 				"opacity": 1-(scrollPos/250)
 			});
@@ -31,13 +31,13 @@
 
 			event.preventDefault();
 
-			let full_url = this.href;
-			let parts = full_url.split("#");
+			let fullUrl = this.href;
+			let parts = fullUrl.split("#");
 			let trgt = parts[1];
-			let target_offset = $("#"+trgt).offset();
-			let target_top = target_offset.top - 68;
+			let targetOffset = $("#"+trgt).offset();
+			let targetTop = targetOffset.top - 68;
 
-			$("html, body").animate({scrollTop:target_top}, 800);
+			$("html, body").animate({scrollTop:targetTop}, 800);
 		});
 
 			
@@ -168,13 +168,13 @@
 			
 			
 			$special = $event.special.debouncedresize = { 
-				setup : function () { 
+				setup() {
 					$(this).on("resize", $special.handler);
 				}, 
-				teardown : function () { 
+				teardown() {
 					$(this).off("resize", $special.handler);
 				}, 
-				handler : function (event, execAsap) { 
+				handler(event, execAsap) {
 					let context = this,
 						args = arguments, 
 						dispatch = function () { 
