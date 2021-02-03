@@ -66,9 +66,9 @@ $(document).ready(function() {
 				}
 				for (let k in data.posts) {
 					let post = data.posts[k];
-					let heroUrl = path + "/img/blog/1.jpg";
+					let heroUrl = window.location.origin + "/img/blog/1.jpg";
 					if (post.heroUrl) {
-						heroUrl = path + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl;
+						heroUrl = window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl;
 					}
 					let heroAlt = "";
 					if (post.heroName) {
@@ -77,13 +77,13 @@ $(document).ready(function() {
 					let postManagementButtons = "";
 					if (post.userId === userId || post.userBanished || !post.userAdmin) {
 						postManagementButtons = "<div class=\"row justify-content-between\">\n" +
-							"                        <a class=\"btn btn-primary btn-sm col-auto\" href=\"" + path + "/admin/posts/" + post.id + "/edit\">Modifier</a>\n" +
+							"                        <a class=\"btn btn-primary btn-sm col-auto\" href=\"" + window.location.origin + "/admin/posts/" + post.id + "/edit\">Modifier</a>\n" +
 							"                        <button class=\"btn btn-danger btn-sm col-auto\" data-toggle=\"modal\" data-target=\"#deleteModal\" data-id=\"" + post.id + "\" data-name=\"" + post.title + "\">Supprimer</button>\n" +
 							"                    </div>\n";
 					}
 					let item = $("<div class=\"grid-box float-inline quarter with-margin drop-shadow rounded post-item-" + post.id + "\">\n" +
 						"                            <div class=\"blog-box-1 blog-home blog-admin background-white over-hide\">\n" +
-						"                                    <a href=\"" + path + "/admin/posts/" + post.id + "/view\">\n" +
+						"                                    <a href=\"" + window.location.origin + "/admin/posts/" + post.id + "/view\">\n" +
 						"                                        <div class=\"portfolio-box-1\">\n" +
 						"                                            <img  src=\"" + heroUrl + "\" alt=\"" + heroAlt + "\"  class=\"blog-home-img\"/>\n" +
 						"                                            <div class=\"portfolio-mask-2 rounded\"></div>\n" +
@@ -91,9 +91,9 @@ $(document).ready(function() {
 						"                                        </div>\n" +
 						"                                    </a>\n" +
 						"                                <div class=\"padding-in\">\n" +
-						"                                    <a href=\"" + path + "/admin/posts/" + post.id + "/view\"><h5 class=\"mt-3\">" + post.title + "</h5></a>\n" +
+						"                                    <a href=\"" + window.location.origin + "/admin/posts/" + post.id + "/view\"><h5 class=\"mt-3\">" + post.title + "</h5></a>\n" +
 						"                                    <p class=\"mt-3\">" + post.chapo + "</p>\n" +
-						"                                    <a href=\"" + path + "/admin/posts/" + post.id + "/view\" class=\"btn-link btn-primary pl-0 mt-4\">Lire la suite</a>\n" +
+						"                                    <a href=\"" + window.location.origin + "/admin/posts/" + post.id + "/view\" class=\"btn-link btn-primary pl-0 mt-4\">Lire la suite</a>\n" +
 						"                                    <div class=\"separator-wrap pt-3\">\n" +
 						"                                        <span class=\"separator\"><span class=\"separator-line\"></span></span>\n" +
 						"                                    </div>\n" +

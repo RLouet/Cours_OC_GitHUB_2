@@ -79,8 +79,8 @@ $(document).ready(function() {
                     let comment = data.comments[k];
                     let item = $("<div class='comment-item-" + comment.id + " col-md-4 my-2 comment-item'>\n" +
                         "                                <div class='col-12 background-white rounded-3 p-2 blog-box-1'>\n" +
-                        "                                    <a href='" + path + "/admin/posts/" + comment.postId + "/view' class='btn-primary'><h5>" + comment.postTitle + " (#" + comment.postId + ")</h5></a>\n" +
-                        "                                    <a href='" + path + "/admin/posts/" + comment.postId + "/view' class='btn-link btn-primary pl-0 mt-4'>Voir le post</a>\n" +
+                        "                                    <a href='" + window.location.origin + "/admin/posts/" + comment.postId + "/view' class='btn-primary'><h5>" + comment.postTitle + " (#" + comment.postId + ")</h5></a>\n" +
+                        "                                    <a href='" + window.location.origin + "/admin/posts/" + comment.postId + "/view' class='btn-link btn-primary pl-0 mt-4'>Voir le post</a>\n" +
                         "                                    <div class='separator-wrap pt-3'>\n" +
                         "                                        <span class='separator'><span class='separator-line'></span></span>\n" +
                         "                                    </div>\n" +

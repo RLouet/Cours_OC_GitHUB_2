@@ -40,7 +40,7 @@ $(document).ready(function() {
     $("#addPostImage").click(function (e) {
         e.preventDefault();
         let $template = $("  <div class='col-md-6 col-lg-4 col-xl-3 mt-3 post-image-item new-post-image-" + postImageCount + "'>\n" +
-            "                    <div><img src='" + path + "/img/blog/1.jpg' alt='Nouvelle image' class='img-fluid post-image-preview'></div>\n" +
+            "                    <div><img src='" + window.location.origin + "/img/blog/1.jpg' alt='Nouvelle image' class='img-fluid post-image-preview'></div>\n" +
             "                    <div><input type='text' placeholder='Description' class='form-control post-image-name-field' name='new_post_image[" + postImageCount + "][name]' required></div>\n" +
             "                    <input type='file' name='new_post_image[" + postImageCount + "]' id='newPostImageInput" + postImageCount + "' class='form-control post-image-input' accept='image/*' required>" +
             "                    <div class='row justify-content-around'>\n" +
