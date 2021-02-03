@@ -49,14 +49,14 @@ $(document).ready(function() {
                     let $itemBox = $(".comment-item-" + data.comment);
                     if (action === "supprimer") {
                         $itemBox.remove();
-                        showFlashMessage("success", "Le commentaire a bien été supprimé.")
+                        showFlashMessage("success", "Le commentaire a bien été supprimé.");
                     }
                     if (action === "valider") {
                         $("div", $itemBox).removeClass("background-dark");
                         $("div", $itemBox).removeClass("color-white rounded-3");
                         $(".waiting-validation",$itemBox).remove();
                         $(".validate-btn",$itemBox).remove();
-                        showFlashMessage("success", "Le commentaire a bien été validé.")
+                        showFlashMessage("success", "Le commentaire a bien été validé.");
                     }
                     $confirmModal.modal("hide");
                 }
@@ -65,7 +65,7 @@ $(document).ready(function() {
                 $(".delete-error .form-error span", $confirmModal).html("Erreur Ajax");
                 $(".delete-error .form-error", $confirmModal).removeClass("hidden");
             }
-        })
+        });
     });
 
     $confirmModal.on("hide.bs.modal", function(event) {
@@ -128,7 +128,7 @@ $(document).ready(function() {
             error(e) {
                 showFlashMessage("danger", "Une erreur s'est produite.");
             }
-        })
+        });
     });
 
 });
