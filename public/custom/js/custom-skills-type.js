@@ -2,7 +2,7 @@
 	$(document).ready(function() {
 
 		// Type text
-		var typed;
+		let typed;
 
 		function getTypedElements() {
 			$.ajax({

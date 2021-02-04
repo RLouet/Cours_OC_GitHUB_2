@@ -1,4 +1,4 @@
-(function($) {
+let customBase = (function($) {
 	"use strict";
 
 	//Preloader
