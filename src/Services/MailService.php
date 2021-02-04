@@ -8,6 +8,7 @@ use Blog\Entities\User;
 use Blog\Models\BlogManagerPDO;
 use Core\Config;
 use Core\Error;
+use Core\HTTPRequest;
 use Core\HTTPResponse;
 use Core\PDOFactory;
 use Swift_SmtpTransport;
@@ -17,16 +18,16 @@ use Swift_Mailer;
 
 class MailService
 {
-    private static ?self $instance = null;
-
     private static Swift_Mailer $mailer;
     private static array $from;
     private Config $config;
     private HTTPResponse $httpResponse;
+    private HTTPRequest $httpRequest;
 
     public function __construct()
     {
         $this->httpResponse = new HTTPResponse();
+        $this->httpRequest = HTTPRequest::getInstance();
 
         $this->config = Config::getInstance();
         $transport = (new Swift_SmtpTransport($this->config->get('mailer_host'), $this->config->get('mailer_port')))
@@ -36,15 +37,6 @@ class MailService
         self::$mailer = new Swift_Mailer($transport);
         $from = [$this->config->get('mailer_from_mail') => $this->config->get('mailer_from_name')];
         self::$from = $from;
-    }
-
-    public static function getInstance(): self
-    {
-        if(is_null(self::$instance))
-        {
-            self::$instance = new self;
-        }
-        return self::$instance;
     }
 
     public function send(string $to, string $subject, string $text, string $html, ?array $replyTo = null)
@@ -70,7 +62,7 @@ class MailService
     public function sendPasswordResetEmail(User $user, string $token)
     {
 
-        $url = "http://" . $_SERVER['HTTP_HOST'] . '/password/reset/' . $token;
+        $url = "http://" . $this->httpRequest->getHost() . '/password/reset/' . $token;
 
         $text = $this->httpResponse->getMailTemplate('Emails/reset-password.txt.twig', [
             'url' => $url
@@ -85,7 +77,7 @@ class MailService
 
     public function sendAccountActivationEmail(User $user, string $token)
     {
-        $url = "http://" . $_SERVER['HTTP_HOST'] . '/account/activate/' . $token;
+        $url = "http://" . $this->httpRequest->getHost() . '/account/activate/' . $token;
 
         $text = $this->httpResponse->getMailTemplate('Emails/activate-account.txt.twig', [
             'url' => $url
@@ -100,7 +92,7 @@ class MailService
 
     public function sendMailChangeEmail(User $user, string $token)
     {
-        $url = "http://" . $_SERVER['HTTP_HOST'] . '/account/change-email/' . $token;
+        $url = "http://" . $this->httpRequest->getHost() . '/account/change-email/' . $token;
 
         $text = $this->httpResponse->getMailTemplate('Emails/change-mail.txt.twig', [
             'url' => $url

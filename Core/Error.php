@@ -27,31 +27,33 @@ class Error
                 $code = 500;
             }
             http_response_code($code);
-            echo "<h1>Fatal error</h1>";
-            echo "<p>Uncaught exception : '" . get_class($exception) . "'</p>";
-            echo "<p>Message : '" . $exception->getMessage() . "'</p>";
-            echo "<p>Stack trace : <pre>" . $exception->getTraceAsString() . "</pre></p>";
-            echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
-        } else {
-            // Code is 404 (not found) or 500 (general error)
-            if ($code != 404) {
-                $code = 500;
-            }
-            http_response_code($code);
-
-            $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
-            ini_set('error_log', $log);
-
-            $message = "Uncaught exception : '" . get_class($exception) . "'";
-            $message .= " Message : '" . $exception->getMessage() . "'";
-            $message .= "\nStack trace : " . $exception->getTraceAsString();
-            $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
-
-            error_log($message);
-
-            $httpResponse = new HTTPResponse();
-            $httpResponse->renderTemplate("Errors/$code.html.twig");
+            $response = "<h1>Fatal error</h1>\n" .
+                "<p>Uncaught exception : '" . get_class($exception) . "'</p>\n" .
+                "<p>Message : '" . $exception->getMessage() . "'</p>\n" .
+                "<p>Stack trace : <pre>" . $exception->getTraceAsString() . "</pre></p>\n" .
+                "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>"
+            ;
+            echo $response;
+            return;
         }
+        // Code is 404 (not found) or 500 (general error)
+        if ($code != 404) {
+            $code = 500;
+        }
+        http_response_code($code);
+
+        $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
+        ini_set('error_log', $log);
+
+        $message = "Uncaught exception : '" . get_class($exception) . "'";
+        $message .= " Message : '" . $exception->getMessage() . "'";
+        $message .= "\nStack trace : " . $exception->getTraceAsString();
+        $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
+
+        error_log($message);
+
+        $httpResponse = new HTTPResponse();
+        $httpResponse->renderTemplate("Errors/$code.html.twig");
     }
 
     /**

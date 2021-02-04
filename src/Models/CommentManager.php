@@ -28,8 +28,7 @@ abstract class CommentManager extends Manager
     public function save(Comment $comment) {
         if ($comment->isValid()) {
             return $comment->isNew() ? $this->add($comment) : $this->modify($comment);
-        } else {
-            throw new \RuntimeException('Les paramètres du commentaire ne sont pas valides.');
         }
+        throw new \RuntimeException('Les paramètres du commentaire ne sont pas valides.');
     }
 }

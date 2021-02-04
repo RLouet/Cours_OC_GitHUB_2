@@ -18,7 +18,6 @@ use Core\HTTPResponse;
 
 class Ajax extends Controller
 {
-
     /**
      * Before filter
      *
@@ -46,7 +45,7 @@ class Ajax extends Controller
             $elements[]=$skill['value'];
         }
 
-        echo json_encode($elements);
+        $this->httpResponse->ajaxResponse($elements);
     }
 
 
@@ -71,14 +70,14 @@ class Ajax extends Controller
         if (!$oldSocialNetwork || $oldSocialNetwork->getBlogId() != $blogId) {
             $handle['success'] = false;
             $handle['errors'][] = 'Le réseau social à supprimer est invalide.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
         if (!$manager->delete($oldSocialNetwork->getId())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du réseau social de la base de données.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -92,12 +91,12 @@ class Ajax extends Controller
             $manager->save($oldSocialNetwork);
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du logo du réseau social.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
         $handle['deleted'] = $oldSocialNetwork->getId();
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
 
@@ -141,7 +140,7 @@ class Ajax extends Controller
         if (!empty($handle['form_errors'])) {
             $handle['success'] = false;
             $handle['errors'][] = 'Erreur dans le formulaire.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -152,7 +151,7 @@ class Ajax extends Controller
         if ($double) {
             $handle['errors'][] = "Un autre réseau social porte déjà ce nom.";
             $handle['success'] = false;
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -173,7 +172,7 @@ class Ajax extends Controller
              if (!$manager->save($socialNetwork)) {
                  $handle['success'] = false;
                  $handle['errors'][] = "Erreur lors de l'enregistrement.";
-                 echo json_encode($handle);
+                 $this->httpResponse->ajaxResponse($handle);
                  exit();
              }
 
@@ -187,7 +186,7 @@ class Ajax extends Controller
                     $manager->save($oldSocialNetwork);
                     $handle['success'] = false;
                     $handle['errors'][] = $upload['errors'];
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
             }
@@ -202,7 +201,7 @@ class Ajax extends Controller
                     $manager->save($oldSocialNetwork);
                     $handle['errors'][] = "Impossible de renommer le fichier.";
                     $handle['success'] = false;
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
             }
@@ -210,7 +209,7 @@ class Ajax extends Controller
             if (empty($this->httpRequest->filesData('logo')['name'])) {
                 $handle['errors'][] = "Le logo est manquant.";
                 $handle['success'] = false;
-                echo json_encode($handle);
+                $this->httpResponse->ajaxResponse($handle);
                 exit();
             }
 
@@ -222,7 +221,7 @@ class Ajax extends Controller
             if (!$socialNetwork) {
                 $handle['success'] = false;
                 $handle['errors'][] = "Erreur lors de l'enregistrement.";
-                echo json_encode($handle);
+                $this->httpResponse->ajaxResponse($handle);
                 exit();
             }
 
@@ -235,14 +234,13 @@ class Ajax extends Controller
                 $manager->delete($socialNetwork->getId());
                 $handle['success'] = false;
                 $handle['errors'][] = $upload['errors'];
-                echo json_encode($handle);
+                $this->httpResponse->ajaxResponse($handle);
                 exit();
             }
         }
 
         $handle['entity'] = $socialNetwork;
-
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
 
@@ -276,7 +274,7 @@ class Ajax extends Controller
         if (!empty($handle['form_errors'])) {
             $handle['success'] = false;
             $handle['errors'][] = 'Erreur dans le formulaire.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -287,7 +285,7 @@ class Ajax extends Controller
         if ($double) {
             $handle['errors'][] = "Un autre skill porte déjà ce nom.";
             $handle['success'] = false;
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -295,13 +293,12 @@ class Ajax extends Controller
          if (!$manager->save($skill)) {
              $handle['success'] = false;
              $handle['errors'][] = "Erreur lors de l'enregistrement.";
-             echo json_encode($handle);
+             $this->httpResponse->ajaxResponse($handle);
              exit();
          }
 
         $handle['entity'] = $skill;
-
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -326,19 +323,19 @@ class Ajax extends Controller
         if (!$oldSkill || $oldSkill->getBlogId() != $blogId) {
             $handle['success'] = false;
             $handle['errors'][] = 'Le skill à supprimer est invalide.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
         if (!$manager->delete($oldSkill->getId())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du skill.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
         $handle['deleted'] = $oldSkill->getId();
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -364,7 +361,7 @@ class Ajax extends Controller
         if (!$oldPost || ($oldPost->getUser()->getId() != $user->getId() && $oldPost->getuser()->isGranted('admin') && !$oldPost->getUser()->getBanished())) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -373,12 +370,12 @@ class Ajax extends Controller
         if ($postDelete !== 'success') {
             $handle['success'] = false;
             $handle['errors'][] = $postDelete;
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
         $handle['deleted'] = $oldPost->getId();
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -402,7 +399,7 @@ class Ajax extends Controller
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
             $handle['success'] = false;
             $handle['token_error'] = true;
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
         if (!password_verify($this->httpRequest->postData('old_password'), $user->getPassword())) {
@@ -429,7 +426,7 @@ class Ajax extends Controller
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->resetPassword($user);
                 if ($user) {
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
                 $handle['db_error'] = true;
@@ -438,7 +435,7 @@ class Ajax extends Controller
             }
         }
         $handle['success'] = false;
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -471,7 +468,7 @@ class Ajax extends Controller
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -482,7 +479,7 @@ class Ajax extends Controller
         if ($user->getId() == $this->auth->getUser()->getId()) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas changer votre role.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -493,12 +490,12 @@ class Ajax extends Controller
                 if (!$mailer->sendRoleChangeEmail($user, $this->httpRequest->postData('message_field'))) {
                     $handle['success'] = false;
                     $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
                 if ($userManager->save($user)) {
                     $this->flash->addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
                 $handle['errors'][] = 'Error lors de l\'enregistrement.';
@@ -508,7 +505,7 @@ class Ajax extends Controller
         }
 
         $handle['success'] = false;
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -543,7 +540,7 @@ class Ajax extends Controller
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -554,7 +551,7 @@ class Ajax extends Controller
         if ($user->getId() == $this->auth->getUser()->getId()) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas changer votre état.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -566,7 +563,7 @@ class Ajax extends Controller
                 if (!$mailer->sendStatusChangeEmail($user, $this->httpRequest->postData('message_field'))) {
                     $handle['success'] = false;
                     $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
 
@@ -576,13 +573,13 @@ class Ajax extends Controller
                     if ($postDelete !== 'success') {
                         $handle['success'] = false;
                         $handle['errors'][] = $postDelete;
-                        echo json_encode($handle);
+                        $this->httpResponse->ajaxResponse($handle);
                         exit();
                     }
                 }
 
                 if ($userManager->save($user)) {
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
                 $handle['errors'][] = 'Error lors de l\'enregistrement.';
@@ -592,7 +589,7 @@ class Ajax extends Controller
         }
 
         $handle['success'] = false;
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -610,7 +607,7 @@ class Ajax extends Controller
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -622,7 +619,7 @@ class Ajax extends Controller
         if ($user->getId() == $this->auth->getUser()->getId()) {
             $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas vous supprimer.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
 
@@ -632,7 +629,7 @@ class Ajax extends Controller
             if (!$mailer->sendUserDeleteEmail($user, $this->httpRequest->postData('message_field'))) {
                 $handle['success'] = false;
                 $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
-                echo json_encode($handle);
+                $this->httpResponse->ajaxResponse($handle);
                 exit();
             }
 
@@ -640,18 +637,18 @@ class Ajax extends Controller
             if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
                 $handle['success'] = false;
                 $handle['errors'][] = "Erreur lors de la suppression des images";
-                echo json_encode(handle);
+                $this->httpResponse->ajaxResponse($handle);
                 exit();
             }
             if ($userManager->delete($user->getId())) {
                 $this->flash->addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
-                echo json_encode($handle);
+                $this->httpResponse->ajaxResponse($handle);
                 exit();
             }
             $handle['errors'][] = 'Error lors de la suppression.';
         }
         $handle['success'] = false;
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     /**
@@ -673,7 +670,7 @@ class Ajax extends Controller
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
             $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
-            echo json_encode($handle);
+            $this->httpResponse->ajaxResponse($handle);
             exit();
         }
         $commentManager = $this->managers->getManagerOf('Comment');
@@ -687,7 +684,7 @@ class Ajax extends Controller
                 $comment->setValidated(true);
                 if ($commentManager->save($comment)) {
                     $handle['comment'] = $comment->getId();
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
 
@@ -698,7 +695,7 @@ class Ajax extends Controller
             if ($this->auth->getUser()->isGranted('admin') || $this->auth->getUser()->getId() == $comment->getUser()->getId()) {
                 if ($commentManager->delete($comment->getId())) {
                     $handle['comment'] = $comment->getId();
-                    echo json_encode($handle);
+                    $this->httpResponse->ajaxResponse($handle);
                     exit();
                 }
 
@@ -707,7 +704,7 @@ class Ajax extends Controller
 
         $handle['success'] = false;
         $handle['errors'][] = 'Une erreur s\'est produite (1).';
-        echo json_encode($handle);
+        $this->httpResponse->ajaxResponse($handle);
     }
 
     private function postDeleter($toDelete)
@@ -761,8 +758,7 @@ class Ajax extends Controller
         if (count($comments['comments']) < $config->get('pagination')) {
             $comments['end'] = true;
         }
-
-        echo json_encode($comments);
+        $this->httpResponse->ajaxResponse($comments);
     }
 
     /**
@@ -778,8 +774,7 @@ class Ajax extends Controller
         if (count($comments['comments']) < $config->get('pagination')) {
             $comments['end'] = true;
         }
-
-        echo json_encode($comments);
+        $this->httpResponse->ajaxResponse($comments);
     }
 
     /**
@@ -796,7 +791,6 @@ class Ajax extends Controller
         if (count($posts['posts']) < $config->get('pagination')) {
             $posts['end'] = true;
         }
-
-        echo json_encode($posts);
+        $this->httpResponse->ajaxResponse($posts);
     }
 }

@@ -73,14 +73,12 @@ abstract class Controller
     {
         $method = $name . 'Action';
 
-        if (method_exists($this, $method)) {
-            if ($this->before() !== false) {
-                call_user_func_array([$this, $method], $args);
-                $this->after();
-            }
-        } else {
-            //echo "Method $method not found in controller" . get_class($this);
-            throw new \Exception("Method $method not found in controller " . get_class($this), 500);
+        if (!method_exists($this, $method)) {
+            throw new \Exception("La méthode $method n'a pas été trouvée" . get_class($this), 404);
+        }
+        if ($this->before() !== false) {
+            call_user_func_array([$this, $method], $args);
+            $this->after();
         }
     }
 

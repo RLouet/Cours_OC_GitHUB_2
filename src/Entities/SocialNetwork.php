@@ -10,10 +10,10 @@ use JsonSerializable;
 class SocialNetwork extends Entity implements JsonSerializable
 {
 
-    protected $blogId,
-        $name,
-        $logo,
-        $url;
+    protected int $blogId;
+    protected string $name;
+    protected string $logo;
+    protected string $url;
 
     const INVALID_BLOG_ID = 1;
     const INVALID_NAME = 2;
@@ -50,52 +50,55 @@ class SocialNetwork extends Entity implements JsonSerializable
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): SocialNetwork
     {
         if (empty($name) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $name)) {
             $this->errors[] = self::INVALID_NAME;
-        } else {
-            $this->name = $name;
+            return $this;
         }
+        $this->name = $name;
+        return $this;
     }
 
-    public function setLogo(string $logo)
+    public function setLogo(string $logo): SocialNetwork
     {
         if (empty($logo)) {
             $this->errors[] = self::INVALID_LOGO;
-        } else {
-            $this->logo = $logo;
+            return $this;
         }
+        $this->logo = $logo;
+        return $this;
     }
 
     public function setUrl(string $url)
     {
         if (empty($url) || !preg_match('/^[-&%_:?\/=.\da-z]{5,50}$/i', $url)) {
             $this->errors[] = self::INVALID_URL;
-        } else {
-            $this->url = $url;
+            return $this;
         }
+        $this->url = $url;
+        return $this;
     }
 
 
     // GETTERS //
 
-    public function getBlogId()
+    public function getBlogId(): int
     {
         return $this->blogId;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getLogo()
+    public function getLogo(): string
     {
         return $this->logo;
     }
 
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }

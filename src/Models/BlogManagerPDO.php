@@ -11,14 +11,14 @@ use PDO;
 
 class BlogManagerPDO extends BlogManager
 {
-    public function getData(int $id = 1)
+    public function getData(int $blogId = 1)
     {
         $sql = 'SELECT * FROM blog  WHERE id=?';
 
         $stmt = $this->dao->prepare($sql);
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Blog\Entities\Blog');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute(array($id));
+        $stmt->execute(array($blogId));
         $blogData = $stmt->fetch();
         $stmt->closeCursor();
 
@@ -27,7 +27,7 @@ class BlogManagerPDO extends BlogManager
         $sqlSocial = 'SELECT * FROM social_network s WHERE s.blog_id=?';
         $stmt = $this->dao->prepare($sqlSocial);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute(array($id));
+        $stmt->execute(array($blogId));
         $socialNetworksList = $stmt->fetchAll();
 
         foreach ($socialNetworksList as $socialNetwork) {
@@ -38,7 +38,7 @@ class BlogManagerPDO extends BlogManager
         $sqlSkill = 'SELECT * FROM skill s WHERE s.blog_id=?';
         $stmt = $this->dao->prepare($sqlSkill);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute(array($id));
+        $stmt->execute(array($blogId));
         $skillsList = $stmt->fetchAll();
 
         foreach ($skillsList as $skill) {

@@ -9,16 +9,16 @@ use \SplObjectStorage;
 
 class Blog extends Entity
 {
-    protected $lastname,
-        $firstname,
-        $email,
-        $phone,
-        $logo,
-        $teaserPhrase,
-        $contactMail,
-        $cv,
-        $skills,
-        $socialNetworks;
+    protected string $lastname;
+    protected string $firstname;
+    protected string $email;
+    protected string $phone;
+    protected string $logo;
+    protected string $teaserPhrase;
+    protected string $contactMail;
+    protected string $cv;
+    protected  SplObjectStorage $skills;
+    protected  SplObjectStorage $socialNetworks;
 
     const INVALID_LASTNAME = 1;
     const INVALID_FIRSTNAME = 2;
@@ -44,7 +44,7 @@ class Blog extends Entity
 
     // SETTERS //
 
-    public function setLastname(string $lastname)
+    public function setLastname(string $lastname): Blog
     {
         if (empty($lastname) || !preg_match('/^[a-zÀ-ÖØ-öø-ÿœŒ\'][a-z-\' À-ÖØ-öø-ÿœŒ]{0,48}[a-zÀ-ÖØ-öø-ÿœŒ\']$/i', $lastname)) {
             $this->errors[] = self::INVALID_LASTNAME;
@@ -55,93 +55,104 @@ class Blog extends Entity
         return $this;
     }
 
-    public function setFirstname(string $firstname)
+    public function setFirstname(string $firstname): Blog
     {
         if (empty($firstname) || !preg_match('/^[a-zÀ-ÖØ-öø-ÿœŒ\'][À-ÖØ-öø-ÿœŒa-z-\' ]{0,48}[À-ÖØ-öø-ÿœŒa-z\']$/i', $firstname)) {
             $this->errors[] = self::INVALID_FIRSTNAME;
-        } else {
-            $this->firstname = $firstname;
+            return $this;
         }
+        $this->firstname = $firstname;
+        return $this;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): Blog
     {
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = self::INVALID_EMAIL;
-        } else {
-            $this->email = $email;
+            return $this;
         }
+        $this->email = $email;
+        return $this;
     }
 
-    public function setPhone(string $phone)
+    public function setPhone(string $phone): Blog
     {
         if (empty($phone) || !preg_match('/^[\d+(][\d. ()+-]{6,28}[\d)]$/', $phone)) {
             $this->errors[] = self::INVALID_PHONE;
-        } else {
-            $this->phone = $phone;
+            return $this;
         }
+        $this->phone = $phone;
+        return $this;
     }
 
-    public function setLogo(string $logo)
+    public function setLogo(string $logo): Blog
     {
         if (empty($logo)) {
             $this->errors[] = self::INVALID_LOGO;
-        } else {
-            $this->logo = $logo;
+            return $this;
         }
+        $this->logo = $logo;
+        return $this;
     }
 
-    public function setTeaserPhrase(string $teaser)
+    public function setTeaserPhrase(string $teaser): Blog
     {
         if (empty($teaser)) {
             $this->errors[] = self::INVALID_TEASER;
-        } else {
-            $this->teaserPhrase = $teaser;
+            return $this;
         }
+        $this->teaserPhrase = $teaser;
+        return $this;
     }
 
-    public function setContactMail(string $contactMail)
+    public function setContactMail(string $contactMail): Blog
     {
         if (empty($contactMail) || !filter_var($contactMail, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = self::INVALID_CONTACTMAIL;
-        } else {
-            $this->contactMail = $contactMail;
+            return $this;
         }
+        $this->contactMail = $contactMail;
+        return $this;
     }
 
-    public function setCv(string $cv)
+    public function setCv(string $cv): Blog
     {
         if (empty($cv)) {
             $this->errors[] = self::INVALID_CV;
-        } else {
-            $this->cv = $cv;
+            return $this;
         }
+        $this->cv = $cv;
+        return $this;
     }
 
-    public function addSocialNetwork(SocialNetwork $socialNetwork)
+    public function addSocialNetwork(SocialNetwork $socialNetwork): Blog
     {
         if (!$this->socialNetworks->contains($socialNetwork)) {
             $this->socialNetworks->attach($socialNetwork);
         }
+        return $this;
     }
-    public function removeSocialNetwork(SocialNetwork $socialNetwork)
+    public function removeSocialNetwork(SocialNetwork $socialNetwork): Blog
     {
         if ($this->socialNetworks->contains($socialNetwork)) {
             $this->socialNetworks->detach($socialNetwork);
         }
+        return $this;
     }
 
-    public function addSkill(Skill $skill)
+    public function addSkill(Skill $skill): Blog
     {
         if (!$this->skills->contains($skill)) {
             $this->skills->attach($skill);
         }
+        return $this;
     }
-    public function removeSkill(Skill $skill)
+    public function removeSkill(Skill $skill): Blog
     {
         if ($this->skills->contains($skill)) {
             $this->skills->detach($skill);
         }
+        return $this;
     }
 
 

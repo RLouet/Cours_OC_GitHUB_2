@@ -100,7 +100,7 @@ class HTTPResponse
             $twig2 = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
-            $twig2->addGlobal('path', 'http://' . $_SERVER['HTTP_HOST']);
+            $twig2->addGlobal('path', 'http://' . $this->httpRequest->getHost());
             $twig2->addGlobal('current_user', $this->auth->getUser());
             $twig2->addGlobal('blog', $this->getBlog());
         }
@@ -126,5 +126,9 @@ class HTTPResponse
     public function setSession(string $key, $value)
     {
         $this->session[$key] = $value;
+    }
+
+    public function ajaxResponse($response) {
+        echo json_encode($response);
     }
 }

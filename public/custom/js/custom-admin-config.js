@@ -159,7 +159,7 @@ $(document).ready(function() {
 		} else {
 			$("h5.modal-title span", this).html("Ajouter un ");
 
-			$("#socialLogoPreview").attr("src", path + "/uploads/icons/empty-icon_128-128.png");
+			$("#socialLogoPreview").attr("src", window.location.origin + "/uploads/icons/empty-icon_128-128.png");
 
 			$(".valid-btn", this).val("Ajouter");
 		}

@@ -17,9 +17,9 @@ abstract class BlogManager extends Manager
 
     public function save(Blog $blog) {
         if ($blog->isValid()) {
-            $blog->isNew() ? $this->add($blog) : $this->modify($blog);
-        } else {
-            throw new \RuntimeException('Les paramètres du blog ne sont pas valides.');
+            return $blog->isNew() ? $this->add($blog) : $this->modify($blog);
         }
+
+        throw new \RuntimeException('Les paramètres du blog ne sont pas valides.');
     }
 }

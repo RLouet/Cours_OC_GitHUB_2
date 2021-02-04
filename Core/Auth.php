@@ -12,15 +12,17 @@ class Auth
 {
     private static ?Auth $instance = null;
     private HTTPRequest $httpRequest;
+    private array $session;
 
     private function __construct()
     {
         $this->httpRequest = HTTPRequest::getInstance();
+        $this->session = &$_SESSION;
     }
 
     public static function getInstance()
     {
-        if(is_null(self::$instance))
+        if(self::$instance === null)
         {
             self::$instance = new self;
         }
@@ -33,7 +35,7 @@ class Auth
     public function login(User $user, $remembeMe): void
     {
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $user->getId();
+        $this->session['user_id'] = $user->getId();
 
         if ($remembeMe) {
             $this->rememberLogin($user);
@@ -46,7 +48,7 @@ class Auth
     public function logout(): void
     {
         // Détruit toutes les variables de session
-        $_SESSION = array();
+        $this->session = array();
 
         // Efface le cookie de session.
         if (ini_get("session.use_cookies")) {
@@ -68,7 +70,7 @@ class Auth
      */
     public function rememberRequestedPage(): void
     {
-        $_SESSION['return_to'] = $this->httpRequest->requestUri();
+        $this->session['return_to'] = $this->httpRequest->requestUri();
     }
 
     /**
@@ -76,7 +78,7 @@ class Auth
      */
     public function GetRequestedPage(): string
     {
-       return $_SESSION['return_to'] ?? '';
+        return $this->httpRequest->sessionData('return_to') ?? '';
     }
 
     /**
@@ -148,7 +150,6 @@ class Auth
             $stmt->bindValue(':token_hash', $hashedToken, PDO::PARAM_STR);
 
             $stmt->execute();
-
             $httpResponse = new HTTPResponse();
             $httpResponse->setCookie('remember_me', '', time() - 36000);
         }

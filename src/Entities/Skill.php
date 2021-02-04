@@ -33,22 +33,24 @@ class Skill extends Entity implements JsonSerializable
 
     // SETTERS //
 
-    public function setBlogId(int $blogId)
+    public function setBlogId(int $blogId): Skill
     {
         if (empty($blogId)) {
             $this->errors[] = self::INVALID_BLOG_ID;
-        } else {
-            $this->blogId = $blogId;
+            return $this;
         }
+        $this->blogId = $blogId;
+        return $this;
     }
 
-    public function setValue(string $value)
+    public function setValue(string $value): Skill
     {
         if (empty($value) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\d\'a-zÀ-ÖØ-öø-ÿœŒ -]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $value)) {
             $this->errors[] = self::INVALID_VALUE;
-        } else {
-            $this->value = $value;
+            return $this;
         }
+        $this->value = $value;
+        return $this;
     }
 
 

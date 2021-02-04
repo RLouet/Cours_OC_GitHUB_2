@@ -40,8 +40,7 @@ abstract class UserManager extends Manager
     public function save(User $user) {
         if ($user->isValid()) {
             return $user->isNew() ? $this->add($user) : $this->modify($user);
-        } else {
-            throw new \RuntimeException("Les paramètres de l'utilisateur ne sont pas valides.");
         }
+        throw new \RuntimeException("Les paramètres de l'utilisateur ne sont pas valides.");
     }
 }
