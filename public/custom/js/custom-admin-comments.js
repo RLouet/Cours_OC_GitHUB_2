@@ -32,8 +32,8 @@ $(document).ready(function() {
             success(data) {
                 if (!data.success) {
                     let errorMessage = "<ul>";
-                    for (var k in data.errors) {
-                        errorMessage += "<li>" + data.errors[k] + "</li>";
+                    for (const error of data.errors) {
+                        errorMessage += "<li>" + error + "</li>";
                     }
                     errorMessage += "</ul>";
                     $(".delete-error .form-error span", $confirmModal).html(errorMessage);
@@ -70,7 +70,7 @@ $(document).ready(function() {
             url: window.location.origin + "/ajax/loadUnvalidatedComments",
             method: "POST",
             data: {
-                "offset": offset,
+                offset,
             },
             dataType: "json",
             success(data) {
