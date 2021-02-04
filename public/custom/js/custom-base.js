@@ -30,7 +30,7 @@ $(window).on("load",function(){
 function scrollBanner() {
 	$(document).scroll(function(){
 		let scrollPos = $(this).scrollTop();
-		$('.parallax-fade-top').css({
+		$(".parallax-fade-top").css({
 			top : (scrollPos/2)+"px",
 			opacity : 1-(scrollPos/750)
 		});
