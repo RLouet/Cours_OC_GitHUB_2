@@ -10,7 +10,7 @@
 				method: "POST",
 				dataType: "json",
 				success: function (data) {
-					typed = new Typed('#typed-1', {
+					typed = new Typed("#typed-1", {
 						strings: data,
 						typeSpeed:45,
 						backSpeed:0,
@@ -25,7 +25,7 @@
 					//setTypedElements(data) ;
 				},
 				error: function () {
-					alert('Typed error');
+					alert("Typed error");
 				}
 			})
 		}

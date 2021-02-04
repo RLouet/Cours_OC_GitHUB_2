@@ -1,6 +1,5 @@
 /*global showFlashMessage*/
 $(document).ready(function() {
-
     // Confirm Modal
 
     let $confirmModal = $("#confirmModal");

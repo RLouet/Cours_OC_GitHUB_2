@@ -31,7 +31,7 @@ function scrollBanner() {
 	$(document).scroll(function(){
 		let scrollPos = $(this).scrollTop();
 		$('.parallax-fade-top').css({
-			top : (scrollPos/2)+'px',
+			top : (scrollPos/2)+"px",
 			opacity : 1-(scrollPos/750)
 		});
 	});
@@ -50,8 +50,8 @@ $(document).ready(function() {
 		let fullUrl = this.href;
 		let parts = fullUrl.split("#");
 		let trgt = parts[1];
-		let target_offset = $("#"+trgt).offset();
-		let targetTop = target_offset.top - 68;
+		let targetOffset = $("#"+trgt).offset();
+		let targetTop = targetOffset.top - 68;
 
 		$("html, body").animate({scrollTop:targetTop}, 800);
 	});
