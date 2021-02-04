@@ -1,5 +1,15 @@
 $(document).ready(function() {
 
+    function initImagePreview($field) {
+        $field.change(function(e) {
+            let $container = $(this).closest(".post-image-item");
+            if (e.target.files.length > 0) {
+                var src = URL.createObjectURL(e.target.files[0]);
+                $(".post-image-preview", $container).attr("src", src);
+            }
+        });
+    }
+
     let $deleteModal = $("#deleteModal");
 
     $deleteModal.on("show.bs.modal", function(event) {
@@ -8,7 +18,7 @@ $(document).ready(function() {
         let id = $button.data("id");
         let type = $button.data("type");
         let name = $(".post-image-name-field", $button.closest(".post-image-item")).val();
-        let $deleteButton = $('.delete-btn', this);
+        let $deleteButton = $(".delete-btn", this);
 
         $(".delete-item-name", this).html(name);
         $deleteButton.data("id", id);
@@ -60,15 +70,5 @@ $(document).ready(function() {
         postImageCount++;
         initImagePreview($(".post-image-input", $template));
         $(".post-image-input", $template).click();
-    })
-
-    function initImagePreview($field) {
-        $field.change(function(e) {
-            let $container = $(this).closest(".post-image-item");
-            if (e.target.files.length > 0) {
-                var src = URL.createObjectURL(e.target.files[0]);
-                $(".post-image-preview", $container).attr("src", src);
-            }
-        });
-    }
-})
+    });
+});

@@ -2,7 +2,7 @@
 
 Royal_Preloader.config({
 	mode: "progress",
-	background: "#aaaaaa",
+	background: "#eeeeee",
 	showProgress: true,
 	showPercentage: false
 });

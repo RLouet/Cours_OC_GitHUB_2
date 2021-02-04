@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 	$("#passwordModal form").submit(function (e) {
 		e.preventDefault();

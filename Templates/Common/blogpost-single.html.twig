@@ -27,7 +27,7 @@
 
 
 <div class="section padding-top over-hide">
-    <div class="parallax" style="background-image: url('{{ path }}/uploads/blog/{{ blog_post.entity.id }}/{{ blog_post.entity.hero.url }}')"></div>
+    <div class="parallax" style="background-image: url('{% if blog_post.entity.hero %}{{ path }}/uploads/blog//{{ blog_post.entity.user.id }}/{{ blog_post.entity.id }}/{{ blog_post.entity.hero.url }}{% endif %}')"></div>
     <div class="dark-fade-over"></div>
     <div class="container z-bigger">
         <div class="row justify-content-center">

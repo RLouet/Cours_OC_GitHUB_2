@@ -197,11 +197,7 @@ class Router
         if ($url != '') {
             $parts = explode('&', $url, 2);
 
-            if (strpos($parts[0], '=') === false) {
-                $url = $parts[0];
-            } else {
-                $url = '';
-            }
+            $url = strpos($parts[0], '=') === false ? $parts[0] : '';
         }
 
         return $url;

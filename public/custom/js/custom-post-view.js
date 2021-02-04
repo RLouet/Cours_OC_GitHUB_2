@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 
     // Activate Carousel
@@ -31,16 +32,16 @@ $(document).ready(function() {
             url: window.location.origin + "/ajax/moderateComment",
             method: "POST",
             data: {
-                "id": $(this).data("id"),
-                "action": action,
-                "token": $(this).data("token"),
+                id: $(this).data("id"),
+                action,
+                token: $(this).data("token"),
             },
             dataType: "json",
             success(data) {
                 if (!data.success) {
-                    var errorMessage = "<ul>";
-                    for (var k in data.errors) {
-                        errorMessage += "<li>" + data.errors[k] + "</li>";
+                    let errorMessage = "<ul>";
+                    for (const error of data.errors) {
+                        errorMessage += "<li>" + error + "</li>";
                     }
                     errorMessage += "</ul>";
                     $(".delete-error .form-error span", $confirmModal).html(errorMessage);
@@ -83,7 +84,7 @@ $(document).ready(function() {
             url: window.location.origin + "/ajax/loadPostComments",
             method: "POST",
             data: {
-                "offset": offset,
+                offset,
                 "post_id": postId,
             },
             dataType: "json",
@@ -91,8 +92,8 @@ $(document).ready(function() {
                 if (data.end) {
                     $("#ViewMore").parent().remove();
                 }
-                for (let k in data.comments) {
-                    let comment = data.comments[k];
+                for (const comment of data.comments) {
+                    //let comment = data.comments[k];
                     //alert(comment.id)
                     let notValidatedClass = "";
                     let notValidatedBadge = "";

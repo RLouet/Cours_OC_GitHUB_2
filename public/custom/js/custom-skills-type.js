@@ -1,3 +1,4 @@
+/*global Typed*/
 $(document).ready(function() {
 	// Type text
 

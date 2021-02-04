@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 
 	let $confirmModal = $("#confirmModal");
@@ -64,8 +65,8 @@ $(document).ready(function() {
 			success(data) {
 				if (!data.success) {
 					let errorMessage = "<ul>";
-					for (let k in data.errors) {
-						errorMessage += "<li>" + data.errors[k] + "</li>";
+					for (const error in data.errors) {
+						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".modal-error .form-error span", $confirmModal).html(errorMessage);

@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 
 	let $deleteModal = $("#deleteModal");
@@ -24,8 +25,8 @@ $(document).ready(function() {
 			success(data) {
 				if (!data.success) {
 					let errorMessage = "<ul>";
-					for (let k in data.errors) {
-						errorMessage += "<li>" + data.errors[k] + "</li>";
+					for (const error of data.errors) {
+						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".delete-error .form-error span", $deleteModal).html(errorMessage);
@@ -57,23 +58,17 @@ $(document).ready(function() {
 			url: window.location.origin + "/ajax/loadPosts",
 			method: "POST",
 			data: {
-				"offset": offset,
+				offset,
 			},
 			dataType: "json",
 			success(data) {
 				if (data.end) {
 					$("#ViewMore").parent().remove();
 				}
-				for (let k in data.posts) {
-					let post = data.posts[k];
-					let heroUrl = window.location.origin + "/img/blog/1.jpg";
-					if (post.heroUrl) {
-						heroUrl = window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl;
-					}
-					let heroAlt = "";
-					if (post.heroName) {
-						heroAlt = post.heroName;
-					}
+				for (const post of data.posts) {
+					//let post = data.posts[k];
+					const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/img/blog/1.jpg";
+					const heroAlt = post.heroName ? post.heroName : "";
 					let postManagementButtons = "";
 					if (post.userId === userId || post.userBanished || !post.userAdmin) {
 						postManagementButtons = "<div class=\"row justify-content-between\">\n" +

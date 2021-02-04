@@ -105,11 +105,10 @@ class Config extends Controller
                 if ($upload['success']) {
                     $method = 'set' . ucfirst($filesField);
                     $formBlog->$method($upload['filename']);
+                    continue;
                 }
-                else {
-                    foreach ($upload['errors'] as $error) {
-                        $formBlog->setCustomError($filesField, $error);
-                    }
+                foreach ($upload['errors'] as $error) {
+                    $formBlog->setCustomError($filesField, $error);
                 }
             }
         }

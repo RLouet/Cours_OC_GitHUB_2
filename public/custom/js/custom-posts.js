@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 
 	// --------------- Pagination ---------------
@@ -7,24 +8,17 @@ $(document).ready(function() {
 			url: window.location.origin + "/ajax/loadPosts",
 			method: "POST",
 			data: {
-				"offset": offset,
+				offset,
 			},
 			dataType: "json",
 			success(data) {
 				if (data.end) {
 					$("#ViewMore").parent().remove();
 				}
-				for (let k in data.posts) {
-					let post = data.posts[k];
-					let heroUrl = window.location.origin + "/img/blog/1.jpg";
-					if (post.heroUrl) {
-						heroUrl = window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl;
-					}
-					let heroAlt = "";
-					if (post.heroName) {
-						heroAlt = post.heroName;
-					}
-					let item = $("<div class=\"grid-box float-inline quarter with-margin drop-shadow rounded post-item-" + post.id + "\">\n" +
+				for (const post of data.posts) {
+					const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/img/blog/1.jpg";
+					const heroAlt = post.heroName ? post.heroName : "";
+					const item = $("<div class=\"grid-box float-inline quarter with-margin drop-shadow rounded post-item-" + post.id + "\">\n" +
 						"                            <div class=\"blog-box-1 blog-home blog-admin background-white over-hide\">\n" +
 						"                                    <a href=\"" + window.location.origin + "/book/" + post.id + "/view\">\n" +
 						"                                        <div class=\"portfolio-box-1\">\n" +

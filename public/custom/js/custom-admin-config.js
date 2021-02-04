@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 
 	let $deleteModal = $("#deleteModal");
@@ -32,16 +33,14 @@ $(document).ready(function() {
 			url: window.location.origin + "/ajax/" + method,
 			method: "POST",
 			data: {
-				"id": $(this).data("id")
+				id: $(this).data("id")
 			},
 			dataType: "json",
 			success(data) {
 				if (!data.success) {
 					let errorMessage = "<ul>";
-					for (let k in data.errors) {
-						if (Object.prototype.hasOwnProperty.call(data.errors, k)) {
-							errorMessage += "<li>" + data.errors[k] + "</li>";
-						}
+					for (const error of data.errors) {
+						errorMessage += "<li>" + data.error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".delete-error .form-error span", $deleteModal).html(errorMessage);
@@ -97,17 +96,15 @@ $(document).ready(function() {
 			success(data) {
 				if (!data.success){
 					let errorMessage = "<ul>";
-					for (let k in data.errors) {
-						if (Object.prototype.hasOwnProperty.call(data.errors, k)) {
-							errorMessage += "<li>" + data.errors[k] + "</li>";
-						}
+					for (const error of data.errors) {
+							errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".sk-general-error .form-error span", $form).html(errorMessage);
 					$(".sk-general-error .form-error", $form).removeClass("hidden");
 
-					for (let fe in data.form_errors) {
-						if (data.form_errors[fe] === 2) {
+					for (const formError of data.form_errors) {
+						if (formError === 2) {
 							$(".sk-value .form-error", $form).removeClass("hidden");
 						}
 					}
@@ -191,10 +188,8 @@ $(document).ready(function() {
 			success(data) {
 				if (!data.success){
 					let errorMessage = "<ul>";
-					for (let k in data.errors) {
-						if (Object.prototype.hasOwnProperty.call(data.errors, k)) {
-							errorMessage += "<li>" + data.errors[k] + "</li>";
-						}
+					for (const error of data.errors) {
+						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".sn-general-error .form-error div", $form).html(errorMessage);
