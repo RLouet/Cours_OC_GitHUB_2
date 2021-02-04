@@ -20,7 +20,7 @@ $(window).on("load",function(){
 	/* demo functions */
 	$("a[rel='next']").click(function(e){
 		e.preventDefault();
-		var to=$(this).parent().parent("section").next().attr("id");
+		let to=$(this).parent().parent("section").next().attr("id");
 		$.mPageScroll2id("scrollTo",to);
 	});
 
@@ -29,7 +29,7 @@ $(window).on("load",function(){
 //Parallax & fade on scroll
 function scrollBanner() {
 	$(document).scroll(function(){
-		var scrollPos = $(this).scrollTop();
+		let scrollPos = $(this).scrollTop();
 		$('.parallax-fade-top').css({
 			top : (scrollPos/2)+'px',
 			opacity : 1-(scrollPos/750)
@@ -40,8 +40,6 @@ scrollBanner();
 
 
 $(document).ready(function() {
-
-
 	$(".tipped").tipper();
 
 	/* Scroll Too */
@@ -49,18 +47,18 @@ $(document).ready(function() {
 
 		event.preventDefault();
 
-		var fullUrl = this.href;
-		var parts = fullUrl.split("#");
-		var trgt = parts[1];
-		var target_offset = $("#"+trgt).offset();
-		var targetTop = target_offset.top - 68;
+		let fullUrl = this.href;
+		let parts = fullUrl.split("#");
+		let trgt = parts[1];
+		let target_offset = $("#"+trgt).offset();
+		let targetTop = target_offset.top - 68;
 
 		$("html, body").animate({scrollTop:targetTop}, 800);
 	});
 
 	//Scroll back to top
-	var offset = 300;
-	var duration = 600;
+	let offset = 300;
+	let duration = 600;
 	jQuery(window).on("scroll", function() {
 		if (jQuery(this).scrollTop() > offset) {
 			jQuery(".scroll-to-top").fadeIn(duration);
