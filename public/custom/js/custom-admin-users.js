@@ -65,7 +65,7 @@ $(document).ready(function() {
 			success(data) {
 				if (!data.success) {
 					let errorMessage = "<ul>";
-					for (const error in data.errors) {
+					for (const error of data.errors) {
 						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";

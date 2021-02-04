@@ -40,7 +40,7 @@ $(document).ready(function() {
 				if (!data.success) {
 					let errorMessage = "<ul>";
 					for (const error of data.errors) {
-						errorMessage += "<li>" + data.error + "</li>";
+						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".delete-error .form-error span", $deleteModal).html(errorMessage);
@@ -195,14 +195,12 @@ $(document).ready(function() {
 					$(".sn-general-error .form-error div", $form).html(errorMessage);
 					$(".sn-general-error .form-error", $form).removeClass("hidden");
 
-					for (let fe in data.form_errors) {
-						if (Object.prototype.hasOwnProperty.call(data.form_errors, fe)) {
-							if (data.form_errors[fe] === 2) {
-								$(".sn-name .form-error", $form).removeClass("hidden");
-							}
-							if (data.form_errors[fe] === 4) {
-								$(".sn-url .form-error", $form).removeClass("hidden");
-							}
+					for (const formError of data.form_errors) {
+						if (formError === 2) {
+							$(".sn-name .form-error", $form).removeClass("hidden");
+						}
+						if (formError === 4) {
+							$(".sn-url .form-error", $form).removeClass("hidden");
 						}
 					}
 				} else {
