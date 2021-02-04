@@ -1,0 +1,20 @@
+[04-Feb-2021 08:11:57 Europe/Paris] Uncaught exception : 'Exception' Message : 'La route n'a pas été trouvée'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 129
+[04-Feb-2021 08:12:01 Europe/Paris] Uncaught exception : 'Exception' Message : 'La route n'a pas été trouvée'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 129
+[04-Feb-2021 08:12:04 Europe/Paris] Uncaught exception : 'Exception' Message : 'La route n'a pas été trouvée'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 129
+[04-Feb-2021 08:12:07 Europe/Paris] Uncaught exception : 'Exception' Message : 'La route n'a pas été trouvée'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 129
+[04-Feb-2021 08:12:24 Europe/Paris] Uncaught exception : 'Exception' Message : 'La route n'a pas été trouvée'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 129

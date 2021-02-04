@@ -24,8 +24,7 @@ abstract class SocialNetworkManager extends Manager
     public function save(SocialNetwork $socialNetwork) {
         if ($socialNetwork->isValid()) {
             return $socialNetwork->isNew() ? $this->add($socialNetwork) : $this->modify($socialNetwork);
-        } else {
-            throw new \RuntimeException('Les paramètres du réseau social ne sont pas valides.');
         }
+        throw new \RuntimeException('Les paramètres du réseau social ne sont pas valides.');
     }
 }

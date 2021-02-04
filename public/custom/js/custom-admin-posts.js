@@ -110,6 +110,6 @@ $(document).ready(function() {
 			error(e) {
 				showFlashMessage("danger", "Une erreur s'est produite.");
 			}
-		})
+		});
 	});
-})
+});

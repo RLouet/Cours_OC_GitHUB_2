@@ -119,7 +119,11 @@
 					columnNumb = getNumbColumns(), 
 					postWidth = Math.floor(winWidth / columnNumb);
 
-			}			
+			}
+			function reArrangeProjects() {
+				setColumnWidth();
+				container.isotope("layout");
+			}
 			$(".grid-filter .filter a").click(function () {
 				let selector = $(this).attr("data-filter");
 				
@@ -136,11 +140,7 @@
 				
 				
 				return false;
-			});			
-			function reArrangeProjects() { 
-				setColumnWidth();
-				container.isotope("layout");
-			}			
+			});
 			container.imagesLoaded(function () { 
 				setColumnWidth();
 				

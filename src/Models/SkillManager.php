@@ -24,8 +24,7 @@ abstract class SkillManager extends Manager
     public function save(Skill $skill) {
         if ($skill->isValid()) {
             return $skill->isNew() ? $this->add($skill) : $this->modify($skill);
-        } else {
-            throw new \RuntimeException('Les paramètres du skill ne sont pas valides.');
         }
+        throw new \RuntimeException('Les paramètres du skill ne sont pas valides.');
     }
 }

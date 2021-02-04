@@ -17,9 +17,7 @@ abstract class PostImageManager extends Manager
     public function save(PostImage $postImage) {
         if ($postImage->isValid()) {
             return $postImage->isNew() ? $this->add($postImage) : $this->modify($postImage);
-        } else {
-            //var_dump($postImage);
-            throw new \RuntimeException("Les paramètres de l'image ne sont pas valides.");
         }
+        throw new \RuntimeException("Les paramètres de l'image ne sont pas valides.");
     }
 }

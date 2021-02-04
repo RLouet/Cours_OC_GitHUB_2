@@ -32,17 +32,14 @@ class Router
         $routes = $xml->getElementsByTagName('route');
 
         foreach ($routes as $route) {
-            //echo ("<h4>" . $route->getAttribute('url') . "</h4>");
             $routeUrl = $route->getAttribute('url');
             $params = $route->getElementsByTagName('param');
             $routeParams = [];
             foreach ($params as $param) {
-                //echo $param->getAttribute('name') . "=>" . $param->nodeValue. "<br/>";
                 $routeParams[$param->getAttribute('name')] = $param->nodeValue;
             }
             $this->add($routeUrl, $routeParams);
         }
-        //var_dump($this->getRoutes());
     }
 
     /**
@@ -128,32 +125,26 @@ class Router
     {
         $url = $this->removeQueryStringVariables($request->requestQueryString());
 
-        if ($this->match($url)) {
-            $controller = $this->params['controller'];
-            $controller = $this->convertToStudlyCaps($controller);
-            $controller = $this->getNamespace() . $controller;
-
-            if (class_exists($controller)) {
-                $controllerObject = new $controller($this->params, $request);
-
-                $action = $this->params['action'];
-                $action = $this->convertToCamelCase($action);
-
-                if (preg_match('/action$/i', $action) == 0) {
-                    $controllerObject->$action();
-                } else {
-                    //echo "Method $action (in controller $controller) not found";
-                    throw new \Exception("Method $action in controller $controller cannot be called directly - remove the Action suffix to call this method", 500);
-                }
-            } else {
-                //echo "Controller class $controller not found";
-                throw new \Exception("Controller class $controller not found", 500);
-            }
-        } else {
-            //echo "No route matched";
-            throw new \Exception("No route matched", 404);
+        if (!$this->match($url)) {
+            throw new \Exception("La route n'a pas été trouvée", 404);
         }
-    }
+        $controller = $this->params['controller'];
+        $controller = $this->convertToStudlyCaps($controller);
+        $controller = $this->getNamespace() . $controller;
+
+        if (!class_exists($controller)) {
+            throw new \Exception("Le controller $controller n'a pas été trouvé", 500);
+        }
+        $controllerObject = new $controller($this->params, $request);
+
+        $action = $this->params['action'];
+        $action = $this->convertToCamelCase($action);
+
+        if (!preg_match('/action$/i', $action) == 0) {
+            throw new \Exception("La méthode $action dans le controller $controller ne peut pas être appelée directement - Enlevez le suffix Action pour appeler cette méthode.", 500);
+        }
+        $controllerObject->$action();
+}
 
     /**
      * Convert the sting with hyphens to StudlyCaps, e.g. post-authors => PostAuthors

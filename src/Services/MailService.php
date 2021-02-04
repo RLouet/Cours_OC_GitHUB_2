@@ -18,8 +18,6 @@ use Swift_Mailer;
 
 class MailService
 {
-    private static ?self $instance = null;
-
     private static Swift_Mailer $mailer;
     private static array $from;
     private Config $config;

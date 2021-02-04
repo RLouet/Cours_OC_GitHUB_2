@@ -18,7 +18,7 @@ class PDOFactory
 
     public static function getPDOConnexion()
     {
-        if (is_null(self::$pdoConnexion)) {
+        if (self::$pdoConnexion === null) {
             self::$pdoConnexion = (new self)->getDb();
         }
         return self::$pdoConnexion;

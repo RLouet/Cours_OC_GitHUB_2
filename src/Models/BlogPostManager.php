@@ -24,8 +24,8 @@ abstract class BlogPostManager extends Manager
     public function save(BlogPost $blogPost) {
         if ($blogPost->isValid()) {
             return $blogPost->isNew() ? $this->add($blogPost) : $this->modify($blogPost);
-        } else {
-            throw new \RuntimeException('Les paramètres du post ne sont pas valides.');
         }
+        throw new \RuntimeException('Les paramètres du post ne sont pas valides.');
+
     }
 }
