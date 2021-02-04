@@ -58,5 +58,6 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript" src="{{ path }}/custom/js/custom-admin.js"></script>
 {% endblock %}

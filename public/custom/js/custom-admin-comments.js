@@ -24,9 +24,9 @@ $(document).ready(function() {
             url: window.location.origin + "/ajax/moderateComment",
             method: "POST",
             data: {
-                "id": $(this).data("id"),
-                "action": action,
-                "token": $(this).data("token"),
+                id: $(this).data("id"),
+                action,
+                token: $(this).data("token"),
             },
             dataType: "json",
             success(data) {
@@ -38,17 +38,19 @@ $(document).ready(function() {
                     errorMessage += "</ul>";
                     $(".delete-error .form-error span", $confirmModal).html(errorMessage);
                     $(".delete-error .form-error", $confirmModal).removeClass("hidden");
-                } else {
-                    let $itemBox = $(".comment-item-" + data.comment);
-                    $itemBox.remove();
-                    if (action === "supprimer") {
-                        showFlashMessage("success", "Le commentaire a bien été supprimé.");
-                    }
-                    if (action === "valider") {
-                        showFlashMessage("success", "Le commentaire a bien été validé.");
-                    }
-                    $confirmModal.modal("hide");
+                    return;
                 }
+                let $itemBox = $(".comment-item-" + data.comment);
+                $itemBox.remove();
+                const message = "Le commentaire a bien été " + (action === "supprimer" ? "supprimé." : "validé.");
+                /*if (action === "supprimer") {
+                    showFlashMessage("success", "supprimé.");
+                }
+                if (action === "valider") {
+                    showFlashMessage("success", "Le commentaire a bien été validé.");
+                }*/
+                showFlashMessage("success", message);
+                $confirmModal.modal("hide");
             },
             error(e) {
                 $(".delete-error .form-error span", $confirmModal).html("Erreur Ajax");
@@ -75,8 +77,8 @@ $(document).ready(function() {
                 if (data.end) {
                     $("#ViewMore").parent().remove();
                 }
-                for (let k in data.comments) {
-                    let comment = data.comments[k];
+                for (const comment of data.comments) {
+                    //let comment = data.comments[k];
                     let item = $("<div class='comment-item-" + comment.id + " col-md-4 my-2 comment-item'>\n" +
                         "                                <div class='col-12 background-white rounded-3 p-2 blog-box-1'>\n" +
                         "                                    <a href='" + window.location.origin + "/admin/posts/" + comment.postId + "/view' class='btn-primary'><h5>" + comment.postTitle + " (#" + comment.postId + ")</h5></a>\n" +
