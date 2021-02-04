@@ -1,3 +1,4 @@
+/*global showFlashMessage*/
 $(document).ready(function() {
 
     // Confirm Modal
