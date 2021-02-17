@@ -3,12 +3,11 @@
 
 namespace Core;
 
-
 class Managers
 {
-    protected $api = null;
+    protected string $api;
     protected $dao = null;
-    protected $managers = [];
+    protected array $managers = [];
 
     public function __construct($api, $dao)
     {

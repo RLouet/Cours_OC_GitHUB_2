@@ -237,14 +237,18 @@ class Posts extends Controller
                                 $imagesCollection[$key][$name] = $value;
                             }
                         }
-                        //var_dump($imagesCollection);
+
+                        // process Images
                         foreach ($imagesCollection as $key=>$image) {
                             $oldImage = null;
 
+                            // Create PostImage and set Name and Post Id
                             $postImage = new PostImage([
                                 'name' => $this->httpRequest->postData($imagesType)[$key]['name'],
                                 'blog_post_id' => $blogPost->getId(),
                             ]);
+
+                            // Retrieve Old Image infos
                             if ($imagesType === "old_post_image") {
                                 $oldImage = $blogPost->getImages()->getById($this->httpRequest->postData('old_post_image')[$key]['id']);
                                 $imageUploadRules['old'] = $oldImage->getUrl();
@@ -252,30 +256,35 @@ class Posts extends Controller
                                 $postImage->setId($oldImage->getId());
                             }
 
+                            // Upload new Image
                             if (!empty($image['name'])){
                                 $fileName = uniqid(rand(1000, 9999), true);
                                 $upload = $uploader->upload($image, $imageUploadRules, $fileName);
-
-                                //var_dump($upload);
 
                                 if ($upload['success']) {
                                     $postImage->setUrl($upload['filename']);
                                 }
                                 else {
                                     foreach ($upload['errors'] as $error) {
-                                        $blogPost->setCustomError('image', $error);
+                                        $blogPost->addCustomError('images', $error);
+                                        $handle['errors'][] = "Une erreur s'est produite lors de l'upload de l'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
                                     }
                                 }
                             }
-                            //var_dump($blogPost->getHero());
-                            $postImage = $imageManager->save($postImage);
-                            if ($postImage) {
-                                if (isset($oldImage)) {
-                                    $blogPost->removeImage($oldImage);
-                                }
-                                $blogPost->addImage($postImage);
 
+
+                            if (!$postImage->getUrl()) {
+                                $blogPost->addCustomError('images', "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"");
+                                $handle['errors'][] = "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
+                            } else {
+                                $postImage = $imageManager->save($postImage);
                             }
+
+
+                            if (isset($oldImage)) {
+                                $blogPost->removeImage($oldImage);
+                            }
+                            $blogPost->addImage($postImage);
 
                             /*
                              * Process Hero
@@ -296,11 +305,12 @@ class Posts extends Controller
                                 }
                             }
                             if ($imagesType === "new_post_image" && $postImage) {
-                                if ($this->httpRequest->postData('hero') === "new-" . $key) {
+                                if ($this->httpRequest->postData('hero') === "new-" . $key && $postImage->getId()) {
                                     $blogPost->setHero($postImage);
                                     $blogPostManager->save($blogPost);
                                 }
                             }
+                            //var_dump($blogPost);
 
                         }
                     }

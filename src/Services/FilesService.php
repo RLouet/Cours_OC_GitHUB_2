@@ -18,19 +18,19 @@ class FilesService
 
         // Undefined | Multiple Files | $_FILES Corruption Attack
         if (!isset($tempFile['error']) || is_array($tempFile['error'])) {
-            $upload['errors'][] = "Erreur de paramètres sur le fichier \"" . $name . "\"";
+            $upload['errors'][] = "Erreur de paramètres sur le fichier \"" . $tempFile['name'] . "\"";
             return $upload;
         }
 
         // Check errors
         if ($tempFile['error'] > 0) {
-            $upload['errors'][] = "Erreur (" . $tempFile['error'] . ") lors du l'upload du fichier \"" . $name . "\"";
+            $upload['errors'][] = "Erreur (" . $tempFile['error'] . ") lors du l'upload du fichier \"" . $tempFile['name'] . "\"";
             return $upload;
         }
 
         // Check filesize
         if ($tempFile['size'] > ($rules['maxSize'] * 1048576)) {
-            $upload['errors'][] = "Le fichier \"" . $name . "\" est trop lourd (max " . $rules['maxSize'] . "Mo";
+            $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" est trop lourd (max " . $rules['maxSize'] . "Mo";
             return $upload;
         }
 
@@ -40,30 +40,30 @@ class FilesService
 
         if ($rules['type'] === 'image') {
             if (!$ext) {
-                $upload['errors'][] = "Le fichier \"" . $name . "\" n'a pas le bon format (jpeg, png ou gif)";
+                $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" n'a pas le bon format (jpeg, png ou gif)";
                 return $upload;
             }
             if (!$this->checkResolution($rules['minRes'], $rules['maxRes'], $tempFile['tmp_name'])) {
-                $upload['errors'][] = "Le fichier \"" . $name . "\" n'a pas la bonne résolution (min : " . $rules['minRes'][0] . "*" . $rules['minRes'][1] . ", max : " . $rules['maxRes'][0] . "*" . $rules['maxRes'][1] . ")";
+                $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" n'a pas la bonne résolution (min : " . $rules['minRes'][0] . "*" . $rules['minRes'][1] . ", max : " . $rules['maxRes'][0] . "*" . $rules['maxRes'][1] . ")";
                 return $upload;
             }
         }
 
         if ($rules['type'] === 'pdf') {
             if (!$ext) {
-                $upload['errors'][] = "Le fichier \"" . $name . "\" n'a pas le bon format (pdf)";
+                $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" n'a pas le bon format (pdf)";
                 return $upload;
             }
         }
 
-        if (!$this->processUpload($tempFile['tmp_name'], $rules, $name . "." . $ext)) {
-            $upload['errors'][] = "Le fichier \"" . $name . "\" n'a pas put être uploadé.";
+        if (!$this->processUpload($tempFile['tmp_name'], $rules, urlencode($name) . "." . $ext)) {
+            $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" n'a pas put être uploadé.";
             return $upload;
         }
 
         if (empty($upload['errors'])) {
             $upload['success'] = true;
-            $upload['filename'] = $name . "." . $ext;
+            $upload['filename'] = urlencode($name) . "." . $ext;
             return $upload;
         }
         return $upload;

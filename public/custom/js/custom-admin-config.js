@@ -236,7 +236,7 @@ $(document).ready(function() {
 						//$socialBox = $('.social-box-' + data.entity.id );
 					}
 					//$socialBox.remove();
-					$(".sn-logo", $socialBox).attr("src", window.location.origin + "/uploads/icons/" + data.entity.blogId + "/" + data.entity.logo).data("file", data.entity.logo);
+					$(".sn-logo", $socialBox).attr("src", window.location.origin + "/uploads/icons/" + data.entity.blogId + "/" + encodeURIComponent(data.entity.logo)).data("file", data.entity.logo);
 					$(".sn-name", $socialBox).html(data.entity.name);
 					$(".btn-delete", $socialBox).data("name", data.entity.name);
 					$(".sn-url", $socialBox).html(data.entity.url);
@@ -244,7 +244,6 @@ $(document).ready(function() {
 				}
 			},
 			error(e) {
-				//alert('ajax');
 				$(".sn-general-error .form-error span", $form).html("Erreur Ajax");
 				$(".sn-general-error .form-error", $form).removeClass("hidden");
 			}

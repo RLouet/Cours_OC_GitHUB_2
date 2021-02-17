@@ -43,6 +43,10 @@ abstract class Entity implements \ArrayAccess
         $this->errors[$key] = $error;
     }
 
+    public function addCustomError (string $key, string $error) {
+        $this->errors[$key][] = $error;
+    }
+
     public function offsetGet($var)
     {
         if (isset($this->$var) && is_callable([$this, $var]))

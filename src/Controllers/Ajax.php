@@ -160,14 +160,15 @@ class Ajax extends Controller
             // Création du nom de l'icone
             if (!empty($this->httpRequest->filesData('logo')['name'])) {
                 $ext = pathinfo($this->httpRequest->filesData('logo')['name'], PATHINFO_EXTENSION);
-                $socialNetwork->setLogo($socialNetwork->getName() . '.' . $ext);
+                $socialNetwork->setLogo(urlencode($socialNetwork->getName()) . '.' . $ext);
             } else {
                 $ext = pathinfo($this->httpRequest->postData('old_logo'), PATHINFO_EXTENSION);
-                $socialNetwork->setLogo($socialNetwork->getName() . '.' . $ext);
+                $socialNetwork->setLogo(urlencode($socialNetwork->getName()) . '.' . $ext);
             }
 
             $oldSocialNetwork =  $manager->getUnique($socialNetwork->getId());
 
+            //var_dump($socialNetwork);
             // Enregistrement du réseau social
              if (!$manager->save($socialNetwork)) {
                  $handle['success'] = false;
@@ -192,10 +193,9 @@ class Ajax extends Controller
             }
 
             // Renommage de l'icone si le nom du réseau a changé
-            if (($oldSocialNetwork->getName() !== $socialNetwork->getName()) && empty($this->httpRequest->filesData('logo')['name'])) {
+            if (($oldSocialNetwork->getLogo() !== $socialNetwork->getLogo()) && empty($this->httpRequest->filesData('logo')['name'])) {
                 $oldPath = $oldSocialNetwork->getLogo();
-                $ext = pathinfo($oldPath, PATHINFO_EXTENSION);
-                $newPath = $socialNetwork->getName() . '.' . $ext;
+                $newPath = $socialNetwork->getLogo();
 
                 if (!$uploader->rename($logoUploadRules, $oldPath, $newPath)){
                     $manager->save($oldSocialNetwork);
@@ -214,7 +214,7 @@ class Ajax extends Controller
             }
 
             $ext = pathinfo($this->httpRequest->filesData('logo')['name'], PATHINFO_EXTENSION);
-            $socialNetwork->setLogo($socialNetwork->getName() . '.' . $ext);
+            $socialNetwork->setLogo(urlencode($socialNetwork->getName()) . '.' . $ext);
 
             // Enregistrement du réseau social
             $socialNetwork = $manager->save($socialNetwork);

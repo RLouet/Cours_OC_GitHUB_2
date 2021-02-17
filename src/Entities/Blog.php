@@ -38,7 +38,7 @@ class Blog extends Entity
 
     public function  isValid()
     {
-        return !(empty($this->lastname) || empty($this->firstname) || empty($this->logo) || empty($this->teaserPhrase) || empty($this->contactMail) || empty($this->cv) ||empty($this->email) || empty($this->phone));
+        return !(empty($this->lastname) || empty($this->firstname) || empty($this->logo) || empty($this->teaserPhrase) || empty($this->contactMail) || empty($this->cv) ||empty($this->email) || empty($this->phone) || !empty($this->errors));
     }
 
 
@@ -46,82 +46,82 @@ class Blog extends Entity
 
     public function setLastname(string $lastname): Blog
     {
+        $this->lastname = $lastname;
         if (empty($lastname) || !preg_match('/^[a-zÀ-ÖØ-öø-ÿœŒ\'][a-z-\' À-ÖØ-öø-ÿœŒ]{0,48}[a-zÀ-ÖØ-öø-ÿœŒ\']$/i', $lastname)) {
             $this->errors[] = self::INVALID_LASTNAME;
             return $this;
         }
-        $this->lastname = $lastname;
 
         return $this;
     }
 
     public function setFirstname(string $firstname): Blog
     {
+        $this->firstname = $firstname;
         if (empty($firstname) || !preg_match('/^[a-zÀ-ÖØ-öø-ÿœŒ\'][À-ÖØ-öø-ÿœŒa-z-\' ]{0,48}[À-ÖØ-öø-ÿœŒa-z\']$/i', $firstname)) {
             $this->errors[] = self::INVALID_FIRSTNAME;
             return $this;
         }
-        $this->firstname = $firstname;
         return $this;
     }
 
     public function setEmail(string $email): Blog
     {
+        $this->email = $email;
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = self::INVALID_EMAIL;
             return $this;
         }
-        $this->email = $email;
         return $this;
     }
 
     public function setPhone(string $phone): Blog
     {
+        $this->phone = $phone;
         if (empty($phone) || !preg_match('/^[\d+(][\d. ()+-]{6,28}[\d)]$/', $phone)) {
             $this->errors[] = self::INVALID_PHONE;
             return $this;
         }
-        $this->phone = $phone;
         return $this;
     }
 
     public function setLogo(string $logo): Blog
     {
+        $this->logo = $logo;
         if (empty($logo)) {
             $this->errors[] = self::INVALID_LOGO;
             return $this;
         }
-        $this->logo = $logo;
         return $this;
     }
 
     public function setTeaserPhrase(string $teaser): Blog
     {
+        $this->teaserPhrase = $teaser;
         if (empty($teaser)) {
             $this->errors[] = self::INVALID_TEASER;
             return $this;
         }
-        $this->teaserPhrase = $teaser;
         return $this;
     }
 
     public function setContactMail(string $contactMail): Blog
     {
+        $this->contactMail = $contactMail;
         if (empty($contactMail) || !filter_var($contactMail, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = self::INVALID_CONTACTMAIL;
             return $this;
         }
-        $this->contactMail = $contactMail;
         return $this;
     }
 
     public function setCv(string $cv): Blog
     {
+        $this->cv = $cv;
         if (empty($cv)) {
             $this->errors[] = self::INVALID_CV;
             return $this;
         }
-        $this->cv = $cv;
         return $this;
     }
 
@@ -158,47 +158,47 @@ class Blog extends Entity
 
     // GETTERS //
 
-    public function getLastname()
+    public function getLastname(): string
     {
         return $this->lastname;
     }
 
-    public function getfirstname()
+    public function getfirstname(): string
     {
         return $this->firstname;
     }
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function getPhone()
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
-    public function getLogo()
+    public function getLogo(): string
     {
         return $this->logo;
     }
 
-    public function getTeaserPhrase()
+    public function getTeaserPhrase(): string
     {
         return $this->teaserPhrase;
     }
 
-    public function getContactMail()
+    public function getContactMail(): string
     {
         return $this->contactMail;
     }
 
-    public function getCv()
+    public function getCv(): string
     {
         return $this->cv;
     }
 
-    public function getSocialNetworks() : array
+    public function getSocialNetworks(): array
     {
         $socialNetworks = [];
 
@@ -209,7 +209,7 @@ class Blog extends Entity
         return $socialNetworks;
     }
 
-    public function getSkills() : array
+    public function getSkills(): array
     {
         $skills = [];
 

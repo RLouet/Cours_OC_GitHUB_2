@@ -62,8 +62,21 @@ class Book extends Controller
             $comment = new Comment($this->httpRequest->postData());
             $comment->setUser($this->auth->getUser())->setBlogPost($blogPost['entity'])->setValidated($this->auth->getUser()->isGranted('admin'));
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                $messageFlash = ['message' => "Votre commentaire est invalide.", 'type' => Flash::WARNING];
                 if ($comment->isValid()) {
-                    if (!$commentManager->save($comment)) {
+                    $messageFlash = ['message' => "Erreur lors de l'enregistrement de votre commentaire.", 'type' => Flash::ERROR];
+
+                    if ($commentManager->save($comment)) {
+                        $message = 'Votre commentaire est enregistré.';
+                        if (!$this->auth->getUser()->isGranted('admin')) {
+                            $message .= ' Il apparaîtra bientôt, après sa validation.';
+                        }
+                        $currentComment = '';
+
+                        $messageFlash = ['message' => $message, 'type' => Flash::SUCCESS];
+                    }
+
+                    /*if (!$commentManager->save($comment)) {
                         $this->flash->addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
                     } else {
                         $message = 'Votre commentaire est enregistré.';
@@ -72,11 +85,10 @@ class Book extends Controller
                         }
                         $this->flash->addMessage( $message, Flash::SUCCESS);
                         $currentComment = "";
-                    }
+                    }*/
                     //$currentComment = "";
-                } else {
-                    $this->flash->addMessage('Votre commentaire est invalide.', Flash::WARNING);
                 }
+                $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
             }
         }
 

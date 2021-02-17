@@ -23,27 +23,51 @@
     </div>
 </div>
 
-<form class="configform" action="" method="post" enctype="multipart/form-data">
+<form class="configform" action="" method="post" enctype="multipart/form-data" id="PostForm">
     <!-- images ============================================== -->
     <div class="section pt-4 background-dark over-hide z-bigger-2">
-        <h4 class="text-center text-white">Images</h4>
+        <h4 class="text-center text-white" id="PostImagesItems">Images</h4>
         <div class="container pt-3">
+            <div class="row form-error text-danger text-center">
+                <div class="col-12">
+                    {% if blog_post.entity.errors.images %}
+                        {% for imageError in blog_post.entity.errors.images %}
+                            <li>{{ imageError }}</li>
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
+                </div>
+                <ul>
+            </div>
 
             <div class="row justify-content-around align-items-center images-list">
                 {% for image in blog_post.entity.images %}
-                    <div class="col-md-6 col-lg-4 col-xl-3  mt-3 post-image-item old-post-image-{{ image.id }}">
-                        <div><img src="{{ path }}/uploads/blog/{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}" alt="{{ image.name }}" class="img-fluid post-image-preview"></div>
-                        <input type="hidden" name="old_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>
-                        <div><input type="text" name="old_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field" required></div>
-                        <input type="file" name="old_post_image[{{ loop.index0 }}]" id="postImageInput{{ image.id }}" class="form-control post-image-input" accept="image/*">
+                    <div class="col-md-6 col-lg-4 col-xl-3  mt-3 post-image-item {% if image.id %}old-post-image-{{ image.id }}{% else %}new-post-image-{{ loop.index0 }}{% endif %}">
+                        <div class="image-preview-container">
+                            <label for="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}">
+                                <div>
+                                    <img src="{{ path }}/{% if image.url %}uploads/blog/{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}{% else %}img/blog/1.jpg{% endif %}" alt="{{ image.name }}" class="img-fluid post-image-preview">
+                                    <div class="img-prev-ol hidden">
+                                        <div class="spinner"></div>
+                                    </div>
+
+                                </div>
+                            </label>
+                            <div class='empty-alert'>
+                                <span>L'image doit être définie.</span>
+                            </div>
+                            <input type="file" data-old="" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}]" id="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}" class="form-control post-image-input" accept="image/*">
+                        </div>
+                        {% if image.id %}<input type="hidden" name={% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>{% endif %}
+                        <div><input type="text" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field text-light-green" required></div>
                         <div class="row justify-content-around">
                             <div class="pt-2">
-                                <input type="radio" id="radioHero{{ image.id }}" name="hero" value="old-{{ image.id }}" {% if image.id == blog_post.entity.hero.id %}checked{% endif %} required>
-                                <label for="radioHero{{ image.id }}">Hero</label>
+                                <input type="radio" id="radioHero{% if image.id %}{{ image.id }}{% else %}New{{ loop.index0 }}{% endif %}" name="hero" value="{% if image.id %}old-{{ image.id }}{% else %}new-{{ loop.index0 }}{% endif %}" {% if image.id == blog_post.entity.hero.id %}checked{% endif %} required>
+                                <label for="radioHero{% if image.id %}{{ image.id }}{% else %}New{{ loop.index0 }}{% endif %}">Hero</label>
                             </div>
                             <div>
-                                <label for="postImageInput{{ image.id }}" class="fa-btn"><i class="fa fa-edit"></i></label>
-                                <button type="button" class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ image.id }}" data-type="old-image"><i class="fa fa-trash"></i></button>
+                                <label for="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}" class="fa-btn"><i class="fa fa-edit"></i></label>
+                                <button type="button" class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{% if image.id %}{{ image.id }}{% else %}{{ loop.index0 }}{% endif %}" data-type="{% if image.id %}old{% else %}new{% endif %}-image"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -96,7 +120,7 @@
                 {% if not blog_post.entity.isNew %}<input type="hidden" name="id" value="{{ blog_post.entity.id }}">{% endif %}
                 <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                 <div class="clear"></div>
-                <input class="btn btn-primary mt-3" type="submit" name="{% if not blog_post.entity.isNew %}post-edit{% else %}post-add{% endif %}" value="Enregistrer" />
+                <input class="btn btn-primary mt-3" id="SubmitPost" type="submit" name="{% if not blog_post.entity.isNew %}post-edit{% else %}post-add{% endif %}" value="Enregistrer" />
             </div>
         </div>
     </div>
