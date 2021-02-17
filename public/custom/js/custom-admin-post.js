@@ -23,7 +23,10 @@ $(document).ready(function() {
 
                 // Check size
                 if (size > maxSize) {
-                    alert ("L'image est trop lourde (max : " + maxSize + " Mo) !");
+                    $("img", $(this).parent()).addClass("img-prev-alert");
+                    $(".img-alert span", $(this).parent()).html("L'image est trop lourde (max : " + maxSize + " Mo) !");
+                    $(".img-alert", $(this).parent()).show();
+                    //alert ("L'image est trop lourde (max : " + maxSize + " Mo) !");
                     $preview.attr("src", oldSrc);
                     $previewLoader.hide();
                     $(this).val(oldVal);
@@ -48,12 +51,15 @@ $(document).ready(function() {
                 const h = this.height;
                 if ( w >= minRes[0] && w <= maxRes[0] && h >= minRes[1] && h <= maxRes[1]) {
                     $("img", field.parent()).removeClass("img-prev-alert");
-                    $(".empty-alert", field.parent()).hide();
+                    $(".img-alert", field.parent()).hide();
                     loader.hide();
                     field.data('old', field.val());
                     return;
                 }
-                alert ("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
+                $("img", field.parent()).addClass("img-prev-alert");
+                $(".img-alert span", field.parent()).html("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
+                $(".img-alert", field.parent()).show();
+                //alert ("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
                 preview.attr("src", oldSrc);
                 loader.hide();
                 field.val(oldVal);
@@ -115,12 +121,14 @@ $(document).ready(function() {
             "                                </div>" +
             "                            </div>" +
             "                        </label>" +
-            "                        <div class='empty-alert'>" +
+            "                        <div class='img-alert'>" +
             "                            <span>L'image doit être définie.</span>" +
             "                        </div>" +
             "                        <input type='file' name='new_post_image[" + postImageCount + "]' id='newPostImageInput" + postImageCount + "' class='form-control post-image-input' accept='image/*'>" +
             "                    </div>\n" +
-            "                    <div><input type='text' placeholder='Description' class='form-control post-image-name-field text-light-green' name='new_post_image[" + postImageCount + "][name]' required></div>\n" +
+            "                    <div>" +
+            "                        <input type='text' placeholder='Description' class='form-control post-image-name-field text-light-green' name='new_post_image[" + postImageCount + "][name]' required>" +
+            "                    </div>\n" +
             "                    <div class='row justify-content-around'>\n" +
             "                        <div class='pt-2'>" +
             "                            <input type='radio' id='radioHeroNew" + postImageCount + "' name='hero' value='new-" + postImageCount + "'>\n" +
@@ -139,20 +147,21 @@ $(document).ready(function() {
         initImagePreview($(".post-image-input", $template));
         $(".post-image-input", $template).click();
     });
-/*
+
     $("#PostForm").submit(function (e) {
-        let $NewImageInputs = $("input[type=\"file\"][name^=\"new_post_image\"]", $(this));
-        let valid = true
-        $NewImageInputs.each(function () {
+        let $imageInputs = $(".post-image-input", $(this));
+        let valid = true;
+        $imageInputs.each(function () {
             if (!$(this).val()) {
                 valid = false;
                 $("img", $(this).parent()).addClass("img-prev-alert");
-                $(".empty-alert", $(this).parent()).show();
+                $(".img-alert span", $(this).parent()).html("L'image doit être définie");
+                $(".img-alert", $(this).parent()).show();
                 let targetTop = document.getElementById("PostImagesItems").offsetTop;
                 $("html, body").animate({scrollTop:targetTop}, 800);
             }
         });
         //alert("submit");
         return valid;
-    });*/
+    });
 });

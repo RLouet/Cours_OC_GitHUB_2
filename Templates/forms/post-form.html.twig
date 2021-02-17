@@ -53,7 +53,7 @@
 
                                 </div>
                             </label>
-                            <div class='empty-alert'>
+                            <div class='img-alert'>
                                 <span>L'image doit être définie.</span>
                             </div>
                             <input type="file" data-old="" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}]" id="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}" class="form-control post-image-input" accept="image/*">

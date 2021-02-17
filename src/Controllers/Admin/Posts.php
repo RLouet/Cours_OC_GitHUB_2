@@ -97,13 +97,17 @@ class Posts extends Controller
         if ($this->httpRequest->postExists('post-add')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogPost = $this->processForm($blogPost['entity']);
+                if ($blogPost['saved']) {
+                    $this->flash->addMessage('Le post a bien été enregistré.');
+                }
                 if (empty($blogPost['errors'])) {
-                    $this->flash->addMessage('Le post a bien été enregistrés');
-
                     $this->httpResponse->redirect('/admin/posts');
                 }
                 foreach ($blogPost['errors'] as $error) {
                     $this->flash->addMessage($error, Flash::WARNING);
+                }
+                if ($blogPost['saved']) {
+                    $this->httpResponse->redirect('/admin/posts/' . $blogPost['entity']->getId() . '/edit');
                 }
             }
         }
@@ -147,6 +151,8 @@ class Posts extends Controller
             }
         }
 
+        var_dump($blogPost['entity']);
+
         $csrf = $this->generateCsrfToken();
 
         $this->httpResponse->renderTemplate('Backend/posts-edit.html.twig', [
@@ -171,12 +177,14 @@ class Posts extends Controller
         $uploader = new FilesService();
 
         $handle['entity'] = $blogPost;
+        $handle['saved'] = false;
 
 
 
         if ($blogPost->isValid() && empty($blogPost->getErrors())) {
             $blogPostManager =  $this->managers->getManagerOf('blogPost');
             $blogPost =$blogPostManager->save($blogPost);
+            $handle['saved'] = true;
 
             /*
              * Process PostImages

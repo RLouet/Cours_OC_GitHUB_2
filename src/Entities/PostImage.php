@@ -58,12 +58,12 @@ class PostImage extends Entity
 
     public function getName(): string
     {
-        return $this->name;
+        return isset($this->name)?$this->name:"";
     }
 
-    public function getUrl(): ?string
+    public function getUrl(): string
     {
-        return $this->url;
+        return isset($this->url)?$this->url:"";
     }
 
     public function getBlogPostId(): int
