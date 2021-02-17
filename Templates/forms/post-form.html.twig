@@ -59,7 +59,12 @@
                             <input type="file" data-old="" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}]" id="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}" class="form-control post-image-input" accept="image/*">
                         </div>
                         {% if image.id %}<input type="hidden" name={% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>{% endif %}
-                        <div><input type="text" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field text-light-green" required></div>
+                        <div>
+                            <input type="text" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field text-light-green" required>
+                            <div class="image-name-alert hidden mt-1">
+                                <span class="badge badge-warning ml-2"></span>
+                            </div>
+                        </div>
                         <div class="row justify-content-around">
                             <div class="pt-2">
                                 <input type="radio" id="radioHero{% if image.id %}{{ image.id }}{% else %}New{{ loop.index0 }}{% endif %}" name="hero" value="{% if image.id %}old-{{ image.id }}{% else %}new-{{ loop.index0 }}{% endif %}" {% if image.id == blog_post.entity.hero.id %}checked{% endif %} required>

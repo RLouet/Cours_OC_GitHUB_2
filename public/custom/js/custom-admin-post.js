@@ -128,6 +128,9 @@ $(document).ready(function() {
             "                    </div>\n" +
             "                    <div>" +
             "                        <input type='text' placeholder='Description' class='form-control post-image-name-field text-light-green' name='new_post_image[" + postImageCount + "][name]' required>" +
+            "                        <div class='image-name-alert hidden mt-1'>" +
+            "                            <span class=\"badge badge-warning ml-2\"></span>" +
+            "                        </div>" +
             "                    </div>\n" +
             "                    <div class='row justify-content-around'>\n" +
             "                        <div class='pt-2'>" +
@@ -149,8 +152,13 @@ $(document).ready(function() {
     });
 
     $("#PostForm").submit(function (e) {
-        let $imageInputs = $(".post-image-input", $(this));
+        //alert("submit");
+        return checkImagesInputs($(this)) && checkImagesNames($(this));
+    });
+
+    function checkImagesInputs($cont) {
         let valid = true;
+        let $imageInputs = $(".post-image-input", $cont);
         $imageInputs.each(function () {
             if (!$(this).val()) {
                 valid = false;
@@ -161,7 +169,23 @@ $(document).ready(function() {
                 $("html, body").animate({scrollTop:targetTop}, 800);
             }
         });
-        //alert("submit");
         return valid;
-    });
+    }
+
+    function checkImagesNames($cont) {
+        let valid = true;
+        let $imageNameInputs = $(".post-image-name-field", $cont);
+        const regex = /^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,62}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i;
+        $imageNameInputs.each(function () {
+            if (!$(this).val().match(regex)) {
+                valid = false;
+                $(this).addClass("img-prev-alert");
+                $(".image-name-alert span", $(this).parent()).html("La description de l'image doit contenir entre 2 et 64 lettres, chiffres, - ou espaces");
+                $(".image-name-alert", $(this).parent()).show();
+                let targetTop = document.getElementById("PostImagesItems").offsetTop;
+                $("html, body").animate({scrollTop:targetTop}, 800);
+            }
+        });
+        return valid;
+    }
 });

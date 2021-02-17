@@ -151,7 +151,7 @@ class Posts extends Controller
             }
         }
 
-        var_dump($blogPost['entity']);
+        //var_dump($blogPost['entity']);
 
         $csrf = $this->generateCsrfToken();
 
@@ -265,18 +265,16 @@ class Posts extends Controller
                             }
 
                             // Upload new Image
-                            if (!empty($image['name'])){
+                            if (!$postImage->getErrors() && !empty($image['name'])){
                                 $fileName = uniqid(rand(1000, 9999), true);
                                 $upload = $uploader->upload($image, $imageUploadRules, $fileName);
 
                                 if ($upload['success']) {
                                     $postImage->setUrl($upload['filename']);
                                 }
-                                else {
-                                    foreach ($upload['errors'] as $error) {
-                                        $blogPost->addCustomError('images', $error);
-                                        $handle['errors'][] = "Une erreur s'est produite lors de l'upload de l'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
-                                    }
+                                foreach ($upload['errors'] as $error) {
+                                    $postImage->addCustomError('file', $error);
+                                    $blogPost->addCustomError('images', $error);
                                 }
                             }
 
@@ -284,8 +282,12 @@ class Posts extends Controller
                             if (!$postImage->getUrl()) {
                                 $blogPost->addCustomError('images', "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"");
                                 $handle['errors'][] = "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
-                            } else {
+                            }
+                            if ($postImage->isValid()) {
                                 $postImage = $imageManager->save($postImage);
+                            } else {
+                                $blogPost->addCustomError('images', "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.");
+                                $handle['errors'][] = "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.";
                             }
 
 

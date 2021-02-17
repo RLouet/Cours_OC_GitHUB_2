@@ -18,14 +18,14 @@ class PostImage extends Entity
 
     public function  isValid()
     {
-        return !(empty($this->name) || empty($this->url) || !empty($this->errors));
+        return !(empty($this->name) || empty($this->url) || empty($this->blogPostId) || !empty($this->errors));
     }
 
     // SETTERS //
 
     public function setName(string $name): PostImage
     {
-        if (empty($name) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,64}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $name)) {
+        if (empty($name) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,62}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $name)) {
             $this->errors[] = self::INVALID_NAME;
             return $this;
         }
