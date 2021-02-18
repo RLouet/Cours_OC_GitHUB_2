@@ -28,6 +28,7 @@ class Error
             }
             http_response_code($code);
             $response = "<h1>Fatal error</h1>\n" .
+                "<h2>Code = " . $code . "</h2>\n" .
                 "<p>Uncaught exception : '" . get_class($exception) . "'</p>\n" .
                 "<p>Message : '" . $exception->getMessage() . "'</p>\n" .
                 "<p>Stack trace : <pre>" . $exception->getTraceAsString() . "</pre></p>\n" .

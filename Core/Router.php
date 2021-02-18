@@ -133,7 +133,7 @@ class Router
         $controller = $this->getNamespace() . $controller;
 
         if (!class_exists($controller)) {
-            throw new \Exception("Le controller $controller n'a pas été trouvé", 500);
+            throw new \Exception("Le controller $controller n'a pas été trouvé", 404);
         }
         $controllerObject = new $controller($this->params, $request);
 
@@ -141,7 +141,7 @@ class Router
         $action = $this->convertToCamelCase($action);
 
         if (!preg_match('/action$/i', $action) == 0) {
-            throw new \Exception("La méthode $action dans le controller $controller ne peut pas être appelée directement - Enlevez le suffix Action pour appeler cette méthode.", 500);
+            throw new \Exception("La méthode $action dans le controller $controller ne peut pas être appelée directement - Enlevez le suffix Action pour appeler cette méthode.", 404);
         }
         $controllerObject->$action();
 }

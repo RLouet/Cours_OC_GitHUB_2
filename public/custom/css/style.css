@@ -547,3 +547,16 @@ table.align-middle th {
         -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
     }
 }
+
+.error-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.error-title {
+    position: relative;
+    z-index: 300;
+    opacity: 0.75;
+    font-size: 3rem;
+    font-weight: bold;
+}

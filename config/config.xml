@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
     <define var="blog_id" value="1" />
-    <define var="show_errors" value="true" />
+    <define var="show_errors" value="false" />
     <define var="secure_cookies" value="false" />
     <define var="secret_key" value="kKQmgw23BPTQa2hk1el3hSlmVBIKHQ4k" />
     <define var="db_host" value="localhost" />
