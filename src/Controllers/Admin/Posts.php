@@ -38,8 +38,6 @@ class Posts extends Controller
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts = $postManager->getList();
 
-        //var_dump($posts);
-
         $this->httpResponse->renderTemplate('Backend/posts-index.html.twig', [
             'section' => 'posts',
             'posts' => $posts,
@@ -150,8 +148,6 @@ class Posts extends Controller
 
             }
         }
-
-        //var_dump($blogPost['entity']);
 
         $csrf = $this->generateCsrfToken();
 
@@ -300,9 +296,7 @@ class Posts extends Controller
                              * Process Hero
                              */
                             $oldHeroId = null;
-                            //var_dump('1');
                             if ($blogPost->getHero()) {
-                                //var_dump('2');
                                 $oldHeroId = $blogPost->getHero()->getId();
                                 //$handle['errors'][] = "Erreur d'enregistrement";
                             }
@@ -320,7 +314,6 @@ class Posts extends Controller
                                     $blogPostManager->save($blogPost);
                                 }
                             }
-                            //var_dump($blogPost);
 
                         }
                     }
