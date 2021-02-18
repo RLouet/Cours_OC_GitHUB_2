@@ -18,14 +18,14 @@ class PostImage extends Entity
 
     public function  isValid()
     {
-        return !(empty($this->name) || empty($this->url));
+        return !(empty($this->name) || empty($this->url) || empty($this->blogPostId) || !empty($this->errors));
     }
 
     // SETTERS //
 
     public function setName(string $name): PostImage
     {
-        if (empty($name)) {
+        if (empty($name) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\da-zÀ-ÖØ-öø-ÿœŒ\- ]{0,62}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $name)) {
             $this->errors[] = self::INVALID_NAME;
             return $this;
         }
@@ -35,7 +35,7 @@ class PostImage extends Entity
 
     public function setUrl(string $url): PostImage
     {
-        if (empty($url) || !preg_match('/^[\da-zÀ-ÖØ-öø-ÿœŒ][\d\'a-zÀ-ÖØ-öø-ÿœŒ -.]{0,48}[\da-zÀ-ÖØ-öø-ÿœŒ]$/i', $url)) {
+        if (empty($url) || !preg_match('/^[-&%_:?\/=.\da-z]{5,128}$/i', $url)) {
             $this->errors[] = self::INVALID_URL;
             return $this;
         }
@@ -56,17 +56,17 @@ class PostImage extends Entity
 
     // GETTERS //
 
-    public function getName() : string
+    public function getName(): string
     {
-        return $this->name;
+        return isset($this->name)?$this->name:"";
     }
 
-    public function getUrl() : string
+    public function getUrl(): string
     {
-        return $this->url;
+        return isset($this->url)?$this->url:"";
     }
 
-    public function getBlogPostId() : int
+    public function getBlogPostId(): int
     {
         return $this->blogPostId;
     }

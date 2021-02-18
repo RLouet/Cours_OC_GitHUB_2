@@ -7,7 +7,7 @@
                 <div class="row footer-social-icons justify-content-center">
                     {% for network in blog.socialnetworks %}
                         <div class="col-auto p-2">
-                            <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ blog.id }}/{{ network.logo }}" alt="logo {{ network.name }}"></a>
+                            <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ blog.id }}/{{ network.logo|url_encode }}" alt="logo {{ network.name }}"></a>
                         </div>
                     {% endfor %}
                 </div>

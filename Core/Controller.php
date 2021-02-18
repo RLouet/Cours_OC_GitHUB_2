@@ -12,14 +12,14 @@ abstract class Controller
      * Parameters from the matched route
      * @var array
      */
-    protected $route_params = [];
+    protected array $route_params = [];
 
 
     /**
      * Entity managers
      * @var Managers
      */
-    protected $managers = null;
+    protected Managers $managers;
 
     /**
      * http request
@@ -69,7 +69,7 @@ abstract class Controller
      *
      * @return void
      */
-    public function __call(string $name, array  $args) : void
+    public function __call(string $name, array  $args): void
     {
         $method = $name . 'Action';
 

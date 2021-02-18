@@ -22,7 +22,7 @@ class SocialNetwork extends Entity implements JsonSerializable
 
     public function  isValid()
     {
-        return !(empty($this->blogId) || empty($this->name) || empty($this->logo) || empty($this->url));
+        return !(empty($this->blogId) || empty($this->name) || empty($this->logo) || empty($this->url) || !empty($this->errors));
     }
 
     public function jsonSerialize()
@@ -62,7 +62,7 @@ class SocialNetwork extends Entity implements JsonSerializable
 
     public function setLogo(string $logo): SocialNetwork
     {
-        if (empty($logo)) {
+        if (empty($logo) || !preg_match('/^[-&%_:?\/=.\da-z]{5,256}$/i', $logo)) {
             $this->errors[] = self::INVALID_LOGO;
             return $this;
         }
@@ -72,7 +72,7 @@ class SocialNetwork extends Entity implements JsonSerializable
 
     public function setUrl(string $url)
     {
-        if (empty($url) || !preg_match('/^[-&%_:?\/=.\da-z]{5,50}$/i', $url)) {
+        if (empty($url) || !preg_match('/^[-&%_:?\/=.\da-z]{5,256}$/i', $url)) {
             $this->errors[] = self::INVALID_URL;
             return $this;
         }

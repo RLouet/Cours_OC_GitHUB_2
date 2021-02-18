@@ -8,7 +8,7 @@ use PDO;
 class PDOFactory
 {
 
-    private static ?PDO $pdoConnexion = null;
+    private static PDO $pdoConnexion;
     protected Config $config;
 
     private function __construct()
@@ -18,7 +18,7 @@ class PDOFactory
 
     public static function getPDOConnexion()
     {
-        if (self::$pdoConnexion === null) {
+        if (!isset(self::$pdoConnexion)) {
             self::$pdoConnexion = (new self)->getDb();
         }
         return self::$pdoConnexion;

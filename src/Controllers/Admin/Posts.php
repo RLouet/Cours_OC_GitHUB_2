@@ -38,8 +38,6 @@ class Posts extends Controller
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts = $postManager->getList();
 
-        //var_dump($posts);
-
         $this->httpResponse->renderTemplate('Backend/posts-index.html.twig', [
             'section' => 'posts',
             'posts' => $posts,
@@ -97,13 +95,17 @@ class Posts extends Controller
         if ($this->httpRequest->postExists('post-add')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $blogPost = $this->processForm($blogPost['entity']);
+                if ($blogPost['saved']) {
+                    $this->flash->addMessage('Le post a bien été enregistré.');
+                }
                 if (empty($blogPost['errors'])) {
-                    $this->flash->addMessage('Le post a bien été enregistrés');
-
                     $this->httpResponse->redirect('/admin/posts');
                 }
                 foreach ($blogPost['errors'] as $error) {
                     $this->flash->addMessage($error, Flash::WARNING);
+                }
+                if ($blogPost['saved']) {
+                    $this->httpResponse->redirect('/admin/posts/' . $blogPost['entity']->getId() . '/edit');
                 }
             }
         }
@@ -171,12 +173,14 @@ class Posts extends Controller
         $uploader = new FilesService();
 
         $handle['entity'] = $blogPost;
+        $handle['saved'] = false;
 
 
 
         if ($blogPost->isValid() && empty($blogPost->getErrors())) {
             $blogPostManager =  $this->managers->getManagerOf('blogPost');
             $blogPost =$blogPostManager->save($blogPost);
+            $handle['saved'] = true;
 
             /*
              * Process PostImages
@@ -237,14 +241,18 @@ class Posts extends Controller
                                 $imagesCollection[$key][$name] = $value;
                             }
                         }
-                        //var_dump($imagesCollection);
+
+                        // process Images
                         foreach ($imagesCollection as $key=>$image) {
                             $oldImage = null;
 
+                            // Create PostImage and set Name and Post Id
                             $postImage = new PostImage([
                                 'name' => $this->httpRequest->postData($imagesType)[$key]['name'],
                                 'blog_post_id' => $blogPost->getId(),
                             ]);
+
+                            // Retrieve Old Image infos
                             if ($imagesType === "old_post_image") {
                                 $oldImage = $blogPost->getImages()->getById($this->httpRequest->postData('old_post_image')[$key]['id']);
                                 $imageUploadRules['old'] = $oldImage->getUrl();
@@ -252,38 +260,43 @@ class Posts extends Controller
                                 $postImage->setId($oldImage->getId());
                             }
 
-                            if (!empty($image['name'])){
+                            // Upload new Image
+                            if (!$postImage->getErrors() && !empty($image['name'])){
                                 $fileName = uniqid(rand(1000, 9999), true);
                                 $upload = $uploader->upload($image, $imageUploadRules, $fileName);
-
-                                //var_dump($upload);
 
                                 if ($upload['success']) {
                                     $postImage->setUrl($upload['filename']);
                                 }
-                                else {
-                                    foreach ($upload['errors'] as $error) {
-                                        $blogPost->setCustomError('image', $error);
-                                    }
+                                foreach ($upload['errors'] as $error) {
+                                    $postImage->addCustomError('file', $error);
+                                    $blogPost->addCustomError('images', $error);
                                 }
                             }
-                            //var_dump($blogPost->getHero());
-                            $postImage = $imageManager->save($postImage);
-                            if ($postImage) {
-                                if (isset($oldImage)) {
-                                    $blogPost->removeImage($oldImage);
-                                }
-                                $blogPost->addImage($postImage);
 
+
+                            if (!$postImage->getUrl()) {
+                                $blogPost->addCustomError('images', "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"");
+                                $handle['errors'][] = "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
                             }
+                            if ($postImage->isValid()) {
+                                $postImage = $imageManager->save($postImage);
+                            } else {
+                                $blogPost->addCustomError('images', "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.");
+                                $handle['errors'][] = "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.";
+                            }
+
+
+                            if (isset($oldImage)) {
+                                $blogPost->removeImage($oldImage);
+                            }
+                            $blogPost->addImage($postImage);
 
                             /*
                              * Process Hero
                              */
                             $oldHeroId = null;
-                            //var_dump('1');
                             if ($blogPost->getHero()) {
-                                //var_dump('2');
                                 $oldHeroId = $blogPost->getHero()->getId();
                                 //$handle['errors'][] = "Erreur d'enregistrement";
                             }
@@ -296,7 +309,7 @@ class Posts extends Controller
                                 }
                             }
                             if ($imagesType === "new_post_image" && $postImage) {
-                                if ($this->httpRequest->postData('hero') === "new-" . $key) {
+                                if ($this->httpRequest->postData('hero') === "new-" . $key && $postImage->getId()) {
                                     $blogPost->setHero($postImage);
                                     $blogPostManager->save($blogPost);
                                 }

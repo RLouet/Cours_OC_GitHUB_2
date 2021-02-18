@@ -24,7 +24,7 @@
                     <ul class="hero-social img-social mb-0 mt-5">
                         {% for network in blog.socialnetworks %}
                             <li>
-                                <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ blog.id }}/{{ network.logo }}" alt="logo {{ network.name }}"></a>
+                                <a href="{{ network.url }}" title="Aller sur ma page {{ network.name }}"><img src="{{ path }}/uploads/icons/{{ blog.id }}/{{ network.logo|url_encode }}" alt="logo {{ network.name }}"></a>
                             </li>
                         {% endfor %}
                     </ul>
