@@ -1,0 +1,93 @@
+[18-Feb-2021 11:54:59 Europe/Paris] Uncaught exception : 'Exception' Message : 'La méthode nimpAction n'a pas été trouvéeBlog\Controllers\Admin\Posts'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php(146): Core\Controller->__call('nimp', Array)
+#1 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#2 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Controller.php' on line 77
+[18-Feb-2021 12:19:52 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:24:54 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:26:07 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:26:53 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:27:48 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:27:57 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:28:12 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:29:31 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:29:52 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:30:16 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:31:18 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:31:32 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Admin\Nimp n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:34:37 Europe/Paris] Uncaught exception : 'ParseError' Message : 'syntax error, unexpected '$postedData' (T_VARIABLE)'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\vendor\composer\ClassLoader.php(322): Composer\Autoload\includeFile('B:\\OC\\parcours_...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('Blog\\Controller...')
+#2 [internal function]: spl_autoload_call('Blog\\Controller...')
+#3 B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php(135): class_exists('Blog\\Controller...')
+#4 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#5 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\src\Controllers\Home.php' on line 31
+[18-Feb-2021 12:43:32 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:44:50 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:45:54 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:46:15 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:46:27 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:47:12 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:47:20 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136
+[18-Feb-2021 12:47:30 Europe/Paris] Uncaught exception : 'Exception' Message : 'Le controller Blog\Controllers\Boofek n'a pas été trouvé'
+Stack trace : #0 B:\OC\parcours_dev_symfony\P5_blog\www\public\index.php(34): Core\Router->dispatch(Object(Core\HTTPRequest))
+#1 {main}
+Thrown in 'B:\OC\parcours_dev_symfony\P5_blog\www\Core\Router.php' on line 136

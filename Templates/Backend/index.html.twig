@@ -79,39 +79,39 @@
         </div>
     </div>
 
-        <!-- Block ============================================== -->
-        <div class="section pt-4 background-dark-1 pb-2 over-hide z-bigger-2">
-            <div class="container-fluid form-on-dark pt-3">
-                <div class="row justify-content-around align-items-center comment-list">
-                    {% for comment in comments %}
-                            <div class="comment-item-{{ comment.id }} col-md-4 my-2 comment-item">
-                                <div class="col-12 background-white rounded-3 p-2 blog-box-1">
-                                    <a href="{{ path }}/admin/posts/{{ comment.blogPost.id }}/view" class="btn-primary"><h5>{{ comment.blogPost.title }} (#{{ comment.blogPost.id }})</h5></a>
-                                    <a href="{{ path }}/admin/posts/{{ comment.blogPost.id }}/view" class="btn-link btn-primary pl-0 mt-4">Voir le post</a>
-                                    <div class="separator-wrap pt-3">
-                                        <span class="separator"><span class="separator-line"></span></span>
-                                    </div>
-                                    <p></p>
-                                    <div class="author-wrap mt-1">
-                                        <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
-                                    </div>
-                                    <p>{{ comment.content|nl2br }}</p>
-                                    <div class="text-center col-12">
-                                        <button type="button" class="btn btn-primary btn-sm mx-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }} data-action="valider">Valider</button>
-                                        <button type="button" class="btn btn-danger btn-sm mx-2" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }}>Supprimer</button>
-                                    </div>
+    <!-- Block ============================================== -->
+    <div class="section pt-4 background-dark-1 pb-2 over-hide z-bigger-2">
+        <div class="container-fluid form-on-dark pt-3">
+            <div class="row justify-content-around align-items-center comment-list">
+                {% for comment in comments %}
+                        <div class="comment-item-{{ comment.id }} col-md-4 my-2 comment-item">
+                            <div class="col-12 background-white rounded-3 p-2 blog-box-1">
+                                <a href="{{ path }}/admin/posts/{{ comment.blogPost.id }}/view" class="btn-primary"><h5>{{ comment.blogPost.title }} (#{{ comment.blogPost.id }})</h5></a>
+                                <a href="{{ path }}/admin/posts/{{ comment.blogPost.id }}/view" class="btn-link btn-primary pl-0 mt-4">Voir le post</a>
+                                <div class="separator-wrap pt-3">
+                                    <span class="separator"><span class="separator-line"></span></span>
+                                </div>
+                                <p></p>
+                                <div class="author-wrap mt-1">
+                                    <p> Par <span class="font-weight-bold">{{ comment.user.username }}</span>, le <mark>{{ comment.date|date('d/m/Y à H:i:s') }}</mark></p>
+                                </div>
+                                <p>{{ comment.content|nl2br }}</p>
+                                <div class="text-center col-12">
+                                    <button type="button" class="btn btn-primary btn-sm mx-2 validate-btn" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }} data-action="valider">Valider</button>
+                                    <button type="button" class="btn btn-danger btn-sm mx-2" data-toggle="modal" data-target="#confirmModal" data-id={{ comment.id }}>Supprimer</button>
                                 </div>
                             </div>
-                    {% endfor %}
+                        </div>
+                {% endfor %}
 
-                </div>
-                {% if comments|length >= app_config.get('pagination') %}
-                <div class="row justify-content-center mt-3">
-                    <button type="button" class="btn btn-primary btn-sm" id="ViewMore">Voir plus</button>
-                </div>
-                {% endif %}
             </div>
+            {% if comments|length >= app_config.get('pagination') %}
+            <div class="row justify-content-center mt-3">
+                <button type="button" class="btn btn-primary btn-sm" id="ViewMore">Voir plus</button>
+            </div>
+            {% endif %}
         </div>
+    </div>
 
 
     {#
