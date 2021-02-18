@@ -12,7 +12,8 @@ $(document).ready(function() {
             img.onload = function () {
                 const w = this.width;
                 const h = this.height;
-                if ( w >= minRes[0] && w <= maxRes[0] && h >= minRes[1] && h <= maxRes[1]) {
+                const isValid = w >= minRes[0] && w <= maxRes[0] && h >= minRes[1] && h <= maxRes[1];
+                if (isValid) {
                     $("img", field.parent()).removeClass("img-prev-alert");
                     $(".img-alert", field.parent()).hide();
                     loader.hide();
@@ -151,11 +152,6 @@ $(document).ready(function() {
         $(".post-image-input", $template).click();
     });
 
-    $("#PostForm").submit(function (e) {
-        //alert("submit");
-        return checkImagesInputs($(this)) && checkImagesNames($(this));
-    });
-
     function checkImagesInputs($cont) {
         let valid = true;
         let $imageInputs = $(".post-image-input", $cont);
@@ -188,4 +184,9 @@ $(document).ready(function() {
         });
         return valid;
     }
+
+    $("#PostForm").submit(function (e) {
+        //alert("submit");
+        return checkImagesInputs($(this)) && checkImagesNames($(this));
+    });
 });

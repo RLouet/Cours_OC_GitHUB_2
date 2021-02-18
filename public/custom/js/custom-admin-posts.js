@@ -62,7 +62,7 @@ $(document).ready(function() {
 				"                        <button class=\"btn btn-danger btn-sm col-auto\" data-toggle=\"modal\" data-target=\"#deleteModal\" data-id=\"" + post.id + "\" data-name=\"" + post.title + "\">Supprimer</button>\n" +
 				"                    </div>\n";
 		}
-		let item = $("<div class=\"grid-box float-inline quarter with-margin drop-shadow rounded post-item-" + post.id + "\">\n" +
+		const item = $("<div class=\"grid-box float-inline quarter with-margin drop-shadow rounded post-item-" + post.id + "\">\n" +
 			"                            <div class=\"blog-box-1 blog-home blog-admin background-white over-hide\">\n" +
 			"                                    <a href=\"" + window.location.origin + "/admin/posts/" + post.id + "/view\">\n" +
 			"                                        <div class=\"portfolio-box-1\">\n" +
