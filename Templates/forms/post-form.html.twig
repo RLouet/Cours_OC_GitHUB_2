@@ -118,7 +118,7 @@
                         {% if blog_post.entity.errors and constant('INVALID_CONTENT', blog_post.entity) in blog_post.entity.errors %}
                             <span class="badge badge-warning ml-2">Contenu invalide</span>
                         {% endif %}
-                        <textarea name="content" placeholder="Contenu" class="for-textarea form-control">{% if not blog_post.entity.isNew %}{{ blog_post.entity.content }}{% endif %}</textarea>
+                        <textarea name="content" placeholder="Contenu" class="for-textarea form-control" rows="20">{% if not blog_post.entity.isNew %}{{ blog_post.entity.content }}{% endif %}</textarea>
                     </div>
                 </div>
                 <div class="clear"></div>

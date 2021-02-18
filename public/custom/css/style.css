@@ -381,17 +381,19 @@ table.align-middle th {
 }
 
 .nav-tabs .nav-link {
-    color: #333;
+    color: #aaa;
     border: 1px solid #888;
 }
 
 .nav-link:hover {
+    color: #eee;
     background-color: rgba(255, 255, 255, 0.4);
 }
 
-.nav-link.active {
-    background-color: #454545 !important;
+.nav-tabs .nav-link.active {
+    background-color: #606060;
     font-weight: bold;
+    border-width: 2px;
 }
 
 .users-table button.fa-btn {
@@ -503,8 +505,16 @@ table.align-middle th {
         padding-bottom: 0;
     }
 
+    .little-pt-mobile {
+        padding-top: 25px;
+    }
+
     .hero-bottom-wrap h2 {
         font-size: 12vw;
+    }
+
+    .main-title {
+        margin-bottom: 1rem;
     }
 }
 
@@ -567,4 +577,16 @@ table.align-middle th {
     opacity: 0.75;
     font-size: 3rem;
     font-weight: bold;
+}
+
+.main-title h3 {
+    position: relative;
+    z-index: 300;
+    opacity: 0.75;
+}
+
+.main-subtitle-bottom {
+    position: relative;
+    z-index: 300;
+    opacity: 0.75;
 }
