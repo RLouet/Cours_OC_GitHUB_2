@@ -51,11 +51,12 @@ $(document).ready(function() {
 
 
 	// --------------- Pagination ---------------
-	function addPost(post) {
+	function addPost(post, userId) {
 		const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/img/blog/1.jpg";
 		const heroAlt = post.heroName ? post.heroName : "";
+		const isEditable = post.userId === userId || post.userBanished || !post.userAdmin
 		let postManagementButtons = "";
-		if (post.userId === userId || post.userBanished || !post.userAdmin) {
+		if (isEditable) {
 			postManagementButtons = "<div class=\"row justify-content-between\">\n" +
 				"                        <a class=\"btn btn-primary btn-sm col-auto\" href=\"" + window.location.origin + "/admin/posts/" + post.id + "/edit\">Modifier</a>\n" +
 				"                        <button class=\"btn btn-danger btn-sm col-auto\" data-toggle=\"modal\" data-target=\"#deleteModal\" data-id=\"" + post.id + "\" data-name=\"" + post.title + "\">Supprimer</button>\n" +
@@ -79,9 +80,8 @@ $(document).ready(function() {
 			"                                    </div>\n" +
 			"                                    <div class=\"author-wrap mt-3\">\n" +
 			"                                        <p> Par <span class=\"text-primary\">" + post.username + "</span>, le <mark>" + post.date + "</mark></p>\n" +
-			"                                    </div>\n" +
-			postManagementButtons +
-			"                                </div>\n" +
+			"                                    </div>\n" + postManagementButtons +
+			"\n                                </div>\n" +
 			"                            </div>\n" +
 			"                        </div>");
 		$(".post-list").append(item);
@@ -103,7 +103,7 @@ $(document).ready(function() {
 				}
 				for (const post of data.posts) {
 					//let post = data.posts[k];
-					addPost(post);
+					addPost(post, userId);
 				}
 			},
 			error(e) {
