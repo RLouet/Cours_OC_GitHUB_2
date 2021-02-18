@@ -192,7 +192,7 @@ $(document).ready(function() {
 						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
-					$(".sn-general-error .form-error div", $form).html(errorMessage);
+					$(".sn-general-error .form-error span", $form).html(errorMessage);
 					$(".sn-general-error .form-error", $form).removeClass("hidden");
 
 					for (const formError of data.form_errors) {

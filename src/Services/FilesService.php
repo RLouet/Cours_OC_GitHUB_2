@@ -24,16 +24,30 @@ class FilesService
 
         // Check errors
         if ($tempFile['error'] > 0) {
-            $upload['errors'][] = "Erreur (" . $tempFile['error'] . ") lors du l'upload du fichier \"" . $tempFile['name'] . "\"";
+            $error = "Inconnue";
+            switch ($tempFile['error']) {
+                case 1:
+                case 2:
+                    $error = "Le fichier est trop lourd. (Max : " . $rules['maxSize'] . " Mo).";
+                    break;
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                    $error = "Erreur lors du l'upload du fichier.";
+                    break;
+            }
+            $upload['errors'][] = "Erreur sur le serveur : " . $error;
             return $upload;
         }
 
         // Check filesize
         if ($tempFile['size'] > ($rules['maxSize'] * 1048576)) {
-            $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" est trop lourd (max " . $rules['maxSize'] . "Mo";
+            $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" est trop lourd. (Max : " . $rules['maxSize'] . " Mo).";
             return $upload;
         }
-
 
         $type = $rules['type'];
         $ext = $this->checkType($type, $tempFile);
