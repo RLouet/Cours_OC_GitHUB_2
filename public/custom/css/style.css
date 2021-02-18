@@ -78,7 +78,7 @@ input:focus,
 }
 
 .hero-bottom-wrap h2 {
-    font-size: 13vw;
+    font-size: 10vw;
 }
 
 .navbar.navbar-toggleable-md {
@@ -497,6 +497,14 @@ table.align-middle th {
 
     .bg-faded {
         background: none;
+    }
+
+    .no-pb-mobile {
+        padding-bottom: 0;
+    }
+
+    .hero-bottom-wrap h2 {
+        font-size: 12vw;
     }
 }
 
