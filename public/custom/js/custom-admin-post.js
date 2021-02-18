@@ -1,4 +1,34 @@
 $(document).ready(function() {
+    function readFile(file, onLoadCallback) {
+        const reader = new FileReader();
+        reader.onload = onLoadCallback;
+        reader.readAsDataURL(file);
+    }
+
+    function checkImageResolution(image, loader, preview, oldSrc, oldVal, field, minRes, maxRes) {
+        readFile(image, function (e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
+                const w = this.width;
+                const h = this.height;
+                if ( w >= minRes[0] && w <= maxRes[0] && h >= minRes[1] && h <= maxRes[1]) {
+                    $("img", field.parent()).removeClass("img-prev-alert");
+                    $(".img-alert", field.parent()).hide();
+                    loader.hide();
+                    field.data("old", field.val());
+                    return;
+                }
+                $("img", field.parent()).addClass("img-prev-alert");
+                $(".img-alert span", field.parent()).html("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
+                $(".img-alert", field.parent()).show();
+                //alert ("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
+                preview.attr("src", oldSrc);
+                loader.hide();
+                field.val(oldVal);
+            };
+        });
+    }
 
     function initImagePreview($field) {
         const maxSize = 4;
@@ -14,7 +44,7 @@ $(document).ready(function() {
             // If is an image : check and change
             if (e.target.files.length > 0) {
                 $previewLoader.show();
-                const oldVal = $(this).data('old');
+                const oldVal = $(this).data("old");
                 const image = e.target.files[0];
                 const src = URL.createObjectURL(image);
                 const size = image.size / 1024 / 1024;
@@ -40,36 +70,6 @@ $(document).ready(function() {
             }
             return true;
         });
-    }
-
-    function checkImageResolution(image, loader, preview, oldSrc, oldVal, field, minRes, maxRes) {
-         readFile(image, function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function () {
-                const w = this.width;
-                const h = this.height;
-                if ( w >= minRes[0] && w <= maxRes[0] && h >= minRes[1] && h <= maxRes[1]) {
-                    $("img", field.parent()).removeClass("img-prev-alert");
-                    $(".img-alert", field.parent()).hide();
-                    loader.hide();
-                    field.data('old', field.val());
-                    return;
-                }
-                $("img", field.parent()).addClass("img-prev-alert");
-                $(".img-alert span", field.parent()).html("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
-                $(".img-alert", field.parent()).show();
-                //alert ("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
-                preview.attr("src", oldSrc);
-                loader.hide();
-                field.val(oldVal);
-            }
-         });
-    }
-    function readFile(file, onLoadCallback) {
-        const reader = new FileReader();
-        reader.onload = onLoadCallback;
-        reader.readAsDataURL(file);
     }
 
     let $deleteModal = $("#deleteModal");
@@ -107,7 +107,7 @@ $(document).ready(function() {
 
     initImagePreview($(".post-image-input"));
 
-    let postImageCount = $('.post-image-item').length;
+    let postImageCount = $(".post-image-item").length;
 
     $("#addPostImage").click(function (e) {
         e.preventDefault();
