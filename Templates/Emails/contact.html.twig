@@ -1,19 +1,22 @@
-<h1>Nouveau message</h1>
-Auteur :
-<ul>
-    <li>
-        Nom : {{ contact_message.lastname }}
-    </li>
-    <li>
-        Prénom : {{ contact_message.firstname }}
-    </li>
-    <li>
-        Email : {{ contact_message.email }}
-    </li>
-    <li>
-        Téléphone : {{ contact_message.phone }}
-    </li>
-</ul>
-<h2>Sujet : {{ contact_message.subject }}</h2>
-<h2>Message :</h2>
-<p>{{ contact_message.message|nl2br }}</p>
+{%  extends "Emails/mailBase.html.twig" %}
+{% block content %}
+    <h2>Vous avez un message :</h2>
+    <h3 style="margin-bottom: 5px;">Auteur :</h3>
+    <ul>
+        <li>
+            Nom : {{ contact_message.lastname }}
+        </li>
+        <li>
+            Prénom : {{ contact_message.firstname }}
+        </li>
+        <li>
+            Email : {{ contact_message.email }}
+        </li>
+        <li>
+            Téléphone : {{ contact_message.phone }}
+        </li>
+    </ul>
+    <h3>Sujet : {{ contact_message.subject }}</h3>
+    <h3 style="margin-bottom: 5px">Message :</h3>
+    <p>{{ contact_message.message|nl2br }}</p>
+{% endblock %}

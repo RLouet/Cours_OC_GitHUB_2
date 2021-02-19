@@ -1,0 +1,104 @@
+{% apply inline_css(source("Emails/mails.css")) %}
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Simple Transactional Email</title>
+    </head>
+    <body class="">
+    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+        <tr>
+            <td>&nbsp;</td>
+            <td class="container header">
+                <div class="content">
+                    <img src="{{ logo.url }}" alt="Logo" width="auto" height="150" border="0" style="border:0; outline:none; text-decoration:none; display:block; float: left">
+                    <div style="text-align: center">
+                        <h1>
+                            {{ blog.firstname }} {{ blog.lastname }}
+                        </h1>
+                        <p class="header-link"><a href="{{ path }}">{{ path }}</a></p>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td class="container" style="padding-top: 0;">
+                <div class="content" style="padding-top: 0;">
+
+
+                    <!-- START CENTERED WHITE CONTAINER -->
+                    <table role="presentation" class="main">
+
+                        <!-- START MAIN CONTENT AREA -->
+                        <tr>
+                            <td class="wrapper">
+                                {% block content %}
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td>
+                                            <p>Hi there,</p>
+                                            <p>Sometimes you just want to send a simple HTML email with a simple design and clear call to action. This is it.</p>
+                                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                                <tbody>
+                                                <tr>
+                                                    <td align="left">
+                                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td> <a href="http://htmlemail.io" target="_blank">Call To Action</a> </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p>This is a really simple email template. Its sole purpose is to get the recipient to click the button with no distractions.</p>
+                                            <p>Good luck! Hope it works.</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                {% endblock %}
+                            </td>
+                        </tr>
+
+                        <!-- END MAIN CONTENT AREA -->
+                    </table>
+                    <!-- END CENTERED WHITE CONTAINER -->
+
+                    <!-- START FOOTER -->
+                    <div class="footer">
+                        <span class="apple-link">
+                            Cet Email a été envoyé automatiquement depuis le site <a href="{{ path }}">{{ path }}</a>.
+                        </span>
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="content-block">
+                                    <span class="apple-link">
+                                        {{ blog.firstname }} {{ blog.lastname }} | {{ blog.phone }} | <a href="mailto:{{ blog.email }}">{{ blog.email }}</a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="content-block powered-by">
+                                    Site web : <a href="{{ path }}">{{ path }}</a>.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- END FOOTER -->
+
+                </div>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    </body>
+</html>
+{% endapply %}

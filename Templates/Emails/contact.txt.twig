@@ -1,4 +1,6 @@
-Nouveau message
+{%  extends "Emails/mailBase.txt.twig" %}
+{% block content %}
+Vous avez un nouveau message :
 
 Auteur :
 Nom : {{ contact_message.lastname }}
@@ -10,3 +12,4 @@ Sujet : {{ contact_message.subject }}
 
 Message :
 {{ contact_message.message|raw }}
+{% endblock %}

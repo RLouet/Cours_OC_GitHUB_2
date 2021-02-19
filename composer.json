@@ -16,6 +16,7 @@
     },
     "require": {
         "twig/twig": "^3.0",
-        "swiftmailer/swiftmailer": "^6.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "twig/cssinliner-extra": "^3.3"
     }
 }
