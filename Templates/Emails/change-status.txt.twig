@@ -1,17 +1,22 @@
+{%  extends "Emails/mailBase.txt.twig" %}
+{% block content %}
 Cher utilisateur,
 
 {% if user.banished %}
-Avec regret, nous vous informons que vous avez été bannis du blog. Vous ne pouvez plus vous y connecter.
+Avec regret, nous vous informons que vous avez été bannis du blog.
+Vous ne pouvez plus vous y connecter.
 {% else %}
-C'est avec grand plaisir que nous vous informons que votre compte sur le blog a été réactivé. Vous pouvez vous connecter à nouveau.
+C'est avec grand plaisir que nous vous informons que votre compte sur le blog a été réactivé.
+Vous pouvez vous connecter à nouveau.
 {% endif %}
 {% if message %}
 
 Message :
-{{ message }}
+{{ message|raw }}
 {% endif %}
-
 {% if not user.banished %}
+
 Vous pouvez vous connecter en vous rendant à l'adresse suivante :
 {{ path }}/login
 {% endif %}
+{% endblock %}
