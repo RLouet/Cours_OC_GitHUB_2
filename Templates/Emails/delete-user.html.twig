@@ -1,4 +1,12 @@
-<h1>Au revoir !</h1>
-<p>Votre compte vient d'être supprimé du blog.</p>
-<p>Tous vos posts et commentaires sont à présent supprimés.</p>
-{% if message %}<h2 style="font-size: 1.1em;margin-bottom: 0;">Message :</h2><p style="margin-top: .2em;">{{ message|nl2br }}</p>{% endif %}
+{%  extends "Emails/mailBase.html.twig" %}
+{% block content %}
+    <h2>Cher utilisateur,</h2>
+    <p>
+        C'est avec regret que nous vous informons que votre compte vient d'être supprimé du blog.<br>
+        Tous vos posts et commentaires sont à présent supprimés.
+    </p>
+    {% if message %}
+        <h3 style="margin-bottom: 5px">Message :</h3>
+        <p>{{ message|nl2br }}</p>
+    {% endif %}
+{% endblock %}
