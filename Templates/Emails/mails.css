@@ -11,7 +11,8 @@ img {
 }
 
 body {
-    background-color: #f6f6f6;
+    background-color: #191919;
+    /*background-color: #f6f6f6;*/
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     font-size: 14px;
@@ -38,7 +39,7 @@ table td {
 ------------------------------------- */
 
 .body {
-    background-color: #f6f6f6;
+    background-color: #191919;
     width: 100%;
 }
 
@@ -66,7 +67,7 @@ table td {
 ------------------------------------- */
 .main {
     background: #ffffff;
-    border-radius: 3px;
+    border-radius: 0 0 3px 3px;
     width: 100%;
 }
 
@@ -253,6 +254,7 @@ hr {
 .header {
     padding: 0;
     background-color: #bbbbbb;
+    border-radius: 0 0 3px 3px;
 }
 .header-link a {
     font-size: 1.3em;

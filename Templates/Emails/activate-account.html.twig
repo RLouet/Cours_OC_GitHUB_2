@@ -1,3 +1,21 @@
-<h1>Bienvenue sur mon blog !</h1>
-<p>Votre demande d'inscription a bien été enregistrée.</p>
-<p>Afin d'activer votre compte, merci de cliquer <a href="{{ url }}">ici</a>.</p>
+{%  extends "Emails/mailBase.html.twig" %}
+{% block content %}
+    <h2>Bienvenue sur mon blog !</h2>
+    <p>Votre demande d'inscription a bien été enregistrée.</p>
+    <p>Afin d'activer votre compte, merci de vous rendre sur le lien suivant :</p>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+        <tbody>
+        <tr>
+            <td align="center" style="text-align: center">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: auto">
+                    <tbody>
+                    <tr>
+                        <td><a href="{{ url }}" target="_blank">Activation</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
