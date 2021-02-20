@@ -1,9 +1,12 @@
-Au revoir !
+{%  extends "Emails/mailBase.txt.twig" %}
+{% block content %}
+Cher utilisateur,
 
-Votre compte vient d'être supprimé du blog.
+C'est avec regret que nous vous informons que votre compte vient d'être supprimé du blog.
 Tous vos posts et commentaires sont à présent supprimés.
 {% if message %}
 
 Message :
-{{ message }}
+{{ message|raw }}
 {% endif %}
+{% endblock %}

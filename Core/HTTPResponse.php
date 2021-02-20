@@ -95,14 +95,25 @@ class HTTPResponse
     {
         static $twig2 = null;
 
+        $blog = $this->getBlog();
+
+        $logo = [
+            'url' => 'http://' . $this->httpRequest->getHost() . '/uploads/logo/' . $blog->getId() . '/' . $blog->getLogo(),
+        ];
+        $logoSize = getimagesize($logo['url']);
+        $logo['width'] = $logoSize[0];
+        $logo['height'] = $logoSize[1];
+
         if ($twig2 === null) {
             $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
             $twig2 = new Twig\Environment($loader, [
                 //'cache' => '../cache'
             ]);
+            $twig2->addExtension(new Twig\Extra\CssInliner\CssInlinerExtension());
             $twig2->addGlobal('path', 'http://' . $this->httpRequest->getHost());
             $twig2->addGlobal('current_user', $this->auth->getUser());
-            $twig2->addGlobal('blog', $this->getBlog());
+            $twig2->addGlobal('blog', $blog);
+            $twig2->addGlobal('logo', $logo);
         }
         return $twig2->render($template, $args);
     }

@@ -1,6 +1,9 @@
+{%  extends "Emails/mailBase.txt.twig" %}
+{% block content %}
 Bienvenue sur mon blog !
 
 Votre demande d'inscription a bien été enregistrée.
 
 Afin d'activer votre compte, merci de vous rendre à l'adresse suivante :
 {{ url }}
+{% endblock %}

@@ -1,11 +1,37 @@
-<h1>Cher utilisateur,</h1>
-
-{% if user.banished %}
-    <p>Avec regret, nous vous informons que vous avez été bannis du blog. Vous ne pouvez plus vous y connecter.</p>
-{% else %}
-    <p>C'est avec grand plaisir que nous vous informons que votre compte sur le blog a été réactivé. Vous pouvez vous connecter à nouveau.</p>
-{% endif %}
-{% if message %}<h2 style="font-size: 1.1em;margin-bottom: 0;">Message :</h2><p style="margin-top: .2em;">{{ message|nl2br }}</p>{% endif %}
-{% if not user.banished %}
-<p>Vous pouvez vous connecter en cliquant <a href="{{ path }}/login">ici</a>.</p>
-{% endif %}
+{%  extends "Emails/mailBase.html.twig" %}
+{% block content %}
+    <h2>Cher utilisateur,</h2>
+    {% if user.banished %}
+        <p>
+            Avec regret, nous vous informons que vous avez été bannis du blog.<br>
+            Vous ne pouvez plus vous y connecter.
+        </p>
+    {% else %}
+        <p>
+            C'est avec grand plaisir que nous vous informons que votre compte sur le blog a été réactivé.<br>
+            Vous pouvez vous connecter à nouveau.
+        </p>
+    {% endif %}
+    {% if message %}
+        <h3 style="margin-bottom: 5px">Message :</h3>
+        <p>{{ message|nl2br }}</p>
+    {% endif %}
+    {% if not user.banished %}
+        <p>Vous pouvez vous connecter en vous rendant sur le lien suivant :</p>
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+            <tbody>
+            <tr>
+                <td align="center" style="text-align: center">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: auto">
+                        <tbody>
+                        <tr>
+                            <td><a href="{{ path }}/login" target="_blank">Connexion</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,9 @@
+{%  extends "Emails/mailBase.txt.twig" %}
+{% block content %}
 Cher utilisateur,
 
 Votre demande de modification d'adresse Email a bien été enregistrée.
 
 Afin de valider ce changement, merci de vous rendre à l'adresse suivante :
 {{ url }}
+{% endblock %}

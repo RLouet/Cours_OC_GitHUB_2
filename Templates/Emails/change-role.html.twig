@@ -1,4 +1,29 @@
-<h1>Cher utilisateur,</h1>
-<p>Votre role sur le blog vient d'être modifié. Vous êtes à présent {% if user.role == "ROLE_ADMIN" %}administrateur{% elseif user.role == "ROLE_USER" %}membre{% endif %}.</p>
-{% if message %}<h2 style="font-size: 1.1em;margin-bottom: 0;">Message :</h2><p style="margin-top: .2em;">{{ message|nl2br }}</p>{% endif %}
-<p>Vous pouvez vous connecter en cliquant <a href="{{ path }}/login">ici</a>.</p>
+{%  extends "Emails/mailBase.html.twig" %}
+{% block content %}
+    <h2>Cher utilisateur,</h2>
+    <p>
+        Votre role sur le blog vient d'être modifié.<br>
+        Vous êtes à présent {% if user.role == "ROLE_ADMIN" %}administrateur{% elseif user.role == "ROLE_USER" %}membre{% endif %}.
+    </p>
+    {% if message %}
+        <h3 style="margin-bottom: 5px">Message :</h3>
+        <p>{{ message|nl2br }}</p>
+    {% endif %}
+    <p>Vous pouvez vous connecter en vous rendant sur le lien suivant :</p>
+
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+        <tbody>
+        <tr>
+            <td align="center" style="text-align: center">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: auto">
+                    <tbody>
+                    <tr>
+                        <td><a href="{{ path }}/login" target="_blank">Connexion</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
