@@ -72,21 +72,8 @@ class Book extends Controller
                             $message .= ' Il apparaîtra bientôt, après sa validation.';
                         }
                         $currentComment = '';
-
                         $messageFlash = ['message' => $message, 'type' => Flash::SUCCESS];
                     }
-
-                    /*if (!$commentManager->save($comment)) {
-                        $this->flash->addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
-                    } else {
-                        $message = 'Votre commentaire est enregistré.';
-                        if (!$this->auth->getUser()->isGranted('admin')) {
-                            $message .= ' Il apparaîtra bientôt, après sa validation.';
-                        }
-                        $this->flash->addMessage( $message, Flash::SUCCESS);
-                        $currentComment = "";
-                    }*/
-                    //$currentComment = "";
                 }
                 $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
             }
