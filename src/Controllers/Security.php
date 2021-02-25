@@ -110,12 +110,10 @@ class Security extends Controller
                 if ($user && $user->getEnabled()) {
                     if ($user->getBanished()) {
                         $this->flash->addMessage('Vous avez été bani de ce site !', Flash::ERROR);
-
                         $this->httpResponse->redirect('');
                     }
                     if (password_verify($this->httpRequest->postData('password'), $user->getPassword())) {
                         $this->auth->login($user, $rememberMe);
-
                         $this->httpResponse->redirect($this->auth->GetRequestedPage());
                     }
                 }
@@ -144,28 +142,29 @@ class Security extends Controller
     {
         if ($this->httpRequest->postExists('forgot-btn')) {
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                $messageFlash = ['message' => "Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'), 'type' => Flash::INFO];
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
-                if ($user) {
-                    $token = new Token();
-                    $hashedToken = $token->getHash();
-                    $expiryDate = new DateTime();
-                    $expiryDate->add(new DateInterval('PT2H'));
-                    $user->setPasswordResetHash($hashedToken);
-                    $user->setPasswordResetExpiry($expiryDate);
-                    if ($userManager->startPasswordReset($user)) {
-                        $mailer = new MailService();
-                        if ($mailer->sendPasswordResetEmail($user, $token->getValue())) {
-                            $this->flash->addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
-                            $this->httpResponse->redirect('/login');
-                        }
-                    }
-                    $this->flash->addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
-                } else {
-                    $this->flash->addMessage("Un email de récupération vous a été envoyé à l'adresse " . $this->httpRequest->postData('email'));
+                if (!$user) {
+                    $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
                     $this->httpResponse->redirect('/login');
                 }
+
+                $token = new Token();
+                $hashedToken = $token->getHash();
+                $expiryDate = new DateTime();
+                $expiryDate->add(new DateInterval('PT2H'));
+                $user->setPasswordResetHash($hashedToken);
+                $user->setPasswordResetExpiry($expiryDate);
+                if ($userManager->startPasswordReset($user)) {
+                    $mailer = new MailService();
+                    if ($mailer->sendPasswordResetEmail($user, $token->getValue())) {
+                        $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
+                        $this->httpResponse->redirect('/login');
+                    }
+                }
+                $this->flash->addMessage("Une erreur s'est produite lors de l'envoie de l'Email de récupération. Merci de rééssayer.", Flash::WARNING);
             }
         }
 

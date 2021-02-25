@@ -166,7 +166,7 @@ class Profile extends Controller
     }
 
     /**
-     * Show a message when user delete hir profile.
+     * Show a message when user delete her profile.
      * Necessary to add a flash message because the session is destroyed at the end of the logout method.
      */
     public function showDeletedMessageAction()
