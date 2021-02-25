@@ -42,7 +42,7 @@ class Profile extends Controller
     }
 
     /**
-     * Show the profile page
+     * Show the edit profile page
      *
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -171,7 +171,7 @@ class Profile extends Controller
      */
     public function showDeletedMessageAction()
     {
-        $this->flash->addMessage('Votre profile a bien été supprime.', 'danger');
+        $this->flash->addMessage('Votre profile a bien été supprimé.', 'danger');
 
         $this->httpResponse->redirect('');
     }
