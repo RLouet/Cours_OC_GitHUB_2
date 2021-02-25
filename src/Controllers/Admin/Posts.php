@@ -68,7 +68,6 @@ class Posts extends Controller
                         $this->flash->addMessage( $message, Flash::SUCCESS);
                         $currentComment = "";
                     }
-                    //$currentComment = "";
                 } else {
                     $this->flash->addMessage('Votre commentaire est invalide.', Flash::WARNING);
                 }

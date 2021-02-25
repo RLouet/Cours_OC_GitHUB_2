@@ -55,7 +55,7 @@ class BlogPost extends Entity implements JsonSerializable
 
     public function isValid()
     {
-        return !(empty($this->userId) || empty($this->title) || empty($this->chapo) || empty($this->content) || empty($this->editDate));
+        return !(empty($this->userId) || empty($this->title) || empty($this->chapo) || empty($this->content) || empty($this->editDate) || !empty($this->errors));
     }
 
     //  Setters  //
@@ -79,31 +79,31 @@ class BlogPost extends Entity implements JsonSerializable
 
     public function setTitle(string $title): BlogPost
     {
-        if (empty($title)) {
+        $this->title = $title;
+        if (empty($title) || !preg_match('/^.{2,128}$/i', $title)) {
             $this->errors[] = self::INVALID_TITLE;
             return $this;
         }
-        $this->title = $title;
         return $this;
     }
 
     public function setChapo(string $chapo): BlogPost
     {
-        if (empty($chapo)) {
+        $this->chapo = $chapo;
+        if (empty($chapo) || !preg_match('/^.{5,255}$/im', $chapo)) {
             $this->errors[] = self::INVALID_CHAPO;
             return $this;
         }
-        $this->chapo = $chapo;
         return $this;
     }
 
     public function setContent(string $content): BlogPost
     {
-        if (empty($content)) {
+        $this->content = $content;
+        if (empty($content) || !preg_match('/^.{5,}$/im', $content)) {
             $this->errors[] = self::INVALID_CONTENT;
             return $this;
         }
-        $this->content = $content;
         return $this;
     }
 
