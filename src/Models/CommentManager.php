@@ -11,7 +11,7 @@ use Core\Manager;
 
 abstract class CommentManager extends Manager
 {
-    abstract public function getUnique(int $id);
+    abstract public function getUnique(int $commentId);
 
     abstract public function getByPost(?User $user, int $blogPost, int $offset = 0);
 
@@ -21,9 +21,9 @@ abstract class CommentManager extends Manager
 
     abstract protected function modify(Comment $comment);
 
-    abstract public function delete(int $id);
+    abstract public function delete(int $commentId);
 
-    abstract public function deleteByUser(int $id);
+    abstract public function deleteByUser(int $commentId);
 
     public function save(Comment $comment) {
         if ($comment->isValid()) {
