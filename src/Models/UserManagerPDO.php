@@ -61,12 +61,12 @@ class UserManagerPDO extends UserManager
         return $result;
     }
 
-    public function findById(int $id)
+    public function findById(int $userId)
     {
         $sql = 'SELECT * FROM user WHERE id =:id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $userId, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -80,40 +80,6 @@ class UserManagerPDO extends UserManager
         }
         return null;
     }
-
-    /*
-    public function getWithPosts(int $id)
-    {
-        $sql = 'SELECT *, user.id as user_id, bp.id as post_id FROM user LEFT JOIN blog_post bp on user.id = bp.user_id WHERE user.id =:id';
-
-        $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-        $stmt->closeCursor();
-
-        if ($result) {
-            $i = 0;
-            $user = new User();
-            foreach ($result as $resultItem) {
-                if ($i == 0) {
-                    $user->hydrate($resultItem);
-                    $user->setId($resultItem['user_id']);
-                }
-                $resultItem['edit_date'] = new DateTime($resultItem['edit_date']);
-                $blogPost = new BlogPost($resultItem);
-                $blogPost->setId($resultItem['post_id']);
-                $user->addPost($blogPost);
-                $i++;
-            }
-            if ($user->isValid()){
-                return $user;
-            }
-        }
-        return false;
-    }
-    */
 
     public function findByPasswordToken(string $token)
     {
@@ -284,13 +250,13 @@ class UserManagerPDO extends UserManager
         return false;
     }
 
-    public function delete(int $id)
+    public function delete(int $userId)
     {
         $sql = 'DELETE FROM user WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $userId, PDO::PARAM_INT);
 
         return $stmt->execute();
     }
