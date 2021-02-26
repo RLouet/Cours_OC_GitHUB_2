@@ -9,7 +9,7 @@ use Core\Manager;
 
 abstract class BlogPostManager extends Manager
 {
-    abstract public function getUnique(int $id);
+    abstract public function getUnique(int $blogPostId);
 
     abstract public function getList(int $offset = 0);
 
@@ -17,9 +17,9 @@ abstract class BlogPostManager extends Manager
 
     abstract protected function modify(BlogPost $blogPost);
 
-    abstract public function delete(int $id);
+    abstract public function delete(int $blogPostId);
 
-    abstract public function deleteByUser(int $id);
+    abstract public function deleteByUser(int $blogPostId);
 
     public function save(BlogPost $blogPost) {
         if ($blogPost->isValid()) {

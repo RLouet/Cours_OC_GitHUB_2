@@ -66,13 +66,13 @@ OFFSET :offset';
         return $blogPostsList;
     }
 
-    public function getUnique(int $id)
+    public function getUnique(int $blogPostId)
     {
         //$sql = 'SELECT id, user_id as userId, title, edit_date as editDate, hero_id as heroId, chapo, content FROM blog_post WHERE blog_post.id = :id';
         $sql = 'SELECT *, bp.id as id, user.id as user_id  FROM blog_post bp JOIN user ON user.id = bp.user_id WHERE bp.id = :id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', (int) $blogPostId, PDO::PARAM_INT);
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Blog\Entities\BlogPost');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
@@ -159,24 +159,24 @@ OFFSET :offset';
         return false;
     }
 
-    public function delete(int $id)
+    public function delete(int $blogPostId)
     {
         $sql = 'DELETE FROM blog_post WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $blogPostId);
 
         return $stmt->execute();
     }
 
-    public function deleteByUser(int $id)
+    public function deleteByUser(int $blogPostId)
     {
         $sql = 'DELETE FROM blog_post WHERE user_id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $blogPostId);
 
         return $stmt->execute();
     }
