@@ -43,13 +43,13 @@ class PostImageManagerPDO extends PostImageManager
         return false;
     }
 
-    public function delete(int $id)
+    public function delete(int $postImageId)
     {
         $sql = 'DELETE FROM post_image WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $postImageId);
 
         return $stmt->execute();
     }
