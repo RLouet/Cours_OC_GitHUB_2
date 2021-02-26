@@ -33,16 +33,19 @@ class Home extends Controller
             $postedData = $this->httpRequest->postData();
             $contactMessage->hydrate($this->httpRequest->postData());
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                $messageFlash = ['message' => "Des champs du formulaire sont invalides. Merci de les corriger et de recommencer.", 'type' => Flash::WARNING];
                 if (empty($contactMessage->getErrors())) {
                     $mailer = new MailService();
                     if ($mailer->sendContactEmail($contactMessage)) {
                         $this->flash->addMessage('Merci, votre message a bien été envoyé.');
                         $this->httpResponse->redirect('/#');
                     }
+                    $messageFlash = ['message' => "Une erreur s'est produite lors de l'envoie de votre message. Merci de rééssayer plus tard.", 'type' => Flash::ERROR];
                 }
-                $this->flash->addMessage('Des champs du formulaire sont invalides. Merci de les corriger et de recommencer.', Flash::WARNING);
+                $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
             }
         }
+
         $csrf = $this->generateCsrfToken();
         $this->httpResponse->renderTemplate('Frontend/index.html.twig', [
             'section' => 'home',

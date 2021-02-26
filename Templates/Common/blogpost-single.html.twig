@@ -27,7 +27,7 @@
 
 
 <div class="section padding-top over-hide">
-    <div class="parallax" style="background-image: url('{% if blog_post.entity.hero %}{{ path }}/uploads/blog//{{ blog_post.entity.user.id }}/{{ blog_post.entity.id }}/{{ blog_post.entity.hero.url }}{% endif %}')"></div>
+    <div class="parallax"{% if blog_post.entity.hero %} style="background-image: url('{{ path }}/uploads/blog//{{ blog_post.entity.user.id }}/{{ blog_post.entity.id }}/{{ blog_post.entity.hero.url }}')"{% endif %}></div>
     <div class="dark-fade-over"></div>
     <div class="container z-bigger">
         <div class="row justify-content-center">
@@ -98,7 +98,10 @@
                                 <div class="col-12 text-center">
                                     {% if current_user.isGranted('user') %}
                                         <form method="post">
-                                            <textarea name="content" class="form-control" placeholder="Votre commentaire" rows="3" required>{{ current_comment }}</textarea>
+                                            {% if current_comment.errors and constant('INVALID_CONTENT', current_comment) in current_comment.errors %}
+                                                <span class="badge badge-warning on-white ml-2">Commentaire invalide (Entre 5 et 255 caractères)</span>
+                                            {% endif %}
+                                            <textarea name="content" class="form-control" placeholder="Votre commentaire" rows="3" required>{% if current_comment.content %}{{ current_comment.content }}{% endif %}</textarea>
                                             <input type="hidden" name="token" value="{{ csrf_token }}" class="crsf-token-field">
                                             <button type="submit" name="comment-send" class="btn btn-primary mt-2">Ajouter</button>
                                         </form>

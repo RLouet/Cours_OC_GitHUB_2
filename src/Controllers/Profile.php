@@ -42,7 +42,7 @@ class Profile extends Controller
     }
 
     /**
-     * Show the profile page
+     * Show the edit profile page
      *
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -166,12 +166,12 @@ class Profile extends Controller
     }
 
     /**
-     * Show a message when user delete hir profile.
+     * Show a message when user delete her profile.
      * Necessary to add a flash message because the session is destroyed at the end of the logout method.
      */
     public function showDeletedMessageAction()
     {
-        $this->flash->addMessage('Votre profile a bien été supprime.', 'danger');
+        $this->flash->addMessage('Votre profile a bien été supprimé.', 'danger');
 
         $this->httpResponse->redirect('');
     }

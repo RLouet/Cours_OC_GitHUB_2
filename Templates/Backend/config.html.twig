@@ -129,7 +129,7 @@
                         <div class="subscribe-box-1">
                             <label>Nom</label>
                             {% if blogForm.entity.errors and constant('INVALID_LASTNAME', blogForm.entity) in blogForm.entity.errors %}
-                                <span class="badge badge-warning ml-2">Nom invalide</span>
+                                <span class="badge badge-warning ml-2">Nom invalide (entre 2 et 50 caractères, espaces et -)</span>
                             {% endif %}
                             <input type="text" name="lastname" value="{{ blogForm.entity.lastname }}" placeholder="Votre nom" class="form-control">
                         </div>
@@ -138,7 +138,7 @@
                         <div class="subscribe-box-1">
                             <label>Prénom</label>
                             {% if blogForm.entity.errors and constant('INVALID_FIRSTNAME', blogForm.entity) in blogForm.entity.errors %}
-                                <span class="badge badge-warning ml-2">Prénom invalide</span>
+                                <span class="badge badge-warning ml-2">Prénom invalide (entre 2 et 50 caractères, espaces et -)</span>
                             {% endif %}
                             <input type="text" name="firstname" value="{{ blogForm.entity.firstname }}" placeholder="Votre prénom" class="form-control">
                         </div>

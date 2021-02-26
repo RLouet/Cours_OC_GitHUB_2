@@ -48,30 +48,34 @@ class Posts extends Controller
     {
         $postManager = $this->managers->getManagerOf('BlogPost');
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
-        $commentManager = $this->managers->getManagerOf('comment');
 
-        $currentComment = "";
+        $commentManager = $this->managers->getManagerOf('comment');
+        $comment = new Comment();
 
         if ($this->httpRequest->postExists('comment-send') && $this->auth->getUser()->isGranted('user')) {
-            $currentComment = $this->httpRequest->postData('content');
-            $comment = new Comment($this->httpRequest->postData());
-            $comment->setUser($this->auth->getUser())->setBlogPost($blogPost['entity'])->setValidated($this->auth->getUser()->isGranted('admin'));
+            $comment
+                ->setUser($this->auth->getUser())
+                ->setContent($this->httpRequest->postData('content'))
+                ->setBlogPost($blogPost['entity'])
+                ->setValidated($this->auth->getUser()
+                    ->isGranted('admin')
+                )
+            ;
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
+                $messageFlash = ['message' => "Votre commentaire est invalide.", 'type' => Flash::WARNING];
                 if ($comment->isValid()) {
-                    if (!$commentManager->save($comment)) {
-                        $this->flash->addMessage('Erreur lors de l\'enregistrement de votre commentaire.', Flash::ERROR);
-                    } else {
+
+                    if ($commentManager->save($comment)) {
                         $message = 'Votre commentaire est enregistré.';
                         if (!$this->auth->getUser()->isGranted('admin')) {
                             $message .= ' Il apparaîtra bientôt, après sa validation.';
                         }
                         $this->flash->addMessage( $message, Flash::SUCCESS);
-                        $currentComment = "";
+                        $this->httpResponse->redirect('/admin/posts/' . $blogPost['entity']->getId() . '/view');
                     }
-                    //$currentComment = "";
-                } else {
-                    $this->flash->addMessage('Votre commentaire est invalide.', Flash::WARNING);
+                    $messageFlash = ['message' => "Erreur lors de l'enregistrement de votre commentaire.", 'type' => Flash::ERROR];
                 }
+                $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
             }
         }
 
@@ -83,7 +87,7 @@ class Posts extends Controller
             'section' => 'posts',
             'blog_post' => $blogPost,
             'comments' => $comments,
-            'current_comment' => $currentComment,
+            'current_comment' => $comment,
             'csrf_token' => $csrf
         ]);
     }

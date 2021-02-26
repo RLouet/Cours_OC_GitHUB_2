@@ -43,10 +43,10 @@ class Config extends Controller
                 $blogForm = $this->processForm($blogForm['entity']);
                 if (empty($blogForm['errors'])) {
                     $this->flash->addMessage('Les paramètres du blog ont bien été enregistrés');
-                } else {
-                    foreach ($blogForm['errors'] as $error) {
-                        $this->flash->addMessage($error, Flash::WARNING);
-                    }
+                    $this->httpResponse->redirect('/admin/config');
+                }
+                foreach ($blogForm['errors'] as $error) {
+                    $this->flash->addMessage($error, Flash::WARNING);
                 }
             }
         }
@@ -117,9 +117,10 @@ class Config extends Controller
 
         if ($formBlog->isValid() && empty($handle['errors'])) {
             $this->managers->getManagerOf('blog')->save($formBlog);
-        } else {
-            $handle['errors'][] = 'Formulaire non valide';
+            return $handle;
         }
+
+        $handle['errors'][] = 'Formulaire non valide';
         return $handle;
     }
 }
