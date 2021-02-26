@@ -9,7 +9,7 @@ use Core\Manager;
 
 abstract class BlogManager extends Manager
 {
-    abstract public function getData(int $id = 1);
+    abstract public function getData(int $blogId = 1);
 
     abstract protected function add(Blog $blog);
 
