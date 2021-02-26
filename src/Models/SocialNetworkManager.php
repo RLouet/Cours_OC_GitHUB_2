@@ -9,9 +9,9 @@ use Core\Manager;
 
 abstract class SocialNetworkManager extends Manager
 {
-    abstract public function getListByBlog(int $id = 1);
+    abstract public function getListByBlog(int $socialNetworkId = 1);
 
-    abstract public function getUnique(int $id);
+    abstract public function getUnique(int $socialNetworkId);
 
     abstract public function doubleExists(SocialNetwork $socialNetwork);
 
@@ -19,7 +19,7 @@ abstract class SocialNetworkManager extends Manager
 
     abstract protected function modify(SocialNetwork $socialNetwork);
 
-    abstract public function delete(int $id);
+    abstract public function delete(int $socialNetworkId);
 
     public function save(SocialNetwork $socialNetwork) {
         if ($socialNetwork->isValid()) {
