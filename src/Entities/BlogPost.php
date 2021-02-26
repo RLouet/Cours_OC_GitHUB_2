@@ -14,9 +14,9 @@ class BlogPost extends Entity implements JsonSerializable
     protected int $userId;
     protected User $user;
 
-    protected string $title;
-    protected string $chapo;
-    protected string $content;
+    protected string $title = "";
+    protected string $chapo = "";
+    protected string $content = "";
 
     protected ObjectCollection $images;
 

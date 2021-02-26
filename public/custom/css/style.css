@@ -321,6 +321,10 @@ ul.sitemap li {
     white-space: unset;
 }
 
+.badge-warning.on-white {
+    background-color: #aa1515;
+}
+
 .bigger-2 {
     font-size: 1.2em;
 }

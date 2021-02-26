@@ -46,34 +46,34 @@ class Book extends Controller
      */
     public function viewAction()
     {
-        /*$flash = [
-            'type' => false,
-            'messages' => []
-        ];*/
-
         $postManager = $this->managers->getManagerOf('BlogPost');
         $blogPost['entity'] = $postManager->getUnique($this->route_params['id']);
-        $commentManager = $this->managers->getManagerOf('comment');
 
-        $currentComment = "";
+        $commentManager = $this->managers->getManagerOf('comment');
+        $comment = new Comment();
 
         if ($this->httpRequest->postExists('comment-send') && $this->auth->getUser()->isGranted('user')) {
-            $currentComment = $this->httpRequest->postData('content');
-            $comment = new Comment($this->httpRequest->postData());
-            $comment->setUser($this->auth->getUser())->setBlogPost($blogPost['entity'])->setValidated($this->auth->getUser()->isGranted('admin'));
+            $comment
+                ->setUser($this->auth->getUser())
+                ->setContent($this->httpRequest->postData('content'))
+                ->setBlogPost($blogPost['entity'])
+                ->setValidated($this->auth->getUser()
+                    ->isGranted('admin')
+                )
+            ;
             if ($this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
                 $messageFlash = ['message' => "Votre commentaire est invalide.", 'type' => Flash::WARNING];
                 if ($comment->isValid()) {
-                    $messageFlash = ['message' => "Erreur lors de l'enregistrement de votre commentaire.", 'type' => Flash::ERROR];
 
                     if ($commentManager->save($comment)) {
                         $message = 'Votre commentaire est enregistré.';
                         if (!$this->auth->getUser()->isGranted('admin')) {
                             $message .= ' Il apparaîtra bientôt, après sa validation.';
                         }
-                        $currentComment = '';
-                        $messageFlash = ['message' => $message, 'type' => Flash::SUCCESS];
+                        $this->flash->addMessage( $message, Flash::SUCCESS);
+                        $this->httpResponse->redirect('/book/' . $blogPost['entity']->getId() . '/view');
                     }
+                    $messageFlash = ['message' => "Erreur lors de l'enregistrement de votre commentaire.", 'type' => Flash::ERROR];
                 }
                 $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
             }
@@ -87,7 +87,7 @@ class Book extends Controller
             'section' => 'book',
             'blog_post' => $blogPost,
             'comments' => $comments,
-            'current_comment' => $currentComment,
+            'current_comment' => $comment,
             //'flash' => $flash,
             'csrf_token' => $csrf
         ]);

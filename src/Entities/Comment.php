@@ -13,7 +13,7 @@ class Comment extends Entity implements JsonSerializable
     protected BlogPost $blogPost;
     protected DateTime $date;
     protected User $user;
-    protected string $content;
+    protected string $content = "";
     protected bool $validated = false;
 
     const INVALID_BLOGPOST = 1;
@@ -24,7 +24,7 @@ class Comment extends Entity implements JsonSerializable
 
     public function  isValid()
     {
-        return !(empty($this->blogPost) || empty($this->user) || empty($this->content) || !is_bool($this->validated));
+        return !(empty($this->blogPost) || empty($this->user) || empty($this->content) || !is_bool($this->validated) || !empty($this->errors));
     }
 
     public function jsonSerialize()
@@ -76,11 +76,11 @@ class Comment extends Entity implements JsonSerializable
 
     public function setContent(string $content): Comment
     {
+        $this->content = $content;
         if (empty($content) || !preg_match('/^.{5,255}$/im', $content)) {
             $this->errors[] = self::INVALID_CONTENT;
             return $this;
         }
-        $this->content = $content;
         return $this;
     }
 
