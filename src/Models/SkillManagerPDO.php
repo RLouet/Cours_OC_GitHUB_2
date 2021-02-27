@@ -9,14 +9,14 @@ use \PDO;
 
 class SkillManagerPDO extends SkillManager
 {
-    public function getListByBlog(int $id = 1)
+    public function getListByBlog(int $skillId = 1)
     {
         $sql = 'SELECT * FROM skill s WHERE s.blog_id=?';
 
         $stmt = $this->dao->prepare($sql);
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Entities\Blog');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute(array($id));
+        $stmt->execute(array($skillId));
         $skillsList = $stmt->fetchAll();
         $stmt->closeCursor();
         //var_dump($blogData);
@@ -24,12 +24,12 @@ class SkillManagerPDO extends SkillManager
         return $skillsList;
     }
 
-    public function getUnique(int $id)
+    public function getUnique(int $skillId)
     {
         $sql = 'SELECT id, value, blog_id as blogId FROM skill s WHERE s.id = :id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', (int) $skillId, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Blog\Entities\Skill');
         $stmt->execute();
         $skill = $stmt->fetch();
@@ -82,13 +82,13 @@ class SkillManagerPDO extends SkillManager
         return false;
     }
 
-    public function delete(int $id)
+    public function delete(int $skillId)
     {
         $sql = 'DELETE FROM skill WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $skillId);
 
         return $stmt->execute();
     }

@@ -9,14 +9,14 @@ use \PDO;
 
 class SocialNetworkManagerPDO extends SocialNetworkManager
 {
-    public function getListByBlog(int $id = 1)
+    public function getListByBlog(int $socialNetworkId = 1)
     {
         $sql = 'SELECT * FROM social_network s WHERE s.blog_id=?';
 
         $stmt = $this->dao->prepare($sql);
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Entities\Blog');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute(array($id));
+        $stmt->execute(array($socialNetworkId));
         $socialNetworksList = $stmt->fetchAll();
         $stmt->closeCursor();
         //var_dump($blogData);
@@ -24,12 +24,12 @@ class SocialNetworkManagerPDO extends SocialNetworkManager
         return $socialNetworksList;
     }
 
-    public function getUnique(int $id)
+    public function getUnique(int $socialNetworkId)
     {
         $sql = 'SELECT id, blog_id as blogId, name, logo, url FROM social_network s WHERE s.id = :id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', (int) $socialNetworkId, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Blog\Entities\SocialNetwork');
         $stmt->execute();
         $socialNetwork = $stmt->fetch();
@@ -85,13 +85,13 @@ class SocialNetworkManagerPDO extends SocialNetworkManager
         return false;
     }
 
-    public function delete(int $id)
+    public function delete(int $socialNetworkId)
     {
         $sql = 'DELETE FROM social_network WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $socialNetworkId);
 
         return $stmt->execute();
     }

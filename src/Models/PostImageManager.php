@@ -12,7 +12,7 @@ abstract class PostImageManager extends Manager
 
     abstract protected function modify(PostImage $postImage);
 
-    abstract public function delete(int $id);
+    abstract public function delete(int $postImageId);
 
     public function save(PostImage $postImage) {
         if ($postImage->isValid()) {

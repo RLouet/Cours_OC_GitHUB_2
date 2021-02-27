@@ -15,7 +15,7 @@ use \DateTime;
 class CommentManagerPDO extends CommentManager
 {
 
-    public function getUnique(int $id)
+    public function getUnique(int $commentId)
     {
         $sql = '
 SELECT *, 
@@ -34,7 +34,7 @@ FROM comment
 WHERE comment.id = :id';
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', (int) $commentId, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -204,24 +204,24 @@ OFFSET :offset';
         return false;
     }
 
-    public function delete(int $id)
+    public function delete(int $commentId)
     {
         $sql = 'DELETE FROM comment WHERE id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $commentId);
 
         return $stmt->execute();
     }
 
-    public function deleteByUser(int $id)
+    public function deleteByUser(int $commentId)
     {
         $sql = 'DELETE FROM comment WHERE user_id=:id';
 
         $stmt = $this->dao->prepare($sql);
 
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $commentId);
 
         return $stmt->execute();
     }
