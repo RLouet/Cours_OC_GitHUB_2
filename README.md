@@ -13,3 +13,11 @@ git clone https://github.com/RLouet/Formation-OC-P5.git .
 install composer
 
 composer update
+
+## Favicon
+https://realfavicongenerator.net/
+
+Dans public/favicons
+
+## Heros
+
