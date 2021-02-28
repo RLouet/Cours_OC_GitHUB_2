@@ -21,3 +21,10 @@ Dans public/favicons
 
 ## Heros
 
+Dans public/uploads/heros : 
+- Home : 
+  - home-hero.jpg
+  - 1920*1024 px
+- Book : 
+  - book-hero.jpg
+  - 1920*512 px
