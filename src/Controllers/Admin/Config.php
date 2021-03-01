@@ -33,8 +33,7 @@ class Config extends Controller
      */
     public function indexAction()
     {
-        $config = BlogConfig::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
         $manager = $this->managers->getManagerOf('Blog');
         $blogForm['entity'] = $manager->getData($blogId);
 

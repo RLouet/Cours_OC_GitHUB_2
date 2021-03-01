@@ -35,10 +35,9 @@ class Ajax extends Controller
      */
     public function typedElementsAction()
     {
-        $config = Config::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
-        $manager = $this->managers->getManagerOf('skill');
-        $skills = $manager->getListByBlog($blogId);
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
+        $skillManager = $this->managers->getManagerOf('skill');
+        $skills = $skillManager->getListByBlog($blogId);
 
         $elements = [];
         foreach ($skills as $skill) {
@@ -55,11 +54,10 @@ class Ajax extends Controller
     public function deleteSocialNetworkAction()
     {
         $this->requiredLogin('admin');
-        $config = Config::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
@@ -68,17 +66,15 @@ class Ajax extends Controller
         $oldSocialNetwork =  $manager->getUnique($this->httpRequest->postData('id'));
 
         if (!$oldSocialNetwork || $oldSocialNetwork->getBlogId() != $blogId) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Le réseau social à supprimer est invalide.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         if (!$manager->delete($oldSocialNetwork->getId())) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du réseau social de la base de données.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         $uploader = new FilesService();
@@ -89,12 +85,12 @@ class Ajax extends Controller
 
         if (!$uploader->deleteFile($iconRules, $oldSocialNetwork->getLogo())) {
             $manager->save($oldSocialNetwork);
-            $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du logo du réseau social.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
+        $handle['success'] = true;
         $handle['deleted'] = $oldSocialNetwork->getId();
         $this->httpResponse->ajaxResponse($handle);
     }
@@ -106,8 +102,7 @@ class Ajax extends Controller
     public function saveSocialNetworkAction()
     {
         $this->requiredLogin('admin');
-        $config = Config::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
 
         $logoUploadRules = [
             'target' => 'icons',
@@ -251,8 +246,7 @@ class Ajax extends Controller
     {
         $this->requiredLogin('admin');
 
-        $config = Config::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
 
         $handle = [
             'success' => true,
@@ -308,8 +302,7 @@ class Ajax extends Controller
     {
 
         $this->requiredLogin('admin');
-        $config = Config::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
 
         $handle = [
             'success' => true,
@@ -740,13 +733,12 @@ class Ajax extends Controller
      * Load more unvalidated comments
      */
     public function loadUnvalidatedComments() {
-        $config = Config::getInstance();
         $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
         $comments['comments'] = $commentManager->getUnvalidated($this->httpRequest->postData('offset'));
 
-        if (count($comments['comments']) < $config->get('pagination')) {
+        if (count($comments['comments']) < $this->config->get('pagination')) {
             $comments['end'] = true;
         }
         $this->httpResponse->ajaxResponse($comments);
@@ -756,13 +748,12 @@ class Ajax extends Controller
      * Load more post comments
      */
     public function loadPostComments() {
-        $config = Config::getInstance();
         $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
         $comments['comments'] = $commentManager->getByPost($this->auth->getUser(), $this->httpRequest->postData('post_id'), $this->httpRequest->postData('offset'));
 
-        if (count($comments['comments']) < $config->get('pagination')) {
+        if (count($comments['comments']) < $this->config->get('pagination')) {
             $comments['end'] = true;
         }
         $this->httpResponse->ajaxResponse($comments);
@@ -772,14 +763,12 @@ class Ajax extends Controller
      * Load more posts
      */
     public function loadPosts() {
-        $config = Config::getInstance();
-
         $posts['end'] = false;
 
         $postManager = $this->managers->getManagerOf('BlogPost');
         $posts['posts'] = $postManager->getList($this->httpRequest->postData('offset'));
 
-        if (count($posts['posts']) < $config->get('pagination')) {
+        if (count($posts['posts']) < $this->config->get('pagination')) {
             $posts['end'] = true;
         }
         $this->httpResponse->ajaxResponse($posts);
