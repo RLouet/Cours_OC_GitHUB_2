@@ -79,15 +79,22 @@ class UserManagerPDO extends UserManager
         return null;
     }
 
-    public function findByPasswordToken(string $token): ?User
+    public function findByToken(string $type, string $token): ?User
     {
         $token = new Token($token);
         $hashedToken = $token->getHash();
 
-        $sql = 'SELECT * FROM user WHERE password_reset_hash=:password_reset_hash';
+        $sql = 'SELECT * FROM user WHERE ';
+
+        if ($type === "password") {
+            $sql .= 'password_reset_hash = :hash';
+        }
+        if ($type === "activation") {
+            $sql .= 'activation_hash = :hash';
+        }
 
         $stmt = $this->dao->prepare($sql);
-        $stmt->bindValue(':password_reset_hash', $hashedToken, PDO::PARAM_STR);
+        $stmt->bindValue(':hash', $hashedToken, PDO::PARAM_STR);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -98,7 +105,10 @@ class UserManagerPDO extends UserManager
         }
 
         $result['registration_date'] = new DateTime($result['registration_date']);
-        $result['password_reset_expiry'] = new DateTime($result['password_reset_expires_at']);
+
+        if ($type === "password") {
+            $result['password_reset_expiry'] = new DateTime($result['password_reset_expires_at']);
+        }
         $user = new User($result);
 
         if ($user->isValid()){

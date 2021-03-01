@@ -174,6 +174,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `enabled` tinyint(1) NOT NULL DEFAULT 0,
   `new_email` varchar(255) DEFAULT NULL,
   `banished` tinyint(4) NOT NULL DEFAULT 0,
+  `registration_date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`),

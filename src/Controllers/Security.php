@@ -87,10 +87,25 @@ class Security extends Controller
 
         $userManager =  $this->managers->getManagerOf('user');
 
-        $userManager->changeEmail($token);
+        $user = $userManager->findByToken('activation', $token);
 
-        $this->flash->addMessage('Votre nouvelle adresse Email est validée. Vous pouvez vous reconnecter');
-        $this->httpResponse->redirect('/login');
+        if ($user) {
+            $mailExists = $userManager->mailExists($user->getNewEmail(), $user->getId());
+            if ($mailExists) {
+                if ($mailExists->getEnabled()) {
+                    $this->flash->addMessage("Cette adresse Email n'est pas disponible.", Flash::ERROR);
+                    $this->httpResponse->redirect('/');
+                }
+                $userManager->delete($mailExists->getId());
+            }
+            $userManager->changeEmail($token);
+            $this->flash->addMessage('Votre nouvelle adresse Email est validée. Vous pouvez vous reconnecter');
+            $this->httpResponse->redirect('/login');
+        }
+        $this->flash->addMessage('Le lien est invalide', Flash::ERROR);
+        $this->httpResponse->redirect('/');
+
+
     }
 
     /**
@@ -194,7 +209,7 @@ class Security extends Controller
         $token = $this->route_params['token'];
 
         $userManager =  $this->managers->getManagerOf('user');
-        $user = $userManager->findByPasswordToken($token);
+        $user = $userManager->findByToken('password', $token);
 
         if (!$user || $user->getPasswordResetExpiry() < new DateTime()) {
             $this->flash->addMessage("Votre lien de réinitialisation est invalide . Merci de renouveler votre demande.", Flash::WARNING);
