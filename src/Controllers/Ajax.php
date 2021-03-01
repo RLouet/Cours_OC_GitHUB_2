@@ -346,7 +346,7 @@ class Ajax extends Controller
             exit();
         }
 
-        $postDelete = $this->postDeleter($oldPost);
+        $postDelete = $this->entityDeleter($oldPost);
         if ($postDelete !== 'success') {
             $handle['success'] = false;
             $handle['errors'][] = $postDelete;
@@ -542,7 +542,7 @@ class Ajax extends Controller
             }
 
             if ($this->httpRequest->postData('delete_messages')) {
-                $postDelete = $this->postDeleter($user);
+                $postDelete = $this->entityDeleter($user);
                 if ($postDelete !== 'success') {
                     $handle['errors'][] = $postDelete;
                     $this->httpResponse->ajaxResponse($handle);
@@ -672,8 +672,9 @@ class Ajax extends Controller
         $this->httpResponse->ajaxResponse($handle);
     }
 
-    private function postDeleter($toDelete)
+    private function entityDeleter($toDelete)
     {
+        $result = 'success';
         $classes = [
             'User' => 'Blog\Entities\User',
             'BlogPost' => 'Blog\Entities\BlogPost'
@@ -683,29 +684,29 @@ class Ajax extends Controller
             return 'Error lors de la suppression.';
         }
 
+
+        $postManager = $this->managers->getManagerOf('BlogPost');
         $deleter = new FilesService();
+
         if ($type === $classes['User']) {
             $dir = "uploads/blog/" . $toDelete->getId();
-        }
-        if ($type === $classes['BlogPost']) {
-            $dir = "uploads/blog/" . $toDelete->getUser()->getId() . '/' . $toDelete->getId();
-        }
-        if (!$deleter->deleteDirectory($dir)) {
-            return 'Error lors de la suppression des images.';
-        }
-
-        $manager = $this->managers->getManagerOf('BlogPost');
-        if ($type === $classes['User']) {
-            if (!$manager->deleteByUser($toDelete->getId())) {
+            if (!$deleter->deleteDirectory($dir)) {
+                return 'Error lors de la suppression des images.';
+            }
+            if (!$postManager->deleteByUser($toDelete->getId())) {
                 return 'Error lors de la suppression des posts.';
             }
         }
         if ($type === $classes['BlogPost']) {
-            if (!$manager->delete($toDelete->getId())) {
+            $dir = "uploads/blog/" . $toDelete->getUser()->getId() . '/' . $toDelete->getId();
+            if (!$deleter->deleteDirectory($dir)) {
+                return 'Error lors de la suppression des images.';
+            }
+            if (!$postManager->delete($toDelete->getId())) {
                 return 'Error lors de la suppression du post.';
             }
         }
-        return 'success';
+        return $result;
 
     }
 
