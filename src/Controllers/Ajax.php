@@ -528,67 +528,58 @@ class Ajax extends Controller
      * Switch user banished
      * @param bool $banished
      */
-
     private function switchBanished(bool $banished) {
         $this->requiredLogin('admin');
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         $userManager = $this->managers->getManagerOf('user');
-
         $user =  $userManager->findById($this->httpRequest->postData('id'));
 
         if ($user->getId() == $this->auth->getUser()->getId()) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas changer votre état.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
-        if ($handle['success']) {
-            $user->setBanished($banished);
-            if ($user->isValid()) {
-                $mailer = new MailService();
+        $user->setBanished($banished);
+        if ($user->isValid()) {
+            $mailer = new MailService();
 
-                if (!$mailer->sendStatusChangeEmail($user, $this->httpRequest->postData('message_field'))) {
-                    $handle['success'] = false;
-                    $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
-                    $this->httpResponse->ajaxResponse($handle);
-                    exit();
-                }
-
-                if ($this->httpRequest->postData('delete_messages')) {
-                    $postDelete = $this->postDeleter($user);
-                    //var_dump($postDelete);
-                    if ($postDelete !== 'success') {
-                        $handle['success'] = false;
-                        $handle['errors'][] = $postDelete;
-                        $this->httpResponse->ajaxResponse($handle);
-                        exit();
-                    }
-                }
-
-                if ($userManager->save($user)) {
-                    $this->httpResponse->ajaxResponse($handle);
-                    exit();
-                }
-                $handle['errors'][] = 'Error lors de l\'enregistrement.';
-            } else {
-                $handle['errors'][] = 'L\'utilisateur est invalide.';
+            if (!$mailer->sendStatusChangeEmail($user, $this->httpRequest->postData('message_field'))) {
+                $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+                $this->httpResponse->ajaxResponse($handle);
+                return;
             }
-        }
 
-        $handle['success'] = false;
+            if ($this->httpRequest->postData('delete_messages')) {
+                $postDelete = $this->postDeleter($user);
+                if ($postDelete !== 'success') {
+                    $handle['errors'][] = $postDelete;
+                    $this->httpResponse->ajaxResponse($handle);
+                    return;
+                }
+            }
+
+            if ($userManager->save($user)) {
+                $handle['success'] = true;
+                $this->httpResponse->ajaxResponse($handle);
+                return;
+            }
+            $handle['errors'][] = 'Error lors de l\'enregistrement.';
+            $this->httpResponse->ajaxResponse($handle);
+            return;
+        }
+        $handle['errors'][] = 'L\'utilisateur est invalide.';
         $this->httpResponse->ajaxResponse($handle);
     }
 

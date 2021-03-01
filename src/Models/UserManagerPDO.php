@@ -33,7 +33,7 @@ class UserManagerPDO extends UserManager
         $userList = [];
 
         foreach ($result as $resultItem) {
-            $resultItem['registration_date'] = new DateTime($result['registration_date']);
+            $resultItem['registration_date'] = new DateTime($resultItem['registration_date']);
             $user = new User($resultItem);
             $userList[] = $user;
         }
