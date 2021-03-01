@@ -65,10 +65,13 @@ class Security extends Controller
 
         $userManager =  $this->managers->getManagerOf('user');
 
-        $userManager->activate($token);
-
-        $this->flash->addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
+        if ($userManager->activate($token)) {
+            $this->flash->addMessage('Votre compte a bien été activé. Vous pouvez vous connecter');
+            $this->httpResponse->redirect('/login');
+        }
+        $this->flash->addMessage('Votre compte a déjà été activé ou le lien est invalide.', Flash::ERROR);
         $this->httpResponse->redirect('/login');
+
     }
 
     /**
@@ -146,7 +149,8 @@ class Security extends Controller
                 $userManager =  $this->managers->getManagerOf('user');
                 $user = $userManager->findByEmail($this->httpRequest->postData('email'));
 
-                if (!$user) {
+                if (!$user || $user->getBanished() || !$user->getEnabled()) {
+                    $messageFlash = ['message' => "Le compte renseigné n'existe pas, n'est pas activé ou a été banni.", 'type' => Flash::ERROR];
                     $this->flash->addMessage($messageFlash['message'], $messageFlash['type']);
                     $this->httpResponse->redirect('/login');
                 }
@@ -269,8 +273,12 @@ class Security extends Controller
         $user->setCustomError('confirm_pass', 'Les mots de passe doivent être identiques');
         }
 
-        if ($userManager->mailExists($user->getEmail())) {
-            $user->setCustomError('mail', 'Vous êtes déjà enregistré avec cette adresse Email');
+        $mailExists = $userManager->mailExists($user->getEmail());
+        if ($mailExists) {
+            $mailExists->getEnabled()
+                ?$user->setCustomError('mail', 'Vous êtes déjà enregistré avec cette adresse Email')
+                :$user->setId($mailExists->getId())->setRegistrationDate(new DateTime())
+            ;
         }
 
         if ($userManager->userExists($user->getUsername())) {

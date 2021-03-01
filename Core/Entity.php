@@ -34,24 +34,28 @@ abstract class Entity implements \ArrayAccess
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): self
     {
         $this->id = (int) $id;
+        return $this;
     }
 
-    public function setCustomError (string $key, string $error) {
+    public function setCustomError (string $key, string $error)
+    {
         $this->errors[$key] = $error;
     }
 
-    public function addCustomError (string $key, string $error) {
+    public function addCustomError (string $key, string $error)
+    {
         $this->errors[$key][] = $error;
     }
 
     public function offsetGet($var)
     {
-        if (isset($this->$var) && is_callable([$this, $var]))
+        $method = 'get'.ucfirst(str_replace('_', '', ucwords($var, '_')));
+        if (isset($this->$var) && is_callable([$this, $method]))
         {
-            return $this->$var();
+            return $this->$method();
         }
     }
 
@@ -67,7 +71,8 @@ abstract class Entity implements \ArrayAccess
 
     public function offsetExists($var)
     {
-        return isset($this->$var) && is_callable([$this, $var]);
+        $method = 'get'.ucfirst(str_replace('_', '', ucwords($var, '_')));
+        return isset($this->$var) && is_callable([$this, $method]);
     }
 
     public function offsetUnset($var)

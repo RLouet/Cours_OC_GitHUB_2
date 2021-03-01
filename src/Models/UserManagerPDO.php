@@ -25,17 +25,15 @@ class UserManagerPDO extends UserManager
         if ($role) {
             $stmt->bindValue(':role', $role, PDO::PARAM_STR);
         }
-        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, '\Entities\Blog');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $stmt->closeCursor();
-        //var_dump($blogData);
-
 
         $userList = [];
 
         foreach ($result as $resultItem) {
+            $resultItem['registration_date'] = new DateTime($result['registration_date']);
             $user = new User($resultItem);
             $userList[] = $user;
         }
@@ -53,7 +51,6 @@ class UserManagerPDO extends UserManager
             $sql .= '(SELECT COUNT(*) FROM user WHERE role="' . $role . '") AS "' . $role . '", ' ;
         }
         $sql .= '(SELECT COUNT(*) FROM user) AS "all"';
-        //var_dump($sql);
         $stmt = $this->dao->query($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetch();
@@ -61,7 +58,7 @@ class UserManagerPDO extends UserManager
         return $result;
     }
 
-    public function findById(int $userId)
+    public function findById(int $userId): ?User
     {
         $sql = 'SELECT * FROM user WHERE id =:id';
 
@@ -73,6 +70,7 @@ class UserManagerPDO extends UserManager
         $stmt->closeCursor();
 
         if ($result) {
+            $result['registration_date'] = new DateTime($result['registration_date']);
             $user = new User($result);
             if ($user->isValid()){
                 return $user;
@@ -81,7 +79,7 @@ class UserManagerPDO extends UserManager
         return null;
     }
 
-    public function findByPasswordToken(string $token)
+    public function findByPasswordToken(string $token): ?User
     {
         $token = new Token($token);
         $hashedToken = $token->getHash();
@@ -99,6 +97,7 @@ class UserManagerPDO extends UserManager
             return null;
         }
 
+        $result['registration_date'] = new DateTime($result['registration_date']);
         $result['password_reset_expiry'] = new DateTime($result['password_reset_expires_at']);
         $user = new User($result);
 
@@ -108,7 +107,7 @@ class UserManagerPDO extends UserManager
         return null;
     }
 
-    public function activate(string $token)
+    public function activate(string $token): bool
     {
         $token = new Token($token);
         $hashedToken = $token->getHash();
@@ -117,11 +116,12 @@ class UserManagerPDO extends UserManager
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':hashed_token', $hashedToken, PDO::PARAM_STR);
+        $stmt->execute();
 
-        return $stmt->execute();
+        return $stmt->rowCount();
     }
 
-    public function changeEmail(string $token)
+    public function changeEmail(string $token): bool
     {
         $token = new Token($token);
         $hashedToken = $token->getHash();
@@ -143,21 +143,27 @@ class UserManagerPDO extends UserManager
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->closeCursor();
-        return $result ? new User($result) : null;
+
+        if ($result) {
+            $result['registration_date'] = new DateTime($result['registration_date']);
+            return new User($result);
+        }
+        return null;
     }
 
-    public function mailExists(string $email, ?int $ignoreId = null) {
+    public function mailExists(string $email, ?int $ignoreId = null): ?User
+    {
         $user =  $this->findByEmail($email);
 
         if ($user) {
             if ($user->getId() != $ignoreId) {
-                return true;
+                return $user;
             }
         }
-        return false;
+        return null;
     }
 
-    public function UserExists(string $username, ?int $ignoreId = null)
+    public function UserExists(string $username, ?int $ignoreId = null): bool
     {
         $sql = 'SELECT id FROM user WHERE username =:username';
 
@@ -176,30 +182,7 @@ class UserManagerPDO extends UserManager
         return false;
     }
 
-    protected function modify(User $user)
-    {
-        $sql = 'UPDATE user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role, banished=:banished, activation_hash = :activation_hash, new_email = :new_email WHERE id=:id';
-
-        $stmt = $this->dao->prepare($sql);
-
-        $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
-        $stmt->bindValue(':lastname', $user->getLastname(), PDO::PARAM_STR);
-        $stmt->bindValue(':firstname', $user->getFirstname(), PDO::PARAM_STR);
-        $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
-        $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-        $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
-        $stmt->bindValue(':banished', $user->getBanished(), PDO::PARAM_BOOL);
-        $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
-        $stmt->bindValue(':new_email', $user->getNewEmail(), PDO::PARAM_STR);
-        $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-            return $user;
-        }
-        return false;
-    }
-
-    public function startPasswordReset(User $user)
+    public function startPasswordReset(User $user): ?User
     {
         $sql = 'UPDATE user SET password_reset_hash=:password_reset_hash, password_reset_expires_at=:password_reset_expires_at WHERE id=:id';
 
@@ -211,10 +194,10 @@ class UserManagerPDO extends UserManager
         if ($stmt->execute()) {
             return $user;
         }
-        return false;
+        return null;
     }
 
-    public function resetPassword(User $user)
+    public function resetPassword(User $user): ?User
     {
         $sql = 'UPDATE user SET password=:password_hash, password_reset_hash = NULL, password_reset_expires_at = NULL WHERE id=:id';
 
@@ -226,12 +209,22 @@ class UserManagerPDO extends UserManager
         if ($stmt->execute()) {
             return $user;
         }
-        return false;
+        return null;
     }
 
-    protected function add(User $user)
+    protected function add(User $user): ?User
     {
-        $sql = 'INSERT INTO user SET username=:username, lastname=:lastname, firstname=:firstname, email=:email, password=:password, role=:role, activation_hash=:activation_hash';
+        $sql = '
+INSERT INTO 
+    user 
+SET 
+    username=:username, 
+    lastname=:lastname, 
+    firstname=:firstname, 
+    email=:email, 
+    password=:password, 
+    role=:role, 
+    activation_hash=:activation_hash';
 
         $stmt = $this->dao->prepare($sql);
 
@@ -247,10 +240,49 @@ class UserManagerPDO extends UserManager
             $user->setId($this->dao->lastInsertId());
             return $user;
         }
-        return false;
+        return null;
     }
 
-    public function delete(int $userId)
+    protected function modify(User $user): ?User
+    {
+        $sql = '
+UPDATE 
+    user 
+SET 
+    username = :username, 
+    lastname = :lastname, 
+    firstname = :firstname, 
+    email = :email, 
+    password = :password, 
+    role = :role, 
+    activation_hash = :activation_hash, 
+    new_email = :new_email, 
+    banished = :banished, 
+    registration_date = :registration_date
+WHERE 
+      id=:id';
+
+        $stmt = $this->dao->prepare($sql);
+
+        $stmt->bindValue(':id', $user->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
+        $stmt->bindValue(':lastname', $user->getLastname(), PDO::PARAM_STR);
+        $stmt->bindValue(':firstname', $user->getFirstname(), PDO::PARAM_STR);
+        $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
+        $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
+        $stmt->bindValue(':role', $user->getRole(), PDO::PARAM_STR);
+        $stmt->bindValue(':activation_hash', $user->getActivationHash(), PDO::PARAM_STR);
+        $stmt->bindValue(':registration_date', $user->getRegistrationDate()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $stmt->bindValue(':new_email', $user->getNewEmail(), PDO::PARAM_STR);
+        $stmt->bindValue(':banished', $user->getBanished(), PDO::PARAM_BOOL);
+
+        if ($stmt->execute()) {
+            return $user;
+        }
+        return null;
+    }
+
+    public function delete(int $userId): bool
     {
         $sql = 'DELETE FROM user WHERE id=:id';
 

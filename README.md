@@ -27,4 +27,4 @@ Dans public/uploads/heros :
   - 1920*1024 px
 - Book : 
   - book-hero.jpg
-  - 1920*512 px
+  - 1920*1024 px
