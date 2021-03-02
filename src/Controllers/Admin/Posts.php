@@ -163,176 +163,231 @@ class Posts extends Controller
     }
 
     private function processForm(BlogPost $blogPost) {
-        $imagesCollections = [
-            'old_post_image' => $this->httpRequest->filesData('old_post_image'),
-            'new_post_image' => $this->httpRequest->filesData('new_post_image')
-        ];
-
         $blogPost->hydrate([
             'title' => $this->httpRequest->postData('title'),
             'chapo' => $this->httpRequest->postData('chapo'),
             'content' => $this->httpRequest->postData('content'),
         ]);
 
-        $uploader = new FilesService();
-
+        $handle = [
+            'entity' => $blogPost,
+            'saved' => false,
+            'errors' => []
+        ];
         $handle['entity'] = $blogPost;
         $handle['saved'] = false;
 
-
-
-        if ($blogPost->isValid() && empty($blogPost->getErrors())) {
-            $blogPostManager =  $this->managers->getManagerOf('blogPost');
-            $blogPost =$blogPostManager->save($blogPost);
-            $handle['saved'] = true;
-
-            /*
-             * Process PostImages
-             */
-            if ($blogPost) {
-                $imageManager = $this->managers->getManagerOf('postImage');
-                /*
-                 * Delete images
-                 */
-                if ($this->httpRequest->postExists('images_to_delete')) {
-                    foreach ($this->httpRequest->postData('images_to_delete') as $imageToDelete) {
-                        $imageDeleteRules = [
-                            'target' => 'blog',
-                            'folder' => '/' . $blogPost->getUser()->getId(). '/' . $blogPost->getId(),
-                        ];
-                        $imageToDelete = $blogPost->getImages()->getById($imageToDelete);
-                        if ($imageToDelete) {
-                            $isPostHero = false;
-                            if ($blogPost->getHero() === $imageToDelete) {
-                                $isPostHero = true;
-                            }
-                            $blogPost->removeImage($imageToDelete);
-
-                            if ($uploader->deleteFile($imageDeleteRules, $imageToDelete->getUrl())) {
-                                $imageManager->delete($imageToDelete->getId());
-                            } else {
-                                $blogPost->addImage($imageToDelete);
-                                if ($isPostHero) {
-                                    $blogPost->setHero($imageToDelete);
-                                }
-
-                            }
-                        }
-                    }
-                }
-
-                /*
-                 * Add / Update images
-                 */
-                foreach ($imagesCollections as $imagesType=>$values) {
-
-
-                    $imageUploadRules = [
-                        'target' => 'blog',
-                        'folder' => '/' . $blogPost->getUser()->getId(). '/' . $blogPost->getId(),
-                        'maxSize' => 4,
-                        'type' => 'image',
-                        'minRes' => [500, 350],
-                        'maxRes' => [1280, 1024]
-                    ];
-
-                    $imagesCollection = [];
-
-                    if ($values) {
-
-                        foreach ($values as $name=>$filesValues) {
-                            foreach ($filesValues as $key=>$value) {
-                                $imagesCollection[$key][$name] = $value;
-                            }
-                        }
-
-                        // process Images
-                        foreach ($imagesCollection as $key=>$image) {
-                            $oldImage = null;
-
-                            // Create PostImage and set Name and Post Id
-                            $postImage = new PostImage([
-                                'name' => $this->httpRequest->postData($imagesType)[$key]['name'],
-                                'blog_post_id' => $blogPost->getId(),
-                            ]);
-
-                            // Retrieve Old Image infos
-                            if ($imagesType === "old_post_image") {
-                                $oldImage = $blogPost->getImages()->getById($this->httpRequest->postData('old_post_image')[$key]['id']);
-                                $imageUploadRules['old'] = $oldImage->getUrl();
-                                $postImage->setUrl($oldImage->getUrl());
-                                $postImage->setId($oldImage->getId());
-                            }
-
-                            // Upload new Image
-                            if (!$postImage->getErrors() && !empty($image['name'])){
-                                $fileName = uniqid(rand(1000, 9999), true);
-                                $upload = $uploader->upload($image, $imageUploadRules, $fileName);
-
-                                if ($upload['success']) {
-                                    $postImage->setUrl($upload['filename']);
-                                }
-                                foreach ($upload['errors'] as $error) {
-                                    $postImage->addCustomError('file', $error);
-                                    $blogPost->addCustomError('images', $error);
-                                }
-                            }
-
-
-                            if (!$postImage->getUrl()) {
-                                $blogPost->addCustomError('images', "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"");
-                                $handle['errors'][] = "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
-                            }
-                            if ($postImage->isValid()) {
-                                $postImage = $imageManager->save($postImage);
-                            } else {
-                                $blogPost->addCustomError('images', "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.");
-                                $handle['errors'][] = "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.";
-                            }
-
-
-                            if (isset($oldImage)) {
-                                $blogPost->removeImage($oldImage);
-                            }
-                            $blogPost->addImage($postImage);
-
-                            /*
-                             * Process Hero
-                             */
-                            $oldHeroId = null;
-                            if ($blogPost->getHero()) {
-                                $oldHeroId = $blogPost->getHero()->getId();
-                                //$handle['errors'][] = "Erreur d'enregistrement";
-                            }
-                            if ($imagesType === "old_post_image" && $postImage) {
-                                if ($this->httpRequest->postData('hero') === "old-" . $postImage->getId()) {
-                                    if ($oldHeroId !== $postImage->getId()) {
-                                        $blogPost->setHero($postImage);
-                                        $blogPostManager->save($blogPost);
-                                    }
-                                }
-                            }
-                            if ($imagesType === "new_post_image" && $postImage) {
-                                if ($this->httpRequest->postData('hero') === "new-" . $key && $postImage->getId()) {
-                                    $blogPost->setHero($postImage);
-                                    $blogPostManager->save($blogPost);
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-
-                $handle['entity'] = $blogPost;
-
-            } else {
-                $handle['errors'][] = "Erreur d'enregistrement";
-            }
-        } else {
+        if (!$blogPost->isValid()) {
             $handle['errors'][] = 'Formulaire non valide';
+            return $handle;
         }
+        $blogPostManager =  $this->managers->getManagerOf('blogPost');
+        $blogPost = $blogPostManager->save($blogPost);
+        $handle['saved'] = true;
+
+        /*
+         * Process PostImages
+         */
+        if (!$blogPost) {
+            $handle['errors'][] = "Erreur d'enregistrement";
+            return $handle;
+        }
+
+        /*
+         * Delete images
+         */
+        if ($this->httpRequest->postExists('images_to_delete')) {
+            $blogPost = $this->deletePostImages($blogPost);
+        }
+
+        /*
+         * Add / Update images
+         */
+
+        $imagesCollections = [
+            'old_post_image' => $this->httpRequest->filesData('old_post_image'),
+            'new_post_image' => $this->httpRequest->filesData('new_post_image')
+        ];
+
+        foreach ($imagesCollections as $imagesType=>$values) {
+            $return = $this->processImagesCollection($blogPost, $imagesType, $values);
+            $blogPost = $return['entity'];
+            $handle['errors'] = array_merge($handle['errors'], $return['errors']);
+
+        }
+        $handle['entity'] = $blogPost;
         return $handle;
+    }
+
+    private function deletePostImages(BlogPost $blogPost)
+    {
+        $imageDeleteRules = [
+            'target' => 'blog',
+            'folder' => '/' . $blogPost->getUser()->getId(). '/' . $blogPost->getId(),
+        ];
+
+        $uploader = new FilesService();
+        $imageManager = $this->managers->getManagerOf('postImage');
+
+        foreach ($this->httpRequest->postData('images_to_delete') as $imageToDelete) {
+            $imageToDelete = $blogPost->getImages()->getById($imageToDelete);
+            if ($imageToDelete) {
+                $isPostHero = false;
+                if ($blogPost->getHero() === $imageToDelete) {
+                    $isPostHero = true;
+                }
+                $blogPost->removeImage($imageToDelete);
+
+                if ($uploader->deleteFile($imageDeleteRules, $imageToDelete->getUrl())) {
+                    $imageManager->delete($imageToDelete->getId());
+                    continue;
+                }
+                $blogPost->addCustomError('images', "Error lors de la suppressions de l'image \"" . $imageToDelete->getName() . "\"");
+                $blogPost->addImage($imageToDelete);
+                if ($isPostHero) {
+                    $blogPost->setHero($imageToDelete);
+                }
+
+            }
+        }
+        return $blogPost;
+    }
+
+    private function processImagesCollection(BlogPost $blogPost, string $imagesType, ?array $values)
+    {
+        $imagesCollection = [];
+
+        $return['errors'] = [];
+
+        if ($values) {
+            foreach ($values as $name=>$filesValues) {
+                foreach ($filesValues as $key=>$value) {
+                    $imagesCollection[$key][$name] = $value;
+                }
+            }
+
+            // process Images
+            foreach ($imagesCollection as $key=>$image) {
+                $processImageReturn = $this->processImage($blogPost, $imagesType, $key, $image);
+                $blogPost = $processImageReturn['entity'];
+                $return['errors'] = array_merge($return['errors'], $processImageReturn['errors']);
+            }
+        }
+        $return['entity'] = $blogPost;
+        return $return;
+    }
+
+    private function processImage(BlogPost $blogPost, string $imagesType, string $key, array $image)
+    {
+        $return = [
+            'entity' => $blogPost,
+            'errors' => []
+        ];
+
+        $imageUploadRules = [
+            'target' => 'blog',
+            'folder' => '/' . $blogPost->getUser()->getId() . '/' . $blogPost->getId(),
+            'maxSize' => 4,
+            'type' => 'image',
+            'minRes' => [500, 350],
+            'maxRes' => [1280, 1024]
+        ];
+        $oldImage = null;
+
+        // Create PostImage and set Name and Post Id
+        $postImage = new PostImage([
+            'name' => $this->httpRequest->postData($imagesType)[$key]['name'],
+            'blog_post_id' => $blogPost->getId(),
+        ]);
+
+        // Retrieve Old Image infos
+        if ($imagesType === "old_post_image") {
+            $oldImage = $blogPost->getImages()->getById($this->httpRequest->postData('old_post_image')[$key]['id']);
+            $imageUploadRules['old'] = $oldImage->getUrl();
+            $postImage->setUrl($oldImage->getUrl());
+            $postImage->setId($oldImage->getId());
+        }
+
+        $uploadReturn = $this->uploadImage($postImage, $image,  $blogPost, $imageUploadRules);
+        $blogPost = $uploadReturn['blog_post'];
+        $postImage = $uploadReturn['post_image'];
+        $return['errors'] = $uploadReturn['errors'];
+
+        // Remove old and add new image
+        if (isset($oldImage)) {
+            $blogPost->removeImage($oldImage);
+        }
+        $blogPost->addImage($postImage);
+
+        // Process Hero
+        if ($postImage) {
+            $blogPost = $this->processHero($blogPost, $imagesType, $postImage, $key);
+        }
+        $return['entity'] = $blogPost;
+        return $return;
+    }
+
+    private function uploadImage(PostImage $postImage, array $image, BlogPost $blogPost, array $imageUploadRules) {
+        $return = [
+            'post_image' => $postImage,
+            'blog_post' => $blogPost,
+            'errors' => []
+        ];
+        if (!$postImage->getErrors() && !empty($image['name'])){
+            $uploader = new FilesService();
+            $fileName = uniqid(rand(1000, 9999), true);
+            $upload = $uploader->upload($image, $imageUploadRules, $fileName);
+
+            if ($upload['success']) {
+                $postImage->setUrl($upload['filename']);
+            }
+            foreach ($upload['errors'] as $error) {
+                $postImage->addCustomError('file', $error);
+                $blogPost->addCustomError('images', $error);
+            }
+            $return['post_image'] = $postImage;
+            $return['blog_post'] = $blogPost;
+        }
+
+        if (!$postImage->getUrl()) {
+            $return['blog_post'] = $blogPost->addCustomError('images', "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"");
+            $return['errors'][] = "Il n'y a pas d'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\"";
+            return $return;
+        }
+        if ($postImage->isValid()) {
+            $imageManager = $this->managers->getManagerOf('postImage');
+            $return['post_image'] = $imageManager->save($postImage);
+            return $return;
+        }
+
+        $return['blog_post'] = $blogPost->addCustomError('images', "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.");
+        $return['errors'][] = "L'image \"" . $this->httpRequest->postData($imagesType)[$key]['name'] . "\" n'est pas valide.";
+        return $return;
+    }
+
+    private function processHero(BlogPost $blogPost, string $imagesType, PostImage $postImage, $key)
+    {
+        $oldHeroId = null;
+        if ($blogPost->getHero()) {
+            $oldHeroId = $blogPost->getHero()->getId();
+        }
+
+        $blogPostManager =  $this->managers->getManagerOf('blogPost');
+        if ($imagesType === "old_post_image") {
+            if ($this->httpRequest->postData('hero') === "old-" . $postImage->getId()) {
+                if ($oldHeroId !== $postImage->getId()) {
+                    $blogPost->setHero($postImage);
+                    $blogPostManager->save($blogPost);
+                }
+            }
+        }
+        if ($imagesType === "new_post_image") {
+            if ($this->httpRequest->postData('hero') === "new-" . $key && $postImage->getId()) {
+                $blogPost->setHero($postImage);
+                $blogPostManager->save($blogPost);
+            }
+        }
+        return $blogPost;
     }
 
 }

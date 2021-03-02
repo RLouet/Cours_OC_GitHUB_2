@@ -4,17 +4,13 @@
 namespace Blog\Controllers;
 
 
-use Blog\Entities\BlogPost;
 use Blog\Entities\Skill;
 use Blog\Entities\SocialNetwork;
 use Blog\Entities\User;
 use Blog\Services\FilesService;
 use Blog\Services\MailService;
-use Core\Auth;
-use Core\Config;
 use Core\Controller;
 use Core\Flash;
-use Core\HTTPResponse;
 
 class Ajax extends Controller
 {
@@ -455,7 +451,7 @@ class Ajax extends Controller
             return;
 
         }
-        
+
         $mailer = new MailService();
         if (!$mailer->sendRoleChangeEmail($user, $this->httpRequest->postData('message_field'))) {
             $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';

@@ -125,7 +125,7 @@ $(document).ready(function() {
             "                        <div class='img-alert'>" +
             "                            <span>L'image doit être définie.</span>" +
             "                        </div>" +
-            "                        <input type='file' name='new_post_image[" + postImageCount + "]' id='newPostImageInput" + postImageCount + "' class='form-control post-image-input' accept='image/*'>" +
+            "                        <input type='file' name='new_post_image[" + postImageCount + "]' id='newPostImageInput" + postImageCount + "' class='form-control post-image-input new-image' accept='image/*'>" +
             "                    </div>\n" +
             "                    <div>" +
             "                        <input type='text' placeholder='Description' class='form-control post-image-name-field text-light-green' name='new_post_image[" + postImageCount + "][name]' required>" +
@@ -154,7 +154,7 @@ $(document).ready(function() {
 
     function checkImagesInputs($cont) {
         let valid = true;
-        let $imageInputs = $(".post-image-input", $cont);
+        let $imageInputs = $(".post-image-input.new-image", $cont);
         $imageInputs.each(function () {
             if (!$(this).val()) {
                 valid = false;

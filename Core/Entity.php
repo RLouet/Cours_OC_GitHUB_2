@@ -40,14 +40,16 @@ abstract class Entity implements \ArrayAccess
         return $this;
     }
 
-    public function setCustomError (string $key, string $error)
+    public function setCustomError (string $key, string $error): self
     {
         $this->errors[$key] = $error;
+        return $this;
     }
 
-    public function addCustomError (string $key, string $error)
+    public function addCustomError (string $key, string $error): self
     {
         $this->errors[$key][] = $error;
+        return $this;
     }
 
     public function offsetGet($var)
