@@ -108,7 +108,7 @@ class Profile extends Controller
 
         $handle['entity'] = $user;
 
-        if ($user->isValid() && empty($user->getErrors())) {
+        if ($user->isValid()) {
             if ($user->getNewEmail()) {
                 $token = new Token();
                 $user->setActivationHash($token->getHash());
