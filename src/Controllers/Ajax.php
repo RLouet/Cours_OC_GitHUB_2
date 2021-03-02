@@ -428,50 +428,47 @@ class Ajax extends Controller
         $this->requiredLogin('admin');
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         $userManager = $this->managers->getManagerOf('user');
-
         $user =  $userManager->findById($this->httpRequest->postData('id'));
 
         if ($user->getId() == $this->auth->getUser()->getId()) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas changer votre role.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
-        if ($handle['success']) {
-            $user->setRole($role);
-            if ($user->isValid()) {
-                $mailer = new MailService();
-                if (!$mailer->sendRoleChangeEmail($user, $this->httpRequest->postData('message_field'))) {
-                    $handle['success'] = false;
-                    $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
-                    $this->httpResponse->ajaxResponse($handle);
-                    exit();
-                }
-                if ($userManager->save($user)) {
-                    $this->flash->addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
-                    $this->httpResponse->ajaxResponse($handle);
-                    exit();
-                }
-                $handle['errors'][] = 'Error lors de l\'enregistrement.';
-            } else {
-                $handle['errors'][] = 'L\'utilisateur est invalide.';
-            }
-        }
+        $user->setRole($role);
 
-        $handle['success'] = false;
+        if (!$user->isValid()) {
+            $handle['errors'][] = 'L\'utilisateur est invalide.';
+            $this->httpResponse->ajaxResponse($handle);
+            return;
+
+        }
+        
+        $mailer = new MailService();
+        if (!$mailer->sendRoleChangeEmail($user, $this->httpRequest->postData('message_field'))) {
+            $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+            $this->httpResponse->ajaxResponse($handle);
+            return;
+        }
+        if ($userManager->save($user)) {
+            $handle['success'] = true;
+            $this->flash->addMessage('Le role de l\'utilisateur a bien été modifié.', Flash::SUCCESS);
+            $this->httpResponse->ajaxResponse($handle);
+            return;
+        }
+        $handle['errors'][] = 'Error lors de l\'enregistrement.';
         $this->httpResponse->ajaxResponse($handle);
     }
 
@@ -558,54 +555,45 @@ class Ajax extends Controller
         $this->requiredLogin('admin');
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         $userManager = $this->managers->getManagerOf('user');
-
         $user =  $userManager->findById($this->httpRequest->postData('id'));
-        //$user =  $userManager->getWithPosts($this->httpRequest->postData('id'));
 
         if ($user->getId() == $this->auth->getUser()->getId()) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas vous supprimer.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
-        if ($handle['success']) {
-
-            $mailer = new MailService();
-            if (!$mailer->sendUserDeleteEmail($user, $this->httpRequest->postData('message_field'))) {
-                $handle['success'] = false;
-                $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
-                $this->httpResponse->ajaxResponse($handle);
-                exit();
-            }
-
-            $deleter = new FilesService();
-            if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
-                $handle['success'] = false;
-                $handle['errors'][] = "Erreur lors de la suppression des images";
-                $this->httpResponse->ajaxResponse($handle);
-                exit();
-            }
-            if ($userManager->delete($user->getId())) {
-                $this->flash->addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
-                $this->httpResponse->ajaxResponse($handle);
-                exit();
-            }
-            $handle['errors'][] = 'Error lors de la suppression.';
+        $mailer = new MailService();
+        if (!$mailer->sendUserDeleteEmail($user, $this->httpRequest->postData('message_field'))) {
+            $handle['errors'][] = 'Erreur lors de l\'envoi du mail.';
+            $this->httpResponse->ajaxResponse($handle);
+            return;
         }
-        $handle['success'] = false;
+
+        $deleter = new FilesService();
+        if (!$deleter->deleteDirectory('uploads/blog/' . $user->getId())) {
+            $handle['errors'][] = "Erreur lors de la suppression des images";
+            $this->httpResponse->ajaxResponse($handle);
+            return;
+        }
+        if ($userManager->delete($user->getId())) {
+            $handle['success'] = true;
+            $this->flash->addMessage('L\'utilisateur a bien été supprimé.', Flash::SUCCESS);
+            $this->httpResponse->ajaxResponse($handle);
+            return;
+        }
+        $handle['errors'][] = 'Error lors de la suppression.';
         $this->httpResponse->ajaxResponse($handle);
     }
 
@@ -615,15 +603,14 @@ class Ajax extends Controller
     public function moderateCommentAction()
     {
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'), false)) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Une erreur s\'est produite. Merci d\'actualisez la page et de recommencer.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
         $commentManager = $this->managers->getManagerOf('Comment');
         $comment = $commentManager->getUnique($this->httpRequest->postData('id'));
@@ -635,9 +622,10 @@ class Ajax extends Controller
             if ($this->auth->getUser()->isGranted('admin')) {
                 $comment->setValidated(true);
                 if ($commentManager->save($comment)) {
+                    $handle['success'] = true;
                     $handle['comment'] = $comment->getId();
                     $this->httpResponse->ajaxResponse($handle);
-                    exit();
+                    return;
                 }
 
             }
@@ -646,15 +634,15 @@ class Ajax extends Controller
         if ($this->httpRequest->postData('action') === "supprimer") {
             if ($this->auth->getUser()->isGranted('admin') || $this->auth->getUser()->getId() == $comment->getUser()->getId()) {
                 if ($commentManager->delete($comment->getId())) {
+                    $handle['success'] = true;
                     $handle['comment'] = $comment->getId();
                     $this->httpResponse->ajaxResponse($handle);
-                    exit();
+                    return;
                 }
 
             }
         }
 
-        $handle['success'] = false;
         $handle['errors'][] = 'Une erreur s\'est produite (1).';
         $this->httpResponse->ajaxResponse($handle);
     }
@@ -700,7 +688,7 @@ class Ajax extends Controller
     /**
      * Load more unvalidated comments
      */
-    public function loadUnvalidatedComments() {
+    public function loadUnvalidatedCommentsAction() {
         $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
@@ -715,7 +703,7 @@ class Ajax extends Controller
     /**
      * Load more post comments
      */
-    public function loadPostComments() {
+    public function loadPostCommentsAction() {
         $comments['end'] = false;
 
         $commentManager = $this->managers->getManagerOf('Comment');
@@ -730,7 +718,7 @@ class Ajax extends Controller
     /**
      * Load more posts
      */
-    public function loadPosts() {
+    public function loadPostsAction() {
         $posts['end'] = false;
 
         $postManager = $this->managers->getManagerOf('BlogPost');
