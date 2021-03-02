@@ -97,7 +97,7 @@ $(document).ready(function() {
 				if (!data.success){
 					let errorMessage = "<ul>";
 					for (const error of data.errors) {
-							errorMessage += "<li>" + error + "</li>";
+						errorMessage += "<li>" + error + "</li>";
 					}
 					errorMessage += "</ul>";
 					$(".sk-general-error .form-error span", $form).html(errorMessage);
