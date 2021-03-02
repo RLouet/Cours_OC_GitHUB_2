@@ -41,7 +41,7 @@ class User extends Entity
 
     public function isValid(): bool
     {
-        return !(empty($this->username) || empty($this->lastname) || empty($this->firstname) || empty($this->email) || empty($this->password) || empty($this->role));
+        return !(empty($this->username) || empty($this->lastname) || empty($this->firstname) || empty($this->email) || empty($this->password) || empty($this->role) || !empty($this->errors));
     }
 
     public function getUsername(): string

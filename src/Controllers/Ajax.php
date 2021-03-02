@@ -239,7 +239,7 @@ class Ajax extends Controller
         $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'form_errors' => [],
             'errors' => []
         ];
@@ -256,10 +256,9 @@ class Ajax extends Controller
         $handle['form_errors'] = $skill->getErrors();
 
         if (!empty($handle['form_errors'])) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Erreur dans le formulaire.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         $manager = $this->managers->getManagerOf('Skill');
@@ -268,19 +267,18 @@ class Ajax extends Controller
         $double = $manager->doubleExists($skill);
         if ($double) {
             $handle['errors'][] = "Un autre skill porte déjà ce nom.";
-            $handle['success'] = false;
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         // Enregistrement du skill
          if (!$manager->save($skill)) {
-             $handle['success'] = false;
              $handle['errors'][] = "Erreur lors de l'enregistrement.";
              $this->httpResponse->ajaxResponse($handle);
-             exit();
+             return;
          }
 
+        $handle['success'] = true;
         $handle['entity'] = $skill;
         $this->httpResponse->ajaxResponse($handle);
     }
@@ -295,7 +293,7 @@ class Ajax extends Controller
         $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
@@ -304,19 +302,18 @@ class Ajax extends Controller
         $oldSkill =  $manager->getUnique($this->httpRequest->postData('id'));
 
         if (!$oldSkill || $oldSkill->getBlogId() != $blogId) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Le skill à supprimer est invalide.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         if (!$manager->delete($oldSkill->getId())) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Error lors de la suppression du skill.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
+        $handle['success'] = true;
         $handle['deleted'] = $oldSkill->getId();
         $this->httpResponse->ajaxResponse($handle);
     }
@@ -331,7 +328,7 @@ class Ajax extends Controller
         $user = $this->auth->getUser();
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'errors' => [],
         ];
 
@@ -340,20 +337,19 @@ class Ajax extends Controller
         $oldPost =  $manager->getUnique($this->httpRequest->postData('id'));
 
         if (!$oldPost || ($oldPost->getUser()->getId() != $user->getId() && $oldPost->getuser()->isGranted('admin') && !$oldPost->getUser()->getBanished())) {
-            $handle['success'] = false;
             $handle['errors'][] = 'Vous ne pouvez pas supprimer ce post.';
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
         $postDelete = $this->entityDeleter($oldPost);
         if ($postDelete !== 'success') {
-            $handle['success'] = false;
             $handle['errors'][] = $postDelete;
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
 
+        $handle['success'] = true;
         $handle['deleted'] = $oldPost->getId();
         $this->httpResponse->ajaxResponse($handle);
     }
@@ -368,53 +364,44 @@ class Ajax extends Controller
         $user = $this->auth->getUser();
 
         $handle = [
-            'success' => true,
+            'success' => false,
             'token_error' => false,
             'old_error' => false,
             'new_error' => false,
             'conf_error' => false,
-            'user_error' => false,
             'db_error' => false,
         ];
         if (!$this->isCsrfTokenValid($this->httpRequest->postData('token'))) {
-            $handle['success'] = false;
             $handle['token_error'] = true;
             $this->httpResponse->ajaxResponse($handle);
-            exit();
+            return;
         }
         if (!password_verify($this->httpRequest->postData('old_password'), $user->getPassword())) {
-            $handle['success'] = false;
+            $user->addCustomError('password', 'Le mot de passe actuel est invalide.');
             $handle['old_error'] = true;
         }
         if ($this->httpRequest->postData('new_password') !== $this->httpRequest->postData('conf_password')) {
-            $handle['success'] = false;
+            $user->addCustomError('password', "Le nouveau mot de passe est différent de sa confirmation.");
             $handle['conf_error'] = true;
         }
         $user->setPlainPassword($this->httpRequest->postData('new_password'));
-        if (!empty($user->getErrors())) {
-            $handle['success'] = false;
-            foreach ($user->getErrors() as $key => $error) {
-                if ($error === User::INVALID_PASSWORD) {
-                    $handle['new_error'] = true;
-                } else {
-                    $handle['user_error'] = true;
-                }
+        foreach ($user->getErrors() as $error) {
+            if ($error === User::INVALID_PASSWORD) {
+                $handle['new_error'] = true;
+                break;
             }
         }
-        if ($handle['success']) {
-            if ($user->isValid()) {
-                $userManager =  $this->managers->getManagerOf('user');
-                $user = $userManager->resetPassword($user);
-                if ($user) {
-                    $this->httpResponse->ajaxResponse($handle);
-                    exit();
-                }
-                $handle['db_error'] = true;
-            } else {
-                $handle['user_error'] = true;
+        if ($user->isValid()) {
+            $userManager =  $this->managers->getManagerOf('user');
+            $user = $userManager->resetPassword($user);
+            if ($user) {
+                $handle['success'] = true;
+                $this->httpResponse->ajaxResponse($handle);
+                return;
             }
+            $handle['db_error'] = true;
         }
-        $handle['success'] = false;
+
         $this->httpResponse->ajaxResponse($handle);
     }
 
