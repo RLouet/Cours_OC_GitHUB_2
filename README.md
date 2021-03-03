@@ -27,3 +27,9 @@ Dans public/uploads/heros :
   - Book :
     - book-hero.jpg
     - 1920*1024 px
+    
+## config.xml
+secret_key : https://randomkeygen.com/ => CodeIgniter Encryption Keys (clé 256-bit)
+
+## .htaccess
+Configurer si https
