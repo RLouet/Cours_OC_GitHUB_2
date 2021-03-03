@@ -160,7 +160,7 @@
 <script src="{{ path }}/js/plugins.js"></script>
 <script src="{{ path }}/custom/js/custom-alerts.js"></script>
 <script>
-    const secureCookies = {% if app_config.get('secure_cookies') == 'true' %}true{% else %}false{% endif %};
+    const secureCookies = {% if app_config.get('https') == 'true' %}true{% else %}false{% endif %};
 
 </script>
 <script src="{{ path }}/custom/js/custom-cookies-notice.js"></script>
