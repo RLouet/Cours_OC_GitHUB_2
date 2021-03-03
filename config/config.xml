@@ -3,7 +3,7 @@
     <define var="blog_id" value="1" />
     <define var="show_errors" value="false" />
     <define var="https" value="false" />
-    <define var="secret_key" value="kKQmgw23BPTQa2hk1el3hSlmVBIKHQ4k" />
+    <define var="secret_key" value="https://randomkeygen.com/ => CodeIgniter Encryption Keys (256-bit key)" />
     <define var="db_host" value="localhost" />
     <define var="db_name" value="oc_daphpsymfony_p5" />
     <define var="db_user" value="root" />
