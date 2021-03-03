@@ -9,10 +9,11 @@ RewriteRule ^(.*)$ index.php?$1 [L,QSA]
 </IfModule>
 
 # BEGIN Redirect HTTP to HTTPS
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteCond %{SERVER_PORT} 80
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://blog.romainlouet.fr/$1 [R,L]
+# <IfModule mod_rewrite.c>
+# RewriteEngine On
+# RewriteCond %{SERVER_PORT} 80
+# RewriteCond %{HTTP_HOST} ^domaine\.fr [NC]
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R,L]
 </IfModule>
 # END Redirect HTTP to HTTPS
