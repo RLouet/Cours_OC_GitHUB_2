@@ -30,8 +30,9 @@ class MailService
         $this->httpRequest = HTTPRequest::getInstance();
 
         $this->config = Config::getInstance();
-        $transport = (new Swift_SmtpTransport($this->config->get('mailer_host'), $this->config->get('mailer_port')))
+        $transport = (new Swift_SmtpTransport($this->config->get('mailer_host'), $this->config->get('mailer_port'), $this->config->get('mailer_encryption')))
             ->setUsername($this->config->get('mailer_username'))
+            ->setPassword($this->config->get('mailer_password'))
             ->setPassword($this->config->get('mailer_password'))
             ;
         self::$mailer = new Swift_Mailer($transport);
