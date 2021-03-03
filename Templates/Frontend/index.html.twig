@@ -14,7 +14,7 @@
         <div class="container hero-text parallax-fade-top">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="typed text-white"><span id="typed-1"></span></h2>
+                    <h2 class="typed text-white"><span id="typed-1">_</span></h2>
                     <div class="subtext mt-3 text text-warning">{{ blog.teaserphrase|nl2br }}</div>
                     <ul class="hero-social img-social mb-0 mt-5">
                         {% for network in blog.socialnetworks %}
@@ -42,7 +42,7 @@
 
     <div class="section background-dark z-bigger-2 text-white padding-top-small" id="contactSection">
         <h2 class="dark-1-title text-center">Me contacter</h2>
-        <form class="contactform mt-5" method="post" action="">
+        <form class="contactform mt-5" method="post">
             <div class="container form-on-dark">
                 <div class="row justify-content-around">
                     <div class="col-md-4 mt-4">
@@ -133,7 +133,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-skills-type.js"></script>
+    <script src="{{ path }}/custom/js/custom-skills-type.js"></script>
     {% if posted_data is not empty %}
         <script>
             location.href = "#contactSection";
