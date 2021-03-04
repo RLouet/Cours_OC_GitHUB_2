@@ -177,10 +177,8 @@ label[for=blogLogoInput] {
 }
 
 .blog-logo-input-area img {
-    /*background-color: white;*/
     max-height: 150px;
     padding: 5px;
-    /*border-radius: 0.15rem 0.15rem 0 0;*/
 }
 
 #socialModal .form-control {
