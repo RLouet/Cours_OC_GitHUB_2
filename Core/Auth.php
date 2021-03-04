@@ -112,8 +112,8 @@ class Auth
         if ($cookie) {
             $token = new Token($cookie);
 
-            $rememberedLoginManager = $this->managers->getManagerOf('RememberedLogin');
-            $rememberedLogin = $rememberedLoginManager->findByToken($token);
+            $remLogManager = $this->managers->getManagerOf('RememberedLogin');
+            $rememberedLogin = $remLogManager->findByToken($token);
 
             if ($rememberedLogin && !$this->hasExpired($rememberedLogin)) {
                 $user = $userManager->findById($rememberedLogin['user_id']);
@@ -132,9 +132,9 @@ class Auth
         $token = new Token();
         $expiryTimestamp = time() + 60 * 60 * 24 * 183;
 
-        $rememberedLoginManager = $this->managers->getManagerOf('RememberedLogin');
+        $remLogManager = $this->managers->getManagerOf('RememberedLogin');
 
-        if ($rememberedLoginManager->save($user, $token, $expiryTimestamp)) {
+        if ($remLogManager->save($user, $token, $expiryTimestamp)) {
             $tokenValue = $token->getValue();
             $httpResponse = new HTTPResponse();
             $httpResponse->setCookie('remember_me', $tokenValue, $expiryTimestamp, '/');
@@ -149,9 +149,9 @@ class Auth
         if ($cookie) {
             $token = new Token($cookie);
 
-            $rememberedLoginManager = $this->managers->getManagerOf('RememberedLogin');
+            $remLogManager = $this->managers->getManagerOf('RememberedLogin');
 
-            $rememberedLoginManager->delete($token);
+            $remLogManager->delete($token);
 
             $httpResponse = new HTTPResponse();
             $httpResponse->setCookie('remember_me', '', time() - 36000);
