@@ -21,9 +21,8 @@ $(document).ready(function() {
                     return;
                 }
                 $("img", field.parent()).addClass("img-prev-alert");
-                $(".img-alert span", field.parent()).html("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
+                $(".img-alert span", field.parent()).html("L'image n'a pas la bonne résolution ( Maxi : " + maxRes[0] + "px * " + maxRes[1] + "px, Mini : " + minRes[0] + "px * " + minRes[1] + "px ) !");
                 $(".img-alert", field.parent()).show();
-                //alert ("L'image n'a pas la bonne résolution ( Max : " + maxRes[0] + "/" + maxRes[1] + "px, Min : " + minRes[0] + "/" + minRes[1] + "px ) !");
                 preview.attr("src", oldSrc);
                 loader.hide();
                 field.val(oldVal);
@@ -55,7 +54,7 @@ $(document).ready(function() {
                 // Check size
                 if (size > maxSize) {
                     $("img", $(this).parent()).addClass("img-prev-alert");
-                    $(".img-alert span", $(this).parent()).html("L'image est trop lourde (max : " + maxSize + " Mo) !");
+                    $(".img-alert span", $(this).parent()).html("L'image est trop volumineuse (Maxi : " + maxSize + " Mo) !");
                     $(".img-alert", $(this).parent()).show();
                     //alert ("L'image est trop lourde (max : " + maxSize + " Mo) !");
                     $preview.attr("src", oldSrc);
@@ -186,7 +185,6 @@ $(document).ready(function() {
     }
 
     $("#PostForm").submit(function (e) {
-        //alert("submit");
         return checkImagesInputs($(this)) && checkImagesNames($(this));
     });
 });

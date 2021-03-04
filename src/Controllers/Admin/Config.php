@@ -66,8 +66,8 @@ class Config extends Controller
             'old' => $blog->getLogo(),
             'maxSize' => 1,
             'type' => 'image',
-            'minRes' => [150, 60],
-            'maxRes' => [300, 300]
+            'minRes' => [64, 64],
+            'maxRes' => [512, 512]
         ];
         $cvUploadRules = [
             'target' => 'cv',

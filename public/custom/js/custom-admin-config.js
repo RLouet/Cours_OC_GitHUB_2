@@ -258,6 +258,7 @@ $(document).ready(function() {
 	});
 
 	$("#blogLogoInput").change(function(e) {
+		$(".blog-logo-warning").remove();
 		if (e.target.files.length > 0) {
 			let src = URL.createObjectURL(e.target.files[0]);
 			$("#blogLogoPreview").attr("src", src);

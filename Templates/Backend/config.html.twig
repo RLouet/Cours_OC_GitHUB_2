@@ -20,7 +20,9 @@
                             <div class="hidden form-error text-center mb-2"><span class="badge badge-warning"></span></div>
                         </div>
                         <div class="col-4 social-icon-input-area">
-                            <img src="{{ path }}/uploads/icons/empty-icon_128-128.png" alt="logo" id="socialLogoPreview" class="img-fluid">
+                            <label for="socialLogoInput" class="mb-0">
+                                <img src="{{ path }}/uploads/icons/empty-icon_128-128.png" alt="logo" id="socialLogoPreview" class="img-fluid">
+                            </label>
                             <label for="socialLogoInput" class="btn btn-primary btn-sm pt-1">Logo</label>
                             <input type="file" name="logo" id="socialLogoInput" class="form-control social-logo" accept="image/*">
                         </div>
@@ -176,13 +178,15 @@
                         <div class="subscribe-box-1">
                             <label>Logo</label>
                             {% if blogForm.entity.errors and constant('INVALID_LOGO', blogForm.entity) in blogForm.entity.errors %}
-                                <span class="badge badge-warning ml-2">Logo invalide</span>
+                                <span class="badge badge-warning ml-2 blog-logo-warning">Logo invalide</span>
                             {% endif %}
                             {% if blogForm.entity.errors.logo %}
-                                <span class="badge badge-warning ml-2">{{ blogForm.entity.errors.logo }}</span>
+                                <span class="badge badge-warning ml-2 blog-logo-warning">{{ blogForm.entity.errors.logo }}</span>
                             {% endif %}
                             <div class="blog-logo-input-area text-center">
-                                <img src="{{ path }}/uploads/logo/{{ blogForm.entity.id }}/{{ blogForm.entity.logo }}" alt="logo" id="blogLogoPreview" class="img-fluid">
+                                <label for="blogLogoInput">
+                                    <img src="{{ path }}/uploads/logo/{{ blogForm.entity.id }}/{{ blogForm.entity.logo }}" alt="logo" id="blogLogoPreview" class="img-fluid">
+                                </label>
                                 <label for="blogLogoInput" class="btn btn-primary btn-sm pt-1">Modifier</label>
                                 <input type="file" name="logo" id="blogLogoInput" class="form-control social-logo" accept="image/gif,image/png,image/jpeg">
                             </div>

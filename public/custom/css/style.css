@@ -119,7 +119,7 @@ input:focus,
     color: #aaa;
 }
 
-.post-image-preview:hover {
+label img {
     cursor: pointer;
 }
 
@@ -177,10 +177,10 @@ label[for=blogLogoInput] {
 }
 
 .blog-logo-input-area img {
-    background-color: white;
+    /*background-color: white;*/
     max-height: 150px;
     padding: 5px;
-    border-radius: 0.15rem 0.15rem 0 0;
+    /*border-radius: 0.15rem 0.15rem 0 0;*/
 }
 
 #socialModal .form-control {
@@ -319,6 +319,7 @@ ul.sitemap li {
 
 .badge {
     white-space: unset;
+    line-height: 1.5;
 }
 
 .badge-warning.on-white {
