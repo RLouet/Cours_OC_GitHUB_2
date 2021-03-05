@@ -56,7 +56,6 @@ $(document).ready(function() {
                     $("img", $(this).parent()).addClass("img-prev-alert");
                     $(".img-alert span", $(this).parent()).html("L'image est trop volumineuse (Maxi : " + maxSize + " Mo) !");
                     $(".img-alert", $(this).parent()).show();
-                    //alert ("L'image est trop lourde (max : " + maxSize + " Mo) !");
                     $preview.attr("src", oldSrc);
                     $previewLoader.hide();
                     $(this).val(oldVal);
@@ -114,12 +113,12 @@ $(document).ready(function() {
         let $template = $("  <div class='col-md-6 col-lg-4 col-xl-3 mt-3 post-image-item new-post-image-" + postImageCount + "'>\n" +
             "                    <div class='image-preview-container'>" +
             "                        <label for='newPostImageInput" + postImageCount + "'>" +
-            "                            <div>" +
+            "                            <span>" +
             "                                <img src='" + window.location.origin + "/img/blog/1.jpg' alt='Nouvelle image' class='img-fluid post-image-preview'>" +
-            "                                <div class=\"img-prev-ol hidden\">\n" +
-            "                                    <div class=\"spinner\"></div>\n" +
-            "                                </div>" +
-            "                            </div>" +
+            "                                <span class=\"img-prev-ol hidden\">\n" +
+            "                                    <span class=\"spinner\"></span>\n" +
+            "                                </span>" +
+            "                            </span>" +
             "                        </label>" +
             "                        <div class='img-alert'>" +
             "                            <span>L'image doit être définie.</span>" +
@@ -127,7 +126,7 @@ $(document).ready(function() {
             "                        <input type='file' name='new_post_image[" + postImageCount + "]' id='newPostImageInput" + postImageCount + "' class='form-control post-image-input new-image' accept='image/*'>" +
             "                    </div>\n" +
             "                    <div>" +
-            "                        <input type='text' placeholder='Description' class='form-control post-image-name-field text-light-green' name='new_post_image[" + postImageCount + "][name]' required>" +
+            "                        <input type='text' aria-label='Description' placeholder='Description' class='form-control post-image-name-field text-light-green' name='new_post_image[" + postImageCount + "][name]' required>" +
             "                        <div class='image-name-alert hidden mt-1'>" +
             "                            <span class=\"badge badge-warning ml-2\"></span>" +
             "                        </div>" +

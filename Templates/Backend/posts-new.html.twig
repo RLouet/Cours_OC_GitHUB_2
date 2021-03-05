@@ -1,6 +1,6 @@
 {%  extends "Backend/back-base.html.twig" %}
 
-{% block title %}Nouveau post{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Nouveau post{% endblock %}
 
 
 {% block body %}
@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="main-title text-center on-dark">
-                        <h3>Nouveau post</h3>
+                        <h2>Nouveau post</h2>
                         <div class="main-subtitle-bottom mt-3">
                             Ajoutez un élément dans votre book.
                         </div>
@@ -28,5 +28,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-post.js"></script>
+    <script src="{{ path }}/custom/js/custom-admin-post.js"></script>
 {% endblock %}

@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title color-white" id="deleteModalLabel">Supprimer l'image</h5>
+                <h3 class="modal-title color-white" id="deleteModalLabel">Supprimer l'image</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true"></span>
                 </button>
@@ -23,21 +23,21 @@
     </div>
 </div>
 
-<form class="configform" action="" method="post" enctype="multipart/form-data" id="PostForm">
+<form class="configform" method="post" enctype="multipart/form-data" id="PostForm">
     <!-- images ============================================== -->
     <div class="section pt-4 background-dark over-hide z-bigger-2">
-        <h4 class="text-center text-white" id="PostImagesItems">Images</h4>
+        <h3 class="text-center text-white" id="PostImagesItems">Images</h3>
         <div class="container pt-3">
             <div class="row form-error text-danger text-center">
                 <div class="col-12">
                     {% if blog_post.entity.errors.images %}
+                        <ul>
                         {% for imageError in blog_post.entity.errors.images %}
                             <li>{{ imageError }}</li>
                         {% endfor %}
+                        </ul>
                     {% endif %}
-                    </ul>
                 </div>
-                <ul>
             </div>
 
             <div class="row justify-content-around align-items-center images-list">
@@ -45,22 +45,21 @@
                     <div class="col-md-6 col-lg-4 col-xl-3  mt-3 post-image-item {% if image.id %}old-post-image-{{ image.id }}{% else %}new-post-image-{{ loop.index0 }}{% endif %}">
                         <div class="image-preview-container">
                             <label for="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}">
-                                <div>
+                                <span>
                                     <img src="{{ path }}/{% if image.url %}uploads/blog/{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}{% else %}img/blog/1.jpg{% endif %}" alt="{{ image.name }}" class="img-fluid post-image-preview">
-                                    <div class="img-prev-ol hidden">
-                                        <div class="spinner"></div>
-                                    </div>
-
-                                </div>
+                                    <span class="img-prev-ol hidden">
+                                        <span class="spinner"></span>
+                                    </span>
+                                </span>
                             </label>
                             <div class='img-alert'>
                                 <span>L'image doit être définie.</span>
                             </div>
                             <input type="file" data-old="" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}]" id="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}" class="form-control post-image-input" accept="image/*">
                         </div>
-                        {% if image.id %}<input type="hidden" name={% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}" required>{% endif %}
+                        {% if image.id %}<input type="hidden" name="old_post_image[{{ loop.index0 }}][id]" value="{{ image.id }}">{% endif %}
                         <div>
-                            <input type="text" name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field text-light-green" required>
+                            <input type="text" aria-label="Description" placeholder='Description' name="{% if image.id %}old{% else %}new{% endif %}_post_image[{{ loop.index0 }}][name]" value="{{ image.name }}" class="form-control post-image-name-field text-light-green" required>
                             <div class="image-name-alert hidden mt-1">
                                 <span class="badge badge-warning ml-2"></span>
                             </div>
@@ -84,41 +83,39 @@
                     <button type="button" class="btn btn-primary" id="addPostImage">Ajouter une image</button>
                 </div>
             </div>
-
-
         </div>
     </div>
 
     <!-- Content ============================================== -->
     <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
-        <h4 class="text-center">Contenu</h4>
+        <h3 class="text-center">Contenu</h3>
         <div class="container pt-3">
             <div class="row justify-content-around align-items-center">
                 <div class="col-md-8">
                     <div class="subscribe-box-1">
-                        <label>Titre</label>
+                        <label for="TitleField">Titre</label>
                         {% if blog_post.entity.errors and constant('INVALID_TITLE', blog_post.entity) in blog_post.entity.errors %}
                             <span class="badge badge-warning on-white ml-2">Titre invalide (Entre 2 et 128 caractères)</span>
                         {% endif %}
-                        <input type="text" name="title" value="{% if blog_post.entity.title %}{{ blog_post.entity.title }}{% endif %}" placeholder="Titre" class="form-control">
+                        <input type="text" name="title" id="TitleField" value="{% if blog_post.entity.title %}{{ blog_post.entity.title }}{% endif %}" placeholder="Titre" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-8 mt-4">
                     <div class="subscribe-box-1">
-                        <label>Châpo</label>
+                        <label for="ChapoField">Châpo</label>
                         {% if blog_post.entity.errors and constant('INVALID_CHAPO', blog_post.entity) in blog_post.entity.errors %}
                             <span class="badge badge-warning on-white ml-2">Châpo invalide (Entre 5 et 255 caractères)</span>
                         {% endif %}
-                        <textarea name="chapo" placeholder="Châpo" class="for-textarea form-control">{% if blog_post.entity.chapo %}{{ blog_post.entity.chapo }}{% endif %}</textarea>
+                        <textarea name="chapo" id="ChapoField" placeholder="Châpo" class="for-textarea form-control">{% if blog_post.entity.chapo %}{{ blog_post.entity.chapo }}{% endif %}</textarea>
                     </div>
                 </div>
                 <div class="col-12 mt-4">
                     <div class="subscribe-box-1">
-                        <label>Contenu</label>
+                        <label for="ContentField">Contenu</label>
                         {% if blog_post.entity.errors and constant('INVALID_CONTENT', blog_post.entity) in blog_post.entity.errors %}
                             <span class="badge badge-warning on-white ml-2">Contenu invalide (Minimum 5 caractères)</span>
                         {% endif %}
-                        <textarea name="content" placeholder="Contenu" class="for-textarea form-control" rows="20">{% if blog_post.entity.content %}{{ blog_post.entity.content }}{% endif %}</textarea>
+                        <textarea name="content" id="ContentField" placeholder="Contenu" class="for-textarea form-control" rows="20">{% if blog_post.entity.content %}{{ blog_post.entity.content }}{% endif %}</textarea>
                     </div>
                 </div>
                 <div class="clear"></div>

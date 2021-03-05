@@ -4,12 +4,28 @@
 
 
 {% block body %}
-
+    <div class="section padding-top little-pt-mobile over-hide">
+        <div class="dark-fade-over"></div>
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center on-dark">
+                        <h2>Posts</h2>
+                        <div class="main-subtitle-bottom mt-3">
+                            Gérer vos posts.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    
     <div class="modal fade default" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title color-white" id="deleteModalLabel">Supprimer le post</h2>
+                    <h3 class="modal-title color-white" id="deleteModalLabel">Supprimer le post</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -26,23 +42,6 @@
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary delete-btn" data-token="{{ csrf_token }}">Supprimer</button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section padding-top little-pt-mobile over-hide">
-        <div class="dark-fade-over"></div>
-        <div class="container parallax-fade-top">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-title text-center on-dark">
-                        <h2>Posts</h2>
-                        <div class="main-subtitle-bottom mt-3">
-                            Gérer vos posts.
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
             </div>
         </div>
     </div>
