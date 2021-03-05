@@ -285,6 +285,8 @@ label.fa-btn:focus {
 
 .sn-name {
     overflow-wrap: break-word;
+    font-size: 1.25rem;
+    font-weight: 500;
 }
 
 .footer-1.dark .scd-foot p.footer-title,
@@ -613,7 +615,7 @@ table.align-middle th {
     font-weight: bold;
 }
 
-.main-title h3 {
+.main-title h2 {
     position: relative;
     z-index: 300;
     opacity: 0.75;

@@ -216,7 +216,7 @@ $(document).ready(function() {
 							"                                        <img src='' alt='Logo du réseau social' class='sn-logo' data-file=''>\n" +
 							"                                    </div>\n" +
 							"                                    <div class='col-7'>\n" +
-							"                                        <h5 class='sn-name'></h5>\n" +
+							"                                        <h4 class='sn-name'></h4>\n" +
 							"                                    </div>\n" +
 							"                                    <div class='col-12 text-center mt-2'>\n" +
 							"                                        <p class='sn-url'></p>\n" +
@@ -233,10 +233,9 @@ $(document).ready(function() {
 							"                            </div>\n" +
 							"                        </div>");
 						$("#addSocialNetworkBtn").before($socialBox);
-						//$socialBox = $('.social-box-' + data.entity.id );
 					}
-					//$socialBox.remove();
 					$(".sn-logo", $socialBox).attr("src", window.location.origin + "/uploads/icons/" + data.entity.blogId + "/" + encodeURIComponent(data.entity.logo)).data("file", data.entity.logo);
+					$(".sn-logo", $socialBox).attr("alt", "Logo " . data.entity.name);
 					$(".sn-name", $socialBox).html(data.entity.name);
 					$(".btn-delete", $socialBox).data("name", data.entity.name);
 					$(".sn-url", $socialBox).html(data.entity.url);

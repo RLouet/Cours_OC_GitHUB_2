@@ -9,7 +9,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="socialModalLabel"><span></span> réseau social</h5>
+                    <h2 class="modal-title color-white" id="socialModalLabel"><span></span> réseau social</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-4 social-icon-input-area">
                             <label for="socialLogoInput" class="mb-0">
-                                <img src="{{ path }}/uploads/icons/empty-icon_128-128.png" alt="logo" id="socialLogoPreview" class="img-fluid">
+                                <img src="{{ path }}/uploads/icons/empty-icon_128-128.png" alt="Logo réseau social" id="socialLogoPreview" class="img-fluid">
                             </label>
                             <label for="socialLogoInput" class="btn btn-primary btn-sm pt-1">Logo</label>
                             <input type="file" name="logo" id="socialLogoInput" class="form-control social-logo" accept="image/*">
@@ -52,7 +52,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="skillModalLabel"><span></span> skill</h5>
+                    <h2 class="modal-title color-white" id="skillModalLabel"><span></span> skill</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -83,7 +83,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="deleteModalLabel">Supprimer le <span class="delete-item-type">#</span></h5>
+                    <h2 class="modal-title color-white" id="deleteModalLabel">Supprimer le <span class="delete-item-type">#</span></h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -110,7 +110,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="main-title text-center on-dark">
-                        <h3>Configuration</h3>
+                        <h2>Configuration</h2>
                         <div class="main-subtitle-bottom mt-3">
                             Configurez la page d'accueil et les paramètres du Blog.
                         </div>
@@ -121,10 +121,10 @@
         </div>
     </div>
 
-    <form class="configform" action="" method="post" enctype="multipart/form-data">
+    <form class="configform" method="post" enctype="multipart/form-data">
         <!-- Block ============================================== -->
         <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2">
-            <h4 class="text-center dark-1-title">Identité</h4>
+            <h3 class="text-center dark-1-title">Identité</h3>
             <div class="container form-on-dark pt-3">
                 <div class="row justify-content-around align-items-center">
                     <div class="col-md-4">
@@ -185,7 +185,7 @@
                             {% endif %}
                             <div class="blog-logo-input-area text-center">
                                 <label for="blogLogoInput">
-                                    <img src="{{ path }}/uploads/logo/{{ blogForm.entity.id }}/{{ blogForm.entity.logo }}" alt="logo" id="blogLogoPreview" class="img-fluid">
+                                    <img src="{{ path }}/uploads/logo/{{ blogForm.entity.id }}/{{ blogForm.entity.logo }}" alt="Logo Blog" id="blogLogoPreview" class="img-fluid">
                                 </label>
                                 <label for="blogLogoInput" class="btn btn-primary btn-sm pt-1">Modifier</label>
                                 <input type="file" name="logo" id="blogLogoInput" class="form-control social-logo" accept="image/gif,image/png,image/jpeg">
@@ -224,7 +224,7 @@
     </form>
 
     <div class="section pt-4 background-dark over-hide z-bigger-2">
-        <h4 class="text-center text-white">Skills</h4>
+        <h3 class="text-center text-white">Skills</h3>
         <div class="container pt-3">
 
             <div class="row justify-content-around align-items-center skills-list">
@@ -232,7 +232,7 @@
                     <div class="col-auto mt-3 skill-item-{{ skill.id }}">
                         <span class="text-light-green font-weight-bold bigger-1 skill-value">{{ skill.value }}</span>
                         <div class="text-center">
-                            <button class="fa-btn" data-toggle="modal" data-target="#skillModal"data-action="edit" data-id="{{ skill.id }}"><i class="fa fa-edit"></i></button>
+                            <button class="fa-btn" data-toggle="modal" data-target="#skillModal" data-action="edit" data-id="{{ skill.id }}"><i class="fa fa-edit"></i></button>
                             <button class="fa-btn btn-delete" data-toggle="modal" data-target="#deleteModal" data-id="{{ skill.id }}" data-name="{{ skill.value }}" data-type="skill"><i class="fa fa-trash"></i></button>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
 
         <!-- Block ============================================== -->
         <div class="section pt-4 background-grey-2 pb-4 over-hide z-bigger-2">
-            <h4 class="text-center">Réseaux sociaux</h4>
+            <h3 class="text-center">Réseaux sociaux</h3>
             <div class="container pt-3">
                 <div class="row justify-content-around align-items-center">
                     {% for socialNetwork in blog.socialNetworks %}
@@ -259,10 +259,10 @@
                             <div class="no-img-effect rounded over-hide p-4 call-box-5">
                                 <div class="row">
                                     <div class="col-5">
-                                        <img src="{{ path }}/uploads/icons/{{ socialNetwork.blogId }}/{{ socialNetwork.logo|url_encode }}" class="sn-logo" data-file="{{ socialNetwork.logo }}">
+                                        <img src="{{ path }}/uploads/icons/{{ socialNetwork.blogId }}/{{ socialNetwork.logo|url_encode }}" alt="Logo {{ socialNetwork.name }}" class="sn-logo" data-file="{{ socialNetwork.logo }}">
                                     </div>
                                     <div class="col-7">
-                                        <h5 class="sn-name">{{ socialNetwork.name }}</h5>
+                                        <h4 class="sn-name">{{ socialNetwork.name }}</h4>
                                     </div>
                                     <div class="col-12 text-center mt-2">
                                         <p class="sn-url">{{ socialNetwork.url }}</p>
@@ -292,5 +292,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-config.js"></script>
+    <script src="{{ path }}/custom/js/custom-admin-config.js"></script>
 {% endblock %}
