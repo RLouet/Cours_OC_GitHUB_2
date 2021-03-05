@@ -1,6 +1,6 @@
 {%  extends "base.html.twig" %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Profil{% endblock %}
 
 
 {% block body %}
@@ -8,7 +8,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="passwordModalLabel"><span></span> Changer de mot de passe</h5>
+                    <h2 class="modal-title color-white" id="passwordModalLabel"><span></span> Changer de mot de passe</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -26,7 +26,17 @@
                         <div class="col-12 pw-new mt-4">
                             <label for="newPasswordInput" class="mb-0">Nouveau mot de passe</label>
                             <input type="password" name="new_password" id="newPasswordInput" class="form-control" required>
-                            <div class="form-error hidden text-center mt-1"><span class="badge badge-warning">Mot de passe invalide :<ul class="mt-1 mb-0 text-left"><li>8 à 50 caractères</li><li>Au moins une lettre minuscule</li><li>Au moins une lettre majuscule</li><li>Au moins un chiffre</li></ul></span></div>
+                            <div class="form-error hidden text-center mt-1">
+                                <div class="badge badge-warning">
+                                    Mot de passe invalide :
+                                    <ul class="mt-1 mb-0 text-left">
+                                        <li>8 à 50 caractères</li>
+                                        <li>Au moins une lettre minuscule</li>
+                                        <li>Au moins une lettre majuscule</li>
+                                        <li>Au moins un chiffre</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 pw-conf mt-2">
                             <label for="newPasswordConfirmationInput" class="mb-0">Confirmation du nouveau mot de passe</label>
@@ -49,7 +59,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="deleteProfileModalLabel">Supprimer votre profil</h5>
+                    <h2 class="modal-title color-white" id="deleteProfileModalLabel">Supprimer votre profil</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -77,13 +87,6 @@
     <div class="section padding-top-big padding-bottom over-hide hidden-md-down">
         <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/chaise-3d_1920-1080_2.jpg')"></div>
         <div class="dark-fade-over"></div>
-        {#
-        <div class="hero-logo hidden-lg-up">
-            <a href="{{ path }}">
-                <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
-            </a>
-        </div>
-        #}
         <div class="hero-bottom-wrap ver-2 text-center z-bigger" style="bottom: -20px;">
             <div class="container-fluid parallax-fade-top" style="top: 0px;">
                 <div class="row">
@@ -103,15 +106,15 @@
                     </div>
                     <dl class="row bigger-2">
                         <dt class="col-4 text-right">Pseudo</dt>
-                        <dl class="col-8 text-left">{{ current_user.username }}</dl>
+                        <dd class="col-8 text-left">{{ current_user.username }}</dd>
                         <dt class="col-4 text-right">Nom</dt>
-                        <dl class="col-8 text-left">{{ current_user.lastname }}</dl>
+                        <dd class="col-8 text-left">{{ current_user.lastname }}</dd>
                         <dt class="col-4 text-right">Prénom</dt>
-                        <dl class="col-8 text-left">{{ current_user.firstname }}</dl>
+                        <dd class="col-8 text-left">{{ current_user.firstname }}</dd>
                         <dt class="col-4 text-right">Email</dt>
-                        <dl class="col-8 text-left">{{ current_user.email }}</dl>
+                        <dd class="col-8 text-left">{{ current_user.email }}</dd>
                         <dt class="col-4 text-right">Mot de passe</dt>
-                        <dl class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round" title="Modifier votre mot de passe">Changer de mot de passe</button></dl>
+                        <dd class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round" title="Modifier votre mot de passe">Changer de mot de passe</button></dd>
                     </dl>
                     <a class="btn btn-primary mb-3" href="{{ path }}/profile/edit" title="Modifier votre profil">Modifier</a><br>
                     <a href="#" title="Supprimer votre profil" data-toggle="modal" data-target="#deleteProfileModal">Supprimer</a>
@@ -123,5 +126,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-profile-password.js"></script>
+    <script src="{{ path }}/custom/js/custom-profile-password.js"></script>
 {% endblock %}
