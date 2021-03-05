@@ -1,6 +1,6 @@
 {%  extends "base.html.twig" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Accueil{% endblock %}
 
 
 {% block body %}
@@ -14,7 +14,7 @@
         <div class="container hero-text parallax-fade-top">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="typed text-white"><span id="typedSkills">_</span></h2>
+                    <span class="typed skills"><span id="typedSkills">_</span></span>
                     <div class="subtext mt-3 text text-warning">{{ blog.teaserphrase|nl2br }}</div>
                     <ul class="hero-social img-social mb-0 mt-5">
                         {% for network in blog.socialnetworks %}
@@ -33,7 +33,7 @@
         <div class="container-fluid parallax-fade-top" style="top: 0px;">
             <div class="row">
                 <div class="col-md-12">
-                    <h2>{{ blog.firstname }} {{ blog.lastname }}</h2>
+                    <span>{{ blog.firstname }} {{ blog.lastname }}</span>
                 </div>
             </div>
         </div>
@@ -115,13 +115,13 @@
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
                         <i class="funky-ui-icon icon-Smartphone-4"></i>
-                        <h5 class="mt-3 pb-0 mb-0 text">{{ blog.phone }}</h5>
+                        <span class="mt-3 pb-0 mb-0">{{ blog.phone }}</span>
                     </div>
                 </div>
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
                         <i class="funky-ui-icon icon-Mail-Open"></i>
-                        <h5 class="mt-3 pb-0 mb-0">{{ blog.email }}</h5>
+                        <span class="mt-3 pb-0 mb-0">{{ blog.email }}</span>
                     </div>
                 </div>
             </div>

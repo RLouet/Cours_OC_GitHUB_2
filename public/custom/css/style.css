@@ -48,6 +48,18 @@ input:focus,
     color: white;
 }
 
+.h1-logo {
+    all: unset;
+}
+
+.hero-text span.typed {
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 3rem;
+    font-family: 'Work Sans', sans-serif;
+}
+
 .hero-logo {
     z-index: 5000;
 }
@@ -60,15 +72,19 @@ input:focus,
     z-index: 1002;
 }
 
-.hero-text h2.typed {
-    color: #00b6f1;
-}
-
 .hero-bottom-wrap {
     position: absolute;
     width: 200%;
     bottom: -13px;
     left: -50%;
+}
+
+.hero-bottom-wrap span {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 10vw;
+    font-weight: 600;
+    line-height: 0.82;
+    color: #fff;
 }
 
 @media (max-width: 1500px) {
@@ -115,8 +131,13 @@ input:focus,
     font-size: 1rem;
 }
 
-.contact-infos h5 {
+.contact-infos span {
     color: #aaa;
+    font-size: 1.25rem;
+    font-weight: 500;
+    font-family: 'Work Sans', sans-serif;
+    line-height: 1.25;
+    display: block;
 }
 
 label img {
@@ -265,6 +286,16 @@ label.fa-btn:focus {
 .sn-name {
     overflow-wrap: break-word;
 }
+
+.footer-1.dark .scd-foot p.footer-title,
+.footer-1.dark .scd-foot h3 {
+    color: #c6ff84;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    line-height: 1.25;
+    font-family: 'Work Sans', sans-serif;
+ }
 
 .footer-social-icons a img {
     height: 50px;

@@ -1,6 +1,6 @@
 {%  extends "base.html.twig" %}
 
-{% block title %}Book{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Book{% endblock %}
 
 
 {% block body %}
@@ -50,7 +50,6 @@
                         </div>
                     </div>
                 {% endfor %}
-
             </div>
 
             {% if posts|length >= app_config.get('pagination') %}

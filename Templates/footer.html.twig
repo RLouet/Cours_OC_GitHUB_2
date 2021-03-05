@@ -3,7 +3,7 @@
     <div class="container scd-foot pt-4 pb-4">
         <div class="row justify-content-center">
             <div class="col-md-4 text-center mb-3">
-                <h5 class="text-light-green">Me suivre :</h5>
+                <p class="text-light-green footer-title">Me suivre :</p>
                 <div class="row footer-social-icons justify-content-center">
                     {% for network in blog.socialnetworks %}
                         <div class="col-auto p-2">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="col-md-4 text-center mb-4">
-                <h5 class="text-light-green">{{ blog.firstname }} {{ blog.lastname }}</h5>
+                <p class="text-light-green footer-title">{{ blog.firstname }} {{ blog.lastname }}</p>
                 <p class="mb-1"><i class="funky-ui-icon icon-Smartphone-4"></i> {{ blog.phone }}</p>
                 <p><i class="funky-ui-icon icon-Mail-Open"></i> {{ blog.email }}</p>
                 <a href="{{ path }}#contactSection" class="btn btn-primary">Contact</a>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="col-md-4 text-center">
-                <h5 class="text-light-green">Plan du site</h5>
+                <h3 class="text-light-green">Plan du site</h3>
                 <ul class="sitemap">
                     <li>
                         <a href="{{ path }}">Accueil</a>
