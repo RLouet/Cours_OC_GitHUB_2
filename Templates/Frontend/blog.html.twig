@@ -22,7 +22,6 @@
     </div>
 
     <div class="section pt-4 background-grey pb-4 over-hide z-bigger-2">
-        <h4 class="text-center">Posts enregistrés</h4>
         <div class="container-fluid">
             <div class="row justify-content-around align-items-center post-list">
 
@@ -33,11 +32,11 @@
                                 <div class="portfolio-box-1">
                                     <img  src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="{{ post.hero.name }}"  class="blog-home-img"/>
                                     <div class="portfolio-mask-2 rounded"></div>
-                                    <h5 class="on-center text-center">Lire la suite ...</h5>
+                                    <p class="on-center text-center view-more">Lire la suite ...</p>
                                 </div>
                             </a>
                             <div class="padding-in">
-                                <a href="{{ path }}/book/{{ post.id }}/view"><h5 class="mt-3">{{ post.title }}</h5></a>
+                                <h3><a href="{{ path }}/book/{{ post.id }}/view">{{ post.title }}</a></h3>
                                 <p class="mt-3">{{ post.chapo|nl2br }}</p>
                                 <a href="{{ path }}/book/{{ post.id }}/view" class="btn-link btn-primary pl-0 mt-4">Lire la suite</a>
                                 <div class="separator-wrap pt-3">

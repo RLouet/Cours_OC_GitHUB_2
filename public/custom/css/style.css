@@ -624,3 +624,35 @@ table.align-middle th {
     z-index: 300;
     opacity: 0.75;
 }
+
+.portfolio-box-1 p.on-center {
+    bottom: auto;
+    letter-spacing: 1px;
+    font-size: 18px;
+    text-transform: unset;
+    line-height: 23px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 3px;
+    color: #212121;
+}
+
+.portfolio-box-1 p.on-center:hover {
+    color: #6dc234
+}
+
+.blog-box-1 h3 a {
+    color: #212121;
+    transition: all 200ms linear;
+    font-size: 1.35rem;
+    font-weight: 500;
+}
+
+.blog-box-1 h3 a:hover {
+    color: #6dc234
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
