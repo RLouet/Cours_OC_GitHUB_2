@@ -4,11 +4,80 @@
 
 
 {% block body %}
+    <!-- Hero Block ================================================== -->
+
+    <div class="section padding-top-big padding-bottom over-hide hidden-md-down">
+        <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/chaise-3d_1920-1080_2.jpg')"></div>
+        <div class="dark-fade-over"></div>
+        <div class="hero-bottom-wrap ver-2 text-center z-bigger" style="bottom: -20px;">
+            <div class="container-fluid parallax-fade-top" style="top: 0px;">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section pt-0 pt-md-4 background-grey pb-md-5 over-hide z-bigger-2">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-xl-4 p-4 mt-md-3 mb-md-2 rounded background-dark text-center">
+                    <div class="main-title on-dark text-center mb-3">
+                        <h2 class="text-center dark-1-title">Profil</h2>
+                    </div>
+                    <dl class="row bigger-2">
+                        <dt class="col-4 text-right">Pseudo</dt>
+                        <dd class="col-8 text-left">{{ current_user.username }}</dd>
+                        <dt class="col-4 text-right">Nom</dt>
+                        <dd class="col-8 text-left">{{ current_user.lastname }}</dd>
+                        <dt class="col-4 text-right">Prénom</dt>
+                        <dd class="col-8 text-left">{{ current_user.firstname }}</dd>
+                        <dt class="col-4 text-right">Email</dt>
+                        <dd class="col-8 text-left">{{ current_user.email }}</dd>
+                        <dt class="col-4 text-right">Mot de passe</dt>
+                        <dd class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round" title="Modifier votre mot de passe">Changer de mot de passe</button></dd>
+                    </dl>
+                    <a class="btn btn-primary mb-3" href="{{ path }}/profile/edit" title="Modifier votre profil">Modifier</a><br>
+                    <a href="#" title="Supprimer votre profil" data-toggle="modal" data-target="#deleteProfileModal">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal ============================================== -->
+    <div class="modal fade default" id="deleteProfileModal" tabindex="-1" role="dialog" aria-labelledby="deleteProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title color-white" id="deleteProfileModalLabel">Supprimer votre profil</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form method="post" action="{{ path }}/profile/deleteProfile">
+                    <div class="modal-body row form-on-dark">
+                        <div class="col-12">
+                            <p>Êtes-vous sûr de vouloir supprimer votre profil ?</p>
+                            <p class="confirm-notice text-warning">Toutes vos contributions à ce blog seront supprimées.</p>
+                        </div>
+                        <input class="token-field" type="hidden" name="token" value="{{ csrf_token }}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary confirm-btn">Valider</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal ============================================== -->
     <div class="modal fade default" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title color-white" id="passwordModalLabel"><span></span> Changer de mot de passe</h2>
+                    <h3 class="modal-title color-white" id="passwordModalLabel"><span></span> Changer de mot de passe</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -51,74 +120,6 @@
                         <input type="submit" name="change_password" class="btn btn-primary valid-btn" value="Valider">
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade default" id="deleteProfileModal" tabindex="-1" role="dialog" aria-labelledby="deleteProfileModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title color-white" id="deleteProfileModalLabel">Supprimer votre profil</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <form method="post" action="{{ path }}/profile/deleteProfile">
-                    <div class="modal-body row form-on-dark">
-                        <div class="col-12">
-                            <p>Êtes-vous sûr de vouloir supprimer votre profil ?</p>
-                            <p class="confirm-notice text-warning">Toutes vos contributions à ce blog seront supprimées.</p>
-                        </div>
-                        <input class="token-field" type="hidden" name="token" value="{{ csrf_token }}"/>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary confirm-btn">Valider</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hero Slider Block
-    ================================================== -->
-
-    <div class="section padding-top-big padding-bottom over-hide hidden-md-down">
-        <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/chaise-3d_1920-1080_2.jpg')"></div>
-        <div class="dark-fade-over"></div>
-        <div class="hero-bottom-wrap ver-2 text-center z-bigger" style="bottom: -20px;">
-            <div class="container-fluid parallax-fade-top" style="top: 0px;">
-                <div class="row">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section pt-0 pt-md-4 background-grey pb-md-5 over-hide z-bigger-2">
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-xl-4 p-4 mt-md-3 mb-md-2 rounded background-dark text-center">
-                    <div class="main-title on-dark text-center mb-3">
-                        <h2 class="text-center dark-1-title">Profil</h2>
-                    </div>
-                    <dl class="row bigger-2">
-                        <dt class="col-4 text-right">Pseudo</dt>
-                        <dd class="col-8 text-left">{{ current_user.username }}</dd>
-                        <dt class="col-4 text-right">Nom</dt>
-                        <dd class="col-8 text-left">{{ current_user.lastname }}</dd>
-                        <dt class="col-4 text-right">Prénom</dt>
-                        <dd class="col-8 text-left">{{ current_user.firstname }}</dd>
-                        <dt class="col-4 text-right">Email</dt>
-                        <dd class="col-8 text-left">{{ current_user.email }}</dd>
-                        <dt class="col-4 text-right">Mot de passe</dt>
-                        <dd class="col-8 text-left"><button type="button" data-toggle="modal" data-target="#passwordModal" class="btn btn-primary btn-sm btn-round" title="Modifier votre mot de passe">Changer de mot de passe</button></dd>
-                    </dl>
-                    <a class="btn btn-primary mb-3" href="{{ path }}/profile/edit" title="Modifier votre profil">Modifier</a><br>
-                    <a href="#" title="Supprimer votre profil" data-toggle="modal" data-target="#deleteProfileModal">Supprimer</a>
-                </div>
             </div>
         </div>
     </div>
