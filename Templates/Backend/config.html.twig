@@ -4,12 +4,30 @@
 
 
 {% block body %}
+    <!-- Header ============================================== -->
+    <div class="section padding-top little-pt-mobile over-hide">
+        <div class="dark-fade-over"></div>
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center on-dark">
+                        <h2>Configuration</h2>
+                        <div class="main-subtitle-bottom mt-3">
+                            Configurez la page d'accueil et les paramètres du Blog.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Social Networks Modal ============================================== -->
     <div class="modal fade default" id="socialModal" tabindex="-1" role="dialog" aria-labelledby="socialModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title color-white" id="socialModalLabel"><span></span> réseau social</h2>
+                    <h3 class="modal-title color-white" id="socialModalLabel"><span></span> réseau social</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -48,11 +66,12 @@
         </div>
     </div>
 
+    <!-- Skills Modal ============================================== -->
     <div class="modal fade default" id="skillModal" tabindex="-1" role="dialog" aria-labelledby="skillModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title color-white" id="skillModalLabel"><span></span> skill</h2>
+                    <h3 class="modal-title color-white" id="skillModalLabel"><span></span> skill</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -79,11 +98,12 @@
         </div>
     </div>
 
+    <!-- Delete Modal ============================================== -->
     <div class="modal fade default" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title color-white" id="deleteModalLabel">Supprimer le <span class="delete-item-type">#</span></h2>
+                    <h3 class="modal-title color-white" id="deleteModalLabel">Supprimer le <span class="delete-item-type">réseau / skill</span></h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -104,23 +124,7 @@
         </div>
     </div>
 
-    <div class="section padding-top little-pt-mobile over-hide">
-        <div class="dark-fade-over"></div>
-        <div class="container parallax-fade-top">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-title text-center on-dark">
-                        <h2>Configuration</h2>
-                        <div class="main-subtitle-bottom mt-3">
-                            Configurez la page d'accueil et les paramètres du Blog.
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Config Form ============================================== -->
     <form class="configform" method="post" enctype="multipart/form-data">
         <!-- Block ============================================== -->
         <div class="section pt-4 background-dark-1 pb-4 over-hide z-bigger-2">
