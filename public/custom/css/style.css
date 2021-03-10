@@ -53,7 +53,7 @@ input:focus,
 }
 
 .hero-text span.typed {
-    color: #FFFFFF;
+    color: #fff;
     font-weight: 700;
     font-size: 3rem;
     line-height: 3rem;
@@ -154,7 +154,7 @@ label img {
     height: 100%;
 }
 
-.img-prev-ol .spinner{
+.img-prev-ol .spinner {
     display: block;
 }
 
@@ -302,7 +302,7 @@ label.fa-btn:focus {
     margin-bottom: 0.6rem;
     line-height: 1.25;
     font-family: 'Work Sans', sans-serif;
- }
+}
 
 .footer-social-icons a img {
     height: 50px;
@@ -656,7 +656,7 @@ table.align-middle th {
 }
 
 .blog-box-1 h3 a:hover {
-    color: #6dc234
+    color: #6dc234;
 }
 
 .modal-title {
