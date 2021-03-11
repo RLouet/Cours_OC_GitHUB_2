@@ -71,7 +71,7 @@ class HTTPResponse
         if ($twig === null) {
             $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
             $twig = new Twig\Environment($loader, [
-                //'cache' => '../cache'
+                'cache' => '../cache'
             ]);
             $twig->addGlobal('path', $this->protocol . $this->httpRequest->getHost());
             $twig->addGlobal('current_user', $this->auth->getUser());
@@ -109,7 +109,7 @@ class HTTPResponse
         if ($twig2 === null) {
             $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
             $twig2 = new Twig\Environment($loader, [
-                //'cache' => '../cache'
+                'cache' => '../cache'
             ]);
             $twig2->addExtension(new Twig\Extra\CssInliner\CssInlinerExtension());
             $twig2->addGlobal('path', $this->protocol . $this->httpRequest->getHost());
