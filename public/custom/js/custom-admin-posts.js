@@ -52,7 +52,7 @@ $(document).ready(function() {
 
 	// --------------- Pagination ---------------
 	function addPost(post, userId) {
-		const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/img/blog/1.jpg";
+		const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/uploads/blog/no-image.jpg";
 		const heroAlt = post.heroName ? post.heroName : "";
 		const isEditable = post.userId === userId || post.userBanished || !post.userAdmin;
 		let postManagementButtons = "";

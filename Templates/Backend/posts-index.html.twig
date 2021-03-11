@@ -63,7 +63,7 @@
                             <div class="blog-box-1 blog-home blog-admin background-white over-hide">
                                     <a href="{{ path }}/admin/posts/{{ post.id }}/view">
                                         <div class="portfolio-box-1">
-                                            <img  src="{{ path }}/{% if post.hero %}uploads/blog/{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}img/blog/1.jpg{% endif %}" alt="{% if post.hero %}{{ post.hero.name }}{% else %}Pas d'image{% endif %}"  class="blog-home-img"/>
+                                            <img  src="{{ path }}/uploads/blog/{% if post.hero %}{{ post.user.id }}/{{ post.id }}/{{ post.hero.url }}{% else %}no-image.jpg{% endif %}" alt="{% if post.hero %}{{ post.hero.name }}{% else %}Pas d'image{% endif %}"  class="blog-home-img"/>
                                             <div class="portfolio-mask-2 rounded"></div>
                                             <p class="on-center text-center">Lire la suite ...</p>
                                         </div>

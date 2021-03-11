@@ -114,7 +114,7 @@ $(document).ready(function() {
             "                    <div class='image-preview-container'>" +
             "                        <label for='newPostImageInput" + postImageCount + "'>" +
             "                            <span>" +
-            "                                <img src='" + window.location.origin + "/img/blog/1.jpg' alt='Nouvelle image' class='img-fluid post-image-preview'>" +
+            "                                <img src='" + window.location.origin + "/uploads/blog/no-image.jpg' alt='Nouvelle image' class='img-fluid post-image-preview'>" +
             "                                <span class=\"img-prev-ol hidden\">\n" +
             "                                    <span class=\"spinner\"></span>\n" +
             "                                </span>" +

@@ -46,7 +46,7 @@
                         <div class="image-preview-container">
                             <label for="{% if image.id %}postImageInput{{ image.id }}{% else %}newPostImageInput{{ loop.index0 }}{% endif %}">
                                 <span>
-                                    <img src="{{ path }}/{% if image.url %}uploads/blog/{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}{% else %}img/blog/1.jpg{% endif %}" alt="{{ image.name }}" class="img-fluid post-image-preview">
+                                    <img src="{{ path }}/uploads/blog/{% if image.url %}{{ blog_post.entity.user.id }}/{{ image.blogPostId }}/{{ image.url }}{% else %}no-image.jpg{% endif %}" alt="{{ image.name }}" class="img-fluid post-image-preview">
                                     <span class="img-prev-ol hidden">
                                         <span class="spinner"></span>
                                     </span>
