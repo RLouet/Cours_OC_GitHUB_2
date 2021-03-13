@@ -18,8 +18,8 @@ class BlogPostManagerPDO extends BlogPostManager
         //$sql = 'SELECT id, user_id as userId, title, edit_date as editDate, hero_id as heroId, chapo, content FROM blog_post';
         $sql = '
 SELECT *,
-       bp.id as id, 
-       user.id as user_id, 
+       bp.id AS id, 
+       user.id AS user_id, 
        pi.name AS hero_name, 
        pi.url AS hero_url 
 FROM blog_post bp 
@@ -34,7 +34,6 @@ OFFSET :offset';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Blog\Entities\BlogPost');
         $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
         $stmt->bindValue(':limit', (int) $this->config->get('pagination'), PDO::PARAM_INT);
         $stmt->execute();
@@ -43,9 +42,8 @@ OFFSET :offset';
 
         $blogPostsList = [];
 
-        //var_dump($result);
-
         foreach ($result as $resultItem) {
+            $resultItem['registration_date'] = new DateTime($resultItem['registration_date']);
             $resultItem['edit_date'] = new DateTime($resultItem['edit_date']);
             $post = new BlogPost($resultItem);
             $user = new User($resultItem);
@@ -68,12 +66,10 @@ OFFSET :offset';
 
     public function getUnique(int $blogPostId)
     {
-        //$sql = 'SELECT id, user_id as userId, title, edit_date as editDate, hero_id as heroId, chapo, content FROM blog_post WHERE blog_post.id = :id';
-        $sql = 'SELECT *, bp.id as id, user.id as user_id  FROM blog_post bp JOIN user ON user.id = bp.user_id WHERE bp.id = :id';
+        $sql = 'SELECT *, bp.id AS id, user.id AS user_id  FROM blog_post bp JOIN user ON user.id = bp.user_id WHERE bp.id = :id';
 
         $stmt = $this->dao->prepare($sql);
         $stmt->bindValue(':id', (int) $blogPostId, PDO::PARAM_INT);
-        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Blog\Entities\BlogPost');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -83,6 +79,7 @@ OFFSET :offset';
             return null;
         }
         $result['edit_date'] = new DateTime($result['edit_date']);
+        $result['registration_date'] = new DateTime($result['registration_date']);
         $blogPost = new BlogPost($result);
         $user = new User($result);
         $user->setId($result['user_id']);

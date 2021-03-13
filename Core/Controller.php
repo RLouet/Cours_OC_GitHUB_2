@@ -8,42 +8,13 @@ abstract class Controller
 {
     use CsrfTokenManager;
 
-    /**
-     * Parameters from the matched route
-     * @var array
-     */
     protected array $route_params = [];
-
-
-    /**
-     * Entity managers
-     * @var Managers
-     */
     protected Managers $managers;
-
-    /**
-     * http request
-     * @var HTTPRequest
-     */
     protected HTTPRequest $httpRequest;
-
-    /**
-     * http response
-     * @var HTTPResponse
-     */
     protected HTTPResponse $httpResponse;
-
-    /**
-     * auth
-     * @var Auth
-     */
     protected Auth $auth;
-
-    /**
-     * flash
-     * @var Flash
-     */
     protected Flash $flash;
+    protected Config $config;
 
     public function __construct(array $routeParams, HTTPRequest $request)
     {
@@ -55,6 +26,7 @@ abstract class Controller
         $this->managers = new Managers('PDO', PDOFactory::getPDOConnexion());
         $this->auth = Auth::getInstance();
         $this->flash = Flash::getInstance();
+        $this->config = Config::getInstance();
     }
 
     /**

@@ -22,6 +22,7 @@ class User extends Entity
     protected bool $enabled = false;
     protected ?string $newEmail = null;
     protected bool $banished = false;
+    protected ?DateTime $registrationDate;
     protected ObjectCollection $blogPosts;
 
     const INVALID_USERNAME = 1;
@@ -40,7 +41,7 @@ class User extends Entity
 
     public function isValid(): bool
     {
-        return !(empty($this->username) || empty($this->lastname) || empty($this->firstname) || empty($this->email) || empty($this->password) || empty($this->role));
+        return !(empty($this->username) || empty($this->lastname) || empty($this->firstname) || empty($this->email) || empty($this->password) || empty($this->role) || !empty($this->errors));
     }
 
     public function getUsername(): string
@@ -229,7 +230,18 @@ class User extends Entity
         return $this;
     }
 
-    public function isGranted($role):bool
+    public function getRegistrationDate(): ?DateTime
+    {
+        return $this->registrationDate;
+    }
+
+    public function setRegistrationDate(?DateTime $registrationDate): self
+    {
+        $this->registrationDate = $registrationDate;
+        return $this;
+    }
+
+    public function isGranted($role): bool
     {
         if (isset($this->role)) {
             if ($role === "user") {

@@ -48,6 +48,18 @@ input:focus,
     color: white;
 }
 
+.h1-logo {
+    all: unset;
+}
+
+.hero-text span.typed {
+    color: #fff;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 3rem;
+    font-family: 'Work Sans', sans-serif;
+}
+
 .hero-logo {
     z-index: 5000;
 }
@@ -60,15 +72,19 @@ input:focus,
     z-index: 1002;
 }
 
-.hero-text h2.typed {
-    color: #00b6f1;
-}
-
 .hero-bottom-wrap {
     position: absolute;
     width: 200%;
     bottom: -13px;
     left: -50%;
+}
+
+.hero-bottom-wrap span {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 10vw;
+    font-weight: 600;
+    line-height: 0.82;
+    color: #fff;
 }
 
 @media (max-width: 1500px) {
@@ -115,21 +131,31 @@ input:focus,
     font-size: 1rem;
 }
 
-.contact-infos h5 {
+.contact-infos span {
     color: #aaa;
+    font-size: 1.25rem;
+    font-weight: 500;
+    font-family: 'Work Sans', sans-serif;
+    line-height: 1.25;
+    display: block;
 }
 
-.post-image-preview:hover {
+label img {
     cursor: pointer;
 }
 
 .img-prev-ol {
+    display: block;
     background-color: rgba(0, 0, 0, 0.8);
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+.img-prev-ol .spinner {
+    display: block;
 }
 
 /* social
@@ -177,10 +203,8 @@ label[for=blogLogoInput] {
 }
 
 .blog-logo-input-area img {
-    background-color: white;
     max-height: 150px;
     padding: 5px;
-    border-radius: 0.15rem 0.15rem 0 0;
 }
 
 #socialModal .form-control {
@@ -266,6 +290,19 @@ label.fa-btn:focus {
 
 .sn-name {
     overflow-wrap: break-word;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.footer-1.dark .scd-foot p.footer-title,
+.footer-1.dark .scd-foot .title {
+    color: #c6ff84;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    padding: 0;
+    line-height: 1.25;
+    font-family: 'Work Sans', sans-serif;
 }
 
 .footer-social-icons a img {
@@ -319,6 +356,7 @@ ul.sitemap li {
 
 .badge {
     white-space: unset;
+    line-height: 1.5;
 }
 
 .badge-warning.on-white {
@@ -583,7 +621,7 @@ table.align-middle th {
     font-weight: bold;
 }
 
-.main-title h3 {
+.main-title h2 {
     position: relative;
     z-index: 300;
     opacity: 0.75;
@@ -593,4 +631,36 @@ table.align-middle th {
     position: relative;
     z-index: 300;
     opacity: 0.75;
+}
+
+.portfolio-box-1 p.on-center {
+    bottom: auto;
+    letter-spacing: 1px;
+    font-size: 18px;
+    text-transform: unset;
+    line-height: 23px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 3px;
+    color: #212121;
+}
+
+.portfolio-box-1 p.on-center:hover {
+    color: #6dc234
+}
+
+.blog-box-1 h3 a {
+    color: #212121;
+    transition: all 200ms linear;
+    font-size: 1.35rem;
+    font-weight: 500;
+}
+
+.blog-box-1 h3 a:hover {
+    color: #6dc234;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 500;
 }

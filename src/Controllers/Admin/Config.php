@@ -33,8 +33,7 @@ class Config extends Controller
      */
     public function indexAction()
     {
-        $config = BlogConfig::getInstance();
-        $blogId = $config->get('blog_id') ? $config->get('blog_id') : 1;
+        $blogId = $this->config->get('blog_id') ? $this->config->get('blog_id') : 1;
         $manager = $this->managers->getManagerOf('Blog');
         $blogForm['entity'] = $manager->getData($blogId);
 
@@ -67,8 +66,8 @@ class Config extends Controller
             'old' => $blog->getLogo(),
             'maxSize' => 1,
             'type' => 'image',
-            'minRes' => [150, 60],
-            'maxRes' => [300, 300]
+            'minRes' => [64, 64],
+            'maxRes' => [512, 512]
         ];
         $cvUploadRules = [
             'target' => 'cv',

@@ -16,7 +16,7 @@ $(document).ready(function() {
 					$("#ViewMore").parent().remove();
 				}
 				for (const post of data.posts) {
-					const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/img/blog/1.jpg";
+					const heroUrl = post.heroUrl ? window.location.origin + "/uploads/blog/" + post.userId + "/" + post.id + "/" + post.heroUrl :  window.location.origin + "/uploads/blog/no-image.jpg";
 					const heroAlt = post.heroName ? post.heroName : "";
 					const item = $("<div class=\"grid-box float-inline quarter with-margin drop-shadow rounded post-item-" + post.id + "\">\n" +
 						"                            <div class=\"blog-box-1 blog-home blog-admin background-white over-hide\">\n" +

@@ -36,10 +36,6 @@ $(document).ready(function() {
 					if (data.conf_error) {
 						$(".pw-conf .form-error", $form).removeClass("hidden");
 					}
-					if (data.user_error) {
-						$(".pw-general-error .form-error span", $form).html("Votre profil est invalide");
-						$(".pw-general-error .form-error", $form).removeClass("hidden");
-					}
 					if (data.db_error) {
 						$(".pw-general-error .form-error span", $form).html("Erreur lors de l'enregistrement");
 						$(".pw-general-error .form-error", $form).removeClass("hidden");

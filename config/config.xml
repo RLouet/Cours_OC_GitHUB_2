@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
     <define var="blog_id" value="1" />
-    <define var="show_errors" value="true" />
-    <define var="secure_cookies" value="false" />
-    <define var="secret_key" value="kKQmgw23BPTQa2hk1el3hSlmVBIKHQ4k" />
+    <define var="show_errors" value="false" />
+    <define var="https" value="false" />
+    <define var="secret_key" value="https://randomkeygen.com/ => CodeIgniter Encryption Keys (256-bit key)" />
     <define var="db_host" value="localhost" />
     <define var="db_name" value="oc_daphpsymfony_p5" />
     <define var="db_user" value="root" />
     <define var="db_password" value="" />
     <define var="mailer_host" value="localhost" />
     <define var="mailer_port" value="1025" />
+    <define var="mailer_encryption" value="" />
     <define var="mailer_username" value="contact@romsworld.net" />
     <define var="mailer_password" value="mdp" />
     <define var="mailer_from_mail" value="contact@romsworld.net" />

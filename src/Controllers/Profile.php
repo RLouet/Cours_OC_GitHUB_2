@@ -92,8 +92,13 @@ class Profile extends Controller
 
         if ($this->httpRequest->postData('new_email') !== $user->getEmail()) {
             $user->setNewEmail($this->httpRequest->postData('new_email'));
-            if ($userManager->mailExists($user->getNewEmail(), $user->getId())) {
-                $user->setCustomError('mail', "Cette adresse email n'est pas disponible.");
+
+            $mailExists = $userManager->mailExists($user->getNewEmail(), $user->getId());
+            if ($mailExists) {
+                $mailExists->getEnabled()
+                    ?$user->setCustomError('mail', "Cette adresse email n'est pas disponible.")
+                    :$userManager->delete($mailExists->getId())
+                ;
             }
         }
 
@@ -103,7 +108,7 @@ class Profile extends Controller
 
         $handle['entity'] = $user;
 
-        if ($user->isValid() && empty($user->getErrors())) {
+        if ($user->isValid()) {
             if ($user->getNewEmail()) {
                 $token = new Token();
                 $user->setActivationHash($token->getHash());

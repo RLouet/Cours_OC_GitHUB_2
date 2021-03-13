@@ -1,13 +1,12 @@
 <?php
 
-/**
- * Composer Autoloader
- */
-
 use Core\Router;
 use Core\HTTPRequest;
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+/**
+ * Composer Autoloader
+ */
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
  * Error and exception handling
@@ -32,10 +31,3 @@ $router = new Router();
 $request = HTTPRequest::getInstance();
 
 $router->dispatch($request);
-
-//$kernel = new \Core\Kernel();
-
-//$kernel->run();
-
-
-//$router->dispatch($_SERVER['QUERY_STRING']);

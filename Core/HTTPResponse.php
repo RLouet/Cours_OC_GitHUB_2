@@ -15,6 +15,7 @@ class HTTPResponse
     private Auth $auth;
     private array $session;
     private Flash $flash;
+    private string $protocol;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class HTTPResponse
         $this->auth = Auth::getInstance();
         $this->session = &$_SESSION;
         $this->flash = Flash::getInstance();
+        $this->protocol = $this->config->get('https') == 'true'?'https://':'http://';
     }
 
     public function addHeader(string $header)
@@ -32,7 +34,7 @@ class HTTPResponse
 
     public function redirect(string $location)
     {
-        header('location: http://' . $this->httpRequest->getHost() . $location, true, 303);
+        header('location: ' . $this->protocol . $this->httpRequest->getHost() . $location, true, 303);
         exit;
     }
 
@@ -67,11 +69,11 @@ class HTTPResponse
         static $twig = null;
 
         if ($twig === null) {
-            $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
+            $loader = new Twig\Loader\FilesystemLoader(__DIR__ . '/../Templates');
             $twig = new Twig\Environment($loader, [
-                //'cache' => '../cache'
+                'cache' => '../cache'
             ]);
-            $twig->addGlobal('path', 'http://' . $this->httpRequest->getHost());
+            $twig->addGlobal('path', $this->protocol . $this->httpRequest->getHost());
             $twig->addGlobal('current_user', $this->auth->getUser());
             if ($messages) {
                 $twig->addGlobal('flash_messages', $this->flash->getMessages());
@@ -98,19 +100,19 @@ class HTTPResponse
         $blog = $this->getBlog();
 
         $logo = [
-            'url' => 'http://' . $this->httpRequest->getHost() . '/uploads/logo/' . $blog->getId() . '/' . $blog->getLogo(),
+            'url' => $this->protocol . $this->httpRequest->getHost() . '/uploads/logo/' . $blog->getId() . '/' . $blog->getLogo(),
         ];
         $logoSize = getimagesize($logo['url']);
         $logo['width'] = $logoSize[0];
         $logo['height'] = $logoSize[1];
 
         if ($twig2 === null) {
-            $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
+            $loader = new Twig\Loader\FilesystemLoader(__DIR__ . '/../Templates');
             $twig2 = new Twig\Environment($loader, [
-                //'cache' => '../cache'
+                'cache' => '../cache'
             ]);
             $twig2->addExtension(new Twig\Extra\CssInliner\CssInlinerExtension());
-            $twig2->addGlobal('path', 'http://' . $this->httpRequest->getHost());
+            $twig2->addGlobal('path', $this->protocol . $this->httpRequest->getHost());
             $twig2->addGlobal('current_user', $this->auth->getUser());
             $twig2->addGlobal('blog', $blog);
             $twig2->addGlobal('logo', $logo);
@@ -121,7 +123,7 @@ class HTTPResponse
 
     public function setCookie(string $name, string $value = '', int $expire = 0, string $path = null, string $domain = null, bool $secure = false, bool $httpOnly = true)
     {
-        if ($this->config->get('secure_cookies') == 'true') {
+        if ($this->config->get('https') == 'true') {
             $secure = true;
         }
         setCookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);

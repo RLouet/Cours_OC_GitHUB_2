@@ -1,6 +1,6 @@
 {%  extends "base.html.twig" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Accueil{% endblock %}
 
 
 {% block body %}
@@ -8,20 +8,13 @@
 ================================================== -->
 
 <div class="section full-height">
-    <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/chaise-3d_1920-1080.jpg')"></div>
+    <div class="parallax" style="background-image: url('{{ path }}/uploads/heros/home-hero.jpg')"></div>
     <div class="dark-fade-over"></div>
-    {#
-    <div class="hero-logo hidden-lg-up">
-        <a href="{{ path }}">
-            <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
-        </a>
-    </div>
-    #}
     <div class="hero-center-wrap z-bigger">
         <div class="container hero-text parallax-fade-top">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="typed text-white"><span id="typed-1"></span></h2>
+                    <span class="typed skills"><span id="typedSkills">_</span></span>
                     <div class="subtext mt-3 text text-warning">{{ blog.teaserphrase|nl2br }}</div>
                     <ul class="hero-social img-social mb-0 mt-5">
                         {% for network in blog.socialnetworks %}
@@ -40,7 +33,7 @@
         <div class="container-fluid parallax-fade-top" style="top: 0px;">
             <div class="row">
                 <div class="col-md-12">
-                    <h2>{{ blog.firstname }} {{ blog.lastname }}</h2>
+                    <span>{{ blog.firstname }} {{ blog.lastname }}</span>
                 </div>
             </div>
         </div>
@@ -49,7 +42,7 @@
 
     <div class="section background-dark z-bigger-2 text-white padding-top-small" id="contactSection">
         <h2 class="dark-1-title text-center">Me contacter</h2>
-        <form class="contactform mt-5" method="post" action="">
+        <form class="contactform mt-5" method="post">
             <div class="container form-on-dark">
                 <div class="row justify-content-around">
                     <div class="col-md-4 mt-4">
@@ -122,13 +115,13 @@
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
                         <i class="funky-ui-icon icon-Smartphone-4"></i>
-                        <h5 class="mt-3 pb-0 mb-0 text">{{ blog.phone }}</h5>
+                        <span class="mt-3 pb-0 mb-0">{{ blog.phone }}</span>
                     </div>
                 </div>
                 <div class="col-md-4 mt-4 mt-md-0">
                     <div class="services-box-1 p-0 text-center">
                         <i class="funky-ui-icon icon-Mail-Open"></i>
-                        <h5 class="mt-3 pb-0 mb-0">{{ blog.email }}</h5>
+                        <span class="mt-3 pb-0 mb-0">{{ blog.email }}</span>
                     </div>
                 </div>
             </div>
@@ -140,7 +133,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-skills-type.js"></script>
+    <script src="{{ path }}/custom/js/custom-skills-type.js"></script>
     {% if posted_data is not empty %}
         <script>
             location.href = "#contactSection";

@@ -1,15 +1,32 @@
 {%  extends "Backend/back-base.html.twig" %}
 
-{% block title %}Utilisateurs{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Utilisateurs{% endblock %}
 
 
 {% block body %}
+    <div class="section padding-top little-pt-mobile over-hide">
+        <div class="dark-fade-over"></div>
+        <div class="container parallax-fade-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-title text-center on-dark">
+                        <h2>Utilisateurs</h2>
+                        <div class="main-subtitle-bottom mt-3">
+                            Gérez vos utilisateurs.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Confirm Modal ============================================== -->
     <div class="modal fade default" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title color-white" id="confirmModalLabel"><span class="action text-capitalize"></span> l'utilisateur</h5>
+                    <h3 class="modal-title color-white" id="confirmModalLabel"><span class="action text-capitalize">Modifier</span> l'utilisateur</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true"></span>
                     </button>
@@ -25,7 +42,7 @@
                         </div>
                         <div class="fields-container col-12">
                             <div class="form-group delete-messages-switch hidden">
-                                <label for="deleteMessagesSwitch" class="bootstrap-switch-label">Effacer les messages</label>
+                                <label for="deleteMessagesSwitch" class="bootstrap-switch-label">Effacer les posts</label>
                                 <input id="deleteMessagesSwitch" type="checkbox" name="delete_messages" class="bootstrap-switch" data-on-color="warning" data-animate="true" />
                             </div>
                             <label for="MessageField" class="form-control-label">Message (optionnel)</label>
@@ -43,24 +60,7 @@
         </div>
     </div>
 
-    <div class="section padding-top little-pt-mobile over-hide">
-        <div class="dark-fade-over"></div>
-        <div class="container parallax-fade-top">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-title text-center on-dark">
-                        <h3>Utilisateurs</h3>
-                        <div class="main-subtitle-bottom mt-3">
-                            Gérez vos utilisateurs.
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Block ============================================== -->
+    <!-- Users ============================================== -->
     <div class="section background-dark-1 pb-md-4 over-hide z-bigger-2">
         <div class="container">
             <div class="row">
@@ -106,9 +106,9 @@
                                         <span class="fa-btn text-success"><span class="fa fa-black-tie fa-4x mx-1"></span></span>
                                 {% else %}
                                     {% if user.role == "ROLE_ADMIN" %}
-                                        <button role="button" class="fa-btn text-success" title="Rétrogader" data-toggle="modal" data-target="#confirmModal" data-action="rétrograder"><span class="fa fa-black-tie"></span></button>
+                                        <button class="fa-btn text-success" title="Rétrogader" data-toggle="modal" data-target="#confirmModal" data-action="rétrograder"><span class="fa fa-black-tie"></span></button>
                                     {% else %}
-                                        <button role="button" class="fa-btn text-info" title="Promouvoir" data-toggle="modal" data-target="#confirmModal" data-action="promouvoir"><span class="fa fa-user"></span></button>
+                                        <button class="fa-btn text-info" title="Promouvoir" data-toggle="modal" data-target="#confirmModal" data-action="promouvoir"><span class="fa fa-user"></span></button>
                                     {% endif %}
                                 {% endif %}
                                 </td>
@@ -136,14 +136,14 @@
                                 <td>
                                 {% if current_user.id != user.id %}
                                     {% if user.banished %}
-                                    <button role="button" class="fa-btn banish-btn" href="#" title="Débannir" data-toggle="modal" data-target="#confirmModal" data-action="débannir"><span class="fa fa-lock"></span></button>
+                                    <button class="fa-btn banish-btn" title="Débannir" data-toggle="modal" data-target="#confirmModal" data-action="débannir"><span class="fa fa-lock"></span></button>
                                     {% else %}
-                                    <button role="button" class="fa-btn banish-btn" href="#" title="Bannir" data-toggle="modal" data-target="#confirmModal" data-action="bannir"><span class="fa fa-unlock"></span></button>
+                                    <button class="fa-btn banish-btn" title="Bannir" data-toggle="modal" data-target="#confirmModal" data-action="bannir"><span class="fa fa-unlock"></span></button>
                                     {% endif %}
                                     {% if user.enabled %}
-                                        <button role="button" class="fa-btn text-danger" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-trash"></span></button>
+                                        <button class="fa-btn text-danger" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-trash"></span></button>
                                     {% else %}
-                                        <button role="button" class="fa-btn text-gray-dark" href="#" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-user-times"></span></button>
+                                        <button class="fa-btn text-gray-dark" title="Supprimer" data-toggle="modal" data-target="#confirmModal" data-action="supprimer"><span class="fa fa-user-times"></span></button>
                                     {% endif %}
                                 {% endif %}
                                 </td>
@@ -162,5 +162,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-users.js"></script>
+    <script src="{{ path }}/custom/js/custom-admin-users.js"></script>
 {% endblock %}

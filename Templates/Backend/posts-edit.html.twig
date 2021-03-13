@@ -1,6 +1,6 @@
 {%  extends "Backend/back-base.html.twig" %}
 
-{% block title %}Modifier un post{% endblock %}
+{% block title %}Blog de {{ blog.firstname }} {{ blog.lastname }} - Modifier un post{% endblock %}
 
 
 {% block body %}
@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="main-title text-center on-dark">
-                        <h3>Modifier un post</h3>
+                        <h2>Modifier un post</h2>
                         <div class="main-subtitle-bottom mt-3">
                             Modifier un élément de votre book.
                         </div>
@@ -28,5 +28,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ path }}/custom/js/custom-admin-post.js"></script>
+    <script src="{{ path }}/custom/js/custom-admin-post.js"></script>
 {% endblock %}

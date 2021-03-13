@@ -45,7 +45,7 @@ class FilesService
 
         // Check filesize
         if ($tempFile['size'] > ($rules['maxSize'] * 1048576)) {
-            $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" est trop lourd. (Max : " . $rules['maxSize'] . " Mo).";
+            $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" est trop volumineux. (Maxi : " . $rules['maxSize'] . " Mo).";
             return $upload;
         }
 
@@ -58,7 +58,7 @@ class FilesService
                 return $upload;
             }
             if (!$this->checkResolution($rules['minRes'], $rules['maxRes'], $tempFile['tmp_name'])) {
-                $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" n'a pas la bonne résolution (min : " . $rules['minRes'][0] . "*" . $rules['minRes'][1] . ", max : " . $rules['maxRes'][0] . "*" . $rules['maxRes'][1] . ")";
+                $upload['errors'][] = "Le fichier \"" . $tempFile['name'] . "\" n'a pas la bonne résolution (Mini : " . $rules['minRes'][0] . "px * " . $rules['minRes'][1] . "px, Maxi : " . $rules['maxRes'][0] . "px * " . $rules['maxRes'][1] . "px)";
                 return $upload;
             }
         }

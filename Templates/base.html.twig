@@ -8,7 +8,7 @@
     ================================================== -->
     <meta charset="utf-8">
     <title>{% block title %}Base{% endblock %}</title>
-    <meta name="description" content="{% block description %}Romain LOUET : développeur web PHP / Symfony{% endblock %}">
+    <meta name="description" content="{% block description %}{{ blog.firstname }} {{ blog.lastname }} : Développeur Web PHP / Symfony.{% endblock %}">
     <meta name="author" content="Romain LOUET">
 
     <!-- Mobile Specific Metas
@@ -37,10 +37,13 @@
 
     <!-- Favicons
     ================================================== -->
-    <link rel="icon" type="image/png" href="{{ path }}/favicons/favicon.png">
-    <link rel="apple-touch-icon" href="{{ path }}/favicons/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ path }}/favicons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ path }}/favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ path }}/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ path }}/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ path }}/favicons/favicon-16x16.png">
+    <link rel="manifest" href="{{ path }}/favicons/site.webmanifest">
+    <link rel="mask-icon" href="{{ path }}/favicons/safari-pinned-tab.svg" color="#ddd">
+    <meta name="msapplication-TileColor" content="#dddddd">
+    <meta name="theme-color" content="#dddddd">
 
 </head>
 <body class="royal_preloader background-dark-2">
@@ -57,14 +60,6 @@
         </div>
     {% endfor %}
 </div>
-{#
-<div id="flashAlert" class="alert{% if flash.type == "success" %} alert-success show{% endif %}{% if flash.type == "error" %} alert-danger show{% endif %}{% if not flash.type %} hidden{% endif %} alert-dismissible fade" role="alert">
-    <button type="button" class="close" aria-label="Fermer">
-        <span aria-hidden="true"><i class="funky-ui-icon icon-Close"></i></span>
-    </button>
-    {% for message in flash.messages %}<div>{{ message }}</div>{% endfor %}
-</div>
-#}
 
 <!-- Nav and Logo
 ================================================== -->
@@ -77,9 +72,11 @@
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavMenuMain" aria-controls="navbarNavMenuMain" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ path }}">
-                        <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Logo" class="">
-                    </a>
+                    <h1 class="h1-logo">
+                        <a class="navbar-brand" href="{{ path }}">
+                            <img src="{{ path }}/uploads/logo/{{ blog.id }}/{{ blog.logo }}" alt="Blog de {{ blog.firstname }} {{ blog.lastname }}">
+                        </a>
+                    </h1>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNavMenuMain">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown mega-menu{% if section == "home" %} active{% endif %}">
@@ -158,18 +155,18 @@
 
 <!-- JAVASCRIPT
 ================================================== -->
-<script type="text/javascript" src="{{ path }}/js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="{{ path }}/js/royal_preloader.min.js"></script>
-<script type="text/javascript" src="{{ path }}/js/tether.min.js"></script>
-<script type="text/javascript" src="{{ path }}/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{{ path }}/js/plugins.js"></script>
-<script type="text/javascript" src="{{ path }}/custom/js/custom-alerts.js"></script>
+<script src="{{ path }}/js/jquery-3.2.1.min.js"></script>
+<script src="{{ path }}/js/royal_preloader.min.js"></script>
+<script src="{{ path }}/js/tether.min.js"></script>
+<script src="{{ path }}/js/bootstrap.min.js"></script>
+<script src="{{ path }}/js/plugins.js"></script>
+<script src="{{ path }}/custom/js/custom-alerts.js"></script>
 <script>
-    const secureCookies = {% if app_config.get('secure_cookies') == 'true' %}true{% else %}false{% endif %};
+    const secureCookies = {% if app_config.get('https') == 'true' %}true{% else %}false{% endif %};
 
 </script>
-<script type="text/javascript" src="{{ path }}/custom/js/custom-cookies-notice.js"></script>
-<script type="text/javascript" src="{{ path }}/custom/js/custom-base.js"></script>
+<script src="{{ path }}/custom/js/custom-cookies-notice.js"></script>
+<script src="{{ path }}/custom/js/custom-base.js"></script>
 {% block javascripts %}
 {% endblock %}
 <!-- End Document
