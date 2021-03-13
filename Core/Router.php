@@ -11,13 +11,13 @@ class Router
      * Associative array of routes (the routing table)
      * @var array
      */
-    protected $routes = [];
+    protected array $routes = [];
 
     /**
      * Parameters from the matched route
      * @var array
      */
-    protected $params = [];
+    protected array $params = [];
 
     /**
      * Constructor for the router.
@@ -27,7 +27,7 @@ class Router
     {
 
         $xml = new \DOMDocument;
-        $xml->load(dirname(__DIR__) . '/config/routes.xml');
+        $xml->load(__DIR__ . '/../config/routes.xml');
 
         $routes = $xml->getElementsByTagName('route');
 

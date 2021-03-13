@@ -69,7 +69,7 @@ class HTTPResponse
         static $twig = null;
 
         if ($twig === null) {
-            $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
+            $loader = new Twig\Loader\FilesystemLoader(__DIR__ . '/../Templates');
             $twig = new Twig\Environment($loader, [
                 'cache' => '../cache'
             ]);
@@ -107,7 +107,7 @@ class HTTPResponse
         $logo['height'] = $logoSize[1];
 
         if ($twig2 === null) {
-            $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/Templates');
+            $loader = new Twig\Loader\FilesystemLoader(__DIR__ . '/../Templates');
             $twig2 = new Twig\Environment($loader, [
                 'cache' => '../cache'
             ]);

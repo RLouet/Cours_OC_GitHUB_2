@@ -295,11 +295,12 @@ label.fa-btn:focus {
 }
 
 .footer-1.dark .scd-foot p.footer-title,
-.footer-1.dark .scd-foot h2 {
+.footer-1.dark .scd-foot .title {
     color: #c6ff84;
     font-size: 1.25rem;
     font-weight: 500;
     margin-bottom: 0.6rem;
+    padding: 0;
     line-height: 1.25;
     font-family: 'Work Sans', sans-serif;
 }
