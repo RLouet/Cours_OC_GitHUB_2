@@ -3,14 +3,14 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e298d43c8c75443fa18801643335069a)](https://app.codacy.com/gh/RLouet/Formation-OC-P5?utm_source=github.com&utm_medium=referral&utm_content=RLouet/Formation-OC-P5&utm_campaign=Badge_Grade)
 
 ## Projet 5 : Créez votre premier blog en PHP
-###Introduction
+### Introduction
 Projet 5 de la formation **OpenClassrooms** *Développeur d'application PHP / Symfony* : 
 [Créez votre premier blog en PHP](https://openclassrooms.com/fr/projects/7/assignment)
 
 Vous pouvez voir la démo du projet [ici](https://blog.romainlouet.fr/)
 
-###Installation
-####Prérequis
+### Installation
+#### Prérequis
 * Version minimum de PHP : 7.3
 * Git
 * Composer
@@ -29,7 +29,7 @@ Importez le fichier *data/database.sql* dans votre système de gestion de base d
     
 #### Configurez le blog
 Vous devez ensuite configurer le blog, en éditant le fichier *config/config.xml*.
-#####Configurer blog
+##### Configurer base
 Par défaut, le blog a l'id 1. Cependant, vous pouvez créer une autre configuration dans la base de données (en ajoutant une ligne dans la table "blog"). Cela peut vous permettre de changer rapidement de configuration. 
 
 * Les utilisateurs, posts et commentaires sont communs à tous les blogs configurés
@@ -46,77 +46,77 @@ Pour l'utiliser, vous devrez configurer son id ici :
 ```xml
 <define var="blog_id" value="1" />
 ```
-#####Configurer erreurs
+##### Configurer erreurs
 Pour afficher les erreurs, passer la ligne suivante à 'true' :
 ```xml
 <define var="show_errors" value="true" />
 ```
-#####Configurer https
+##### Configurer https
 Si vous utilisez le protocole https, passez la ligne suivante à 'true' :
 ```xml
 <define var="https" value="true" />
 ```
 Cela permettra le chargement correct des ressources, et de sécuriser les cookies.
-#####Configurer clé de chiffrement
+##### Configurer clé de chiffrement
 Afin de sécuriser l'encodage des tokens, je vous conseille de générer une clé 256-bit qui vous est propre, et de la configurer sur la ligne suivante :
 ```xml
 <define var="secret_key" value="votre clé" />
 ```
 Vous pouvez en générer une [ici](https://randomkeygen.com/), et en choisir une dans *CodeIgniter Encryption Keys (256-bit key)*.
-#####configurer base de donnée
+##### Configurer base de donnée
 Configurez ensuite votre base de données :
-######host :
+###### Host :
 ```xml
 <define var="db_host" value="localhost" />
 ```
-######nom de la base :
+###### Nom de la base :
 ```xml
 <define var="db_name" value="nom_de_votre_base" />
 ```
-######username :
+###### Username :
 ```xml
 <define var="db_user" value="username" />
 ```
-######mot de passe :
+###### Mot de passe :
 ```xml
 <define var="db_password" value="password" />
 ```
-#####Configurer mail
+##### Configurer mail
 Ensuite, vous devez configurer le serveur mail pour l'envoie des mails de contact, et de fonctionnement (smtp) :
-######host :
+###### Host :
 ```xml
 <define var="mailer_host" value="smtp.fournisseur.com" />
 ```
-######port :
+###### Port :
 ```xml
 <define var="mailer_port" value="465" />
 ```
-######encodage :
+###### Encodage :
 ```xml
 <define var="mailer_encryption" value="ssl" />
 ```
 * "" => pas d'encodage
 * "ssl" => ssl
 * "tls" => tls
-######login :
+###### Login :
 ```xml
 <define var="mailer_username" value="votreLogin" />
 ```
-######mot de passe :
+###### Mot de passe :
 ```xml
 <define var="mailer_password" value="votreMotDePasse" />
 ```
-######Adresse From :
+###### Adresse From :
 Afin d'améliorer la délivrabilité des emails, il est conseillé de mettre ici l'adresse email configurée en smtp:
 ```xml
 <define var="mailer_from_mail" value="adresse@domaine.com" />
 ```
-######Nom :
+###### Nom :
 C'est le nom qui sera affiché à la réception des emails.
 ```xml
 <define var="mailer_from_name" value="Romain LOUET" />
 ```
-#####Configuer pagination
+##### Configuer pagination
 Enfin, vous pouvez configurer le nombre de posts et de commentaires affichés sur les pages :
 ```xml
 <define var="pagination" value="12" />
@@ -138,11 +138,11 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R,L]
 
 #### User
 Afin de pouvoir administrer le blog, il vous faudra effectuer quelques manipulations :
-#####S'enregistrer
+##### S'enregistrer
 * S'enregistrer en tant que nouvel utlisateur
 * Valider votre inscription depuis le mail qui vous a été envoyé.
 
-#####Modifier la base de donnée pour vous promouvoir administrateur : 
+##### Modifier la base de donnée pour vous promouvoir administrateur : 
 * Accédez à votre base de donnée
 * ouvrez la table "user".
 * Passer "role" à "ROLE_ADMIN" sur la ligne correspondante à l'utilisateur que vous venez de créer.
