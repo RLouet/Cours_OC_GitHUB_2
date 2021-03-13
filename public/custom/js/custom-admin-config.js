@@ -235,7 +235,7 @@ $(document).ready(function() {
 						$("#addSocialNetworkBtn").before($socialBox);
 					}
 					$(".sn-logo", $socialBox).attr("src", window.location.origin + "/uploads/icons/" + data.entity.blogId + "/" + encodeURIComponent(data.entity.logo)).data("file", data.entity.logo);
-					$(".sn-logo", $socialBox).attr("alt", "Logo " . data.entity.name);
+					$(".sn-logo", $socialBox).attr("alt", "Logo " + data.entity.name);
 					$(".sn-name", $socialBox).html(data.entity.name);
 					$(".btn-delete", $socialBox).data("name", data.entity.name);
 					$(".sn-url", $socialBox).html(data.entity.url);
