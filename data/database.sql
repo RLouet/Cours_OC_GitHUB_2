@@ -47,8 +47,7 @@ CREATE TABLE IF NOT EXISTS `blog` (
 --
 
 INSERT INTO `blog` (`id`, `lastname`, `firstname`, `email`, `phone`, `logo`, `teaser_phrase`, `contact_mail`, `cv`) VALUES
-(1, 'LOuET', 'Romain', 'romainlouet@romsworld.net', '0614336004', 'logo-Romain_LOUET.png', 'arezergg erg g er gerg er g', 'contact@romsworld.net', 'cv-Romain_LOUET.pdf'),
-(2, 'test', 'Mister', 'contact@romsworld.net', '0612345678', 'logo-Mister_test.png', 'Phrase de teaser du blog 2', 'maildecontact@blog2.fr', 'cv-du-blog-2.pdf');
+(1, 'LOUET', 'Romain', 'romainlouet@romsworld.net', '0614336004', 'logo-Romain_LOUET.png', 'Ici votre présentation.', 'contact@romsworld.net', 'cv-Romain_LOUET.pdf');
 
 -- --------------------------------------------------------
 

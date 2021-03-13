@@ -11,9 +11,9 @@
     <define var="mailer_host" value="localhost" />
     <define var="mailer_port" value="1025" />
     <define var="mailer_encryption" value="" />
-    <define var="mailer_username" value="contact@romsworld.net" />
+    <define var="mailer_username" value="nom-prenom@domaine.com" />
     <define var="mailer_password" value="mdp" />
-    <define var="mailer_from_mail" value="contact@romsworld.net" />
-    <define var="mailer_from_name" value="Romain LOUET" />
+    <define var="mailer_from_mail" value="nom-prenom@domaine.com" />
+    <define var="mailer_from_name" value="Prenom NOM" />
     <define var="pagination" value="12" />
 </definitions>
